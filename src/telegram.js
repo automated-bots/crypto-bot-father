@@ -24,7 +24,7 @@ class Telegram {
       const chatId = msg.chat.id
       const helpText = `
 /help - Return this help output
-/status - Retrieve Bitcoin, Lbrycrd, Chainquery status
+/status - Retrieve Bitcoin Core Deamon info
 /networkinfo - Get Bitcoin Network info
 /stats - Get blockchain, mining and exchange stats
 /price - Get market (price) info
@@ -96,77 +96,44 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
       const bot = this.bot
       const chatId = msg.chat.id
       let text = ''
-      bitcoin.getLbryNetStatus()
-        .then(result => {
-          text += `*General* 🖥
-Bitcoin daemon running: ${result.is_running}
-Bitcoin connection: ${result.connection_status.code}`
-        })
-        .catch(error => {
-          console.error(error)
-          text += 'Error: Could not Bitcoinnet (SDK) info!\n'
-        })
-        .then(function () {
-          // always executed
-          bitcoin.getNetworkInfo()
-            .then(networkResult => {
-              text += `
-Lbrycrd version: ${networkResult.subversion}
+      bitcoin.getNetworkInfo()
+        .then(networkResult => {
+          text += `
+Bitcoin Core version: ${networkResult.subversion}
 Protocol version: ${networkResult.protocolversion}
 \n*Peer info*
 Peers connected: ${networkResult.connections}`
+        })
+        .catch(error => {
+          console.error(error)
+          text += 'Error: Could not fetch network info!\n'
+        })
+        .then(function () {
+          // always executed
+          bitcoin.getPeerInfo()
+            .then(peerResult => {
+              text += '\nFirst peer details:'
+              if (peerResult.length > 0) {
+                const sendTime = Misc.printDate(new Date(peerResult[0].lastsend * 1000))
+                const recieveTime = Misc.printDate(new Date(peerResult[0].lastrecv * 1000))
+                const ping = parseFloat(peerResult[0].pingtime * 1000).toFixed(2)
+                text += `
+Ping: ${ping} ms
+Last send: ${sendTime}
+Last receive: ${recieveTime}`
+              } else {
+                text += 'Warning: No peers connected...'
+              }
             })
             .catch(error => {
               console.error(error)
-              text += 'Error: Could not fetch network info!\n'
+              text += 'Error: Could not fetch peer info!\n'
             })
             .then(function () {
-              // always executed
-              bitcoin.getPeerInfo()
-                .then(peerResult => {
-                  text += '\nFirst peer details:'
-                  if (peerResult.length > 0) {
-                    const sendTime = Misc.printDate(new Date(peerResult[0].lastsend * 1000))
-                    const recieveTime = Misc.printDate(new Date(peerResult[0].lastrecv * 1000))
-                    const ping = parseFloat(peerResult[0].pingtime * 1000).toFixed(2)
-                    text += `
-    Ping: ${ping} ms
-    Last send: ${sendTime}
-    Last receive: ${recieveTime}`
-                  } else {
-                    text += 'Warning: No peers connected...'
-                  }
-                })
-                .catch(error => {
-                  console.error(error)
-                  text += 'Error: Could not fetch peer info!\n'
-                })
-                .then(function () {
-                  // always executed
-                  bitcoin.getWalletInfo()
-                    .then(walletResult => {
-                      const oldestKeyTime = Misc.printDate(new Date(walletResult.keypoololdest * 1000))
-                      text += `
-\n*Wallet info* 👛
-Oldest address in keypool: ${oldestKeyTime}
-# of reserved addresses: ${walletResult.keypoolsize}`
-                    })
-                    .catch(error => {
-                      console.error(error)
-                      text += 'Error: Could not fetch wallet info!\n'
-                    })
-                    .then(function () {
-                      // always executed, finally we send the info back!
-                      bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
-                    })
-                })
+              // always executed, finally we send the info back!
+              bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
             })
         })
-    })
-
-    this.bot.onText(/^[/|!]file\S*$/, msg => {
-      const chatId = msg.chat.id
-      this.bot.sendMessage(chatId, 'Error: Provide atleast the URI as argument: /file <uri>')
     })
 
     this.bot.onText(/[/|!]networkinfo/, msg => {
@@ -240,10 +207,10 @@ Block reward 24 hours avg: ${exchangeResult.block_reward24} BTC
 Block reward 3 days avg: ${exchangeResult.block_reward3} BTC
 
 *Exchange* 💱
-Exchange rate: ${exchangeRate} BTC-LTC
-Exchange rate 24 hours avg: ${exchangeRate24h} BTC-LTC
-Exchange rate 3 days avg: ${exchangeRate3d} BTC-LTC
-Exchange rate 7 days avg: ${exchangeRate7d} BTC-LTC`
+Exchange rate: ${exchangeRate} BTC-USD
+Exchange rate 24 hours avg: ${exchangeRate24h} BTC-USD
+Exchange rate 3 days avg: ${exchangeRate3d} BTC-USD
+Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
                   this.bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
                 })
                 .catch(error => {
@@ -290,7 +257,7 @@ Number of coins circulating: ${circulating} BTCs
 *Price* 💸
 Price: $${dollarPrice}/BTC
 Last updated dollar: ${dollarPriceLastUpdated}
-Price: 1 BTC = ${bitcoinPrice} BTC 
+Price: 1 BTC = $${bitcoinPrice} 
 Last updated BTC: ${bitcoinPriceDateTime}
 Volume 24 hour avg: $${volume24h}
 Volume 7 days avg: $${volume7d}
@@ -462,44 +429,11 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
       }
     })
 
-    // lastcontent command
-    this.bot.onText(/[/|!]lastcontent/, msg => {
-      const chatId = msg.chat.id
-      this.bitcoin.getLastContentClaims()
-        .then(result => {
-          let textMsg = '*Last 10 uploaded content*\n'
-          for (let i = 0; i < result.length; i++) {
-            const content = result[i]
-            const type = content.content_type.split('/')[0]
-            textMsg += `${content.created_at} - [${content.title}](${OPEN_URL}/${content.name}) (${type})\n`
-          }
-          this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
-
-    // lastchannels command
-    this.bot.onText(/[/|!]lastchannels/, msg => {
-      const chatId = msg.chat.id
-      this.bitcoin.getLastChannelsClaims()
-        .then(result => {
-          let textMsg = '*Last 10 new channels*\n'
-          for (let i = 0; i < result.length; i++) {
-            const channel = result[i]
-            textMsg += `${channel.created_at} - [${channel.name}](${OPEN_URL}/${channel.name})\n`
-          }
-          this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
-
     // lastblocks command (/lastblocks)
+    // TODO: Implemented getLastBlocks
     this.bot.onText(/[/|!]lastblocks/, msg => {
       const chatId = msg.chat.id
+      /*
       this.bitcoin.getLastBlocks()
         .then(result => {
           let textMsg = '*Last 10 blocks* 🧱'
@@ -519,12 +453,15 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
         })
         .catch(error => {
           console.error(error)
-        })
+        }) */
+      this.bot.sendMessage(chatId, 'Not yet implemented')
     })
 
     // top10 command (/top10)
+    // TODO: implement getTop10BiggestTransactions
     this.bot.onText(/[/|!]top10/, msg => {
       const chatId = msg.chat.id
+      /*
       this.bitcoin.getTop10BiggestTransactions()
         .then(result => {
           let textMsg = '*Top 10 biggest transactions of this year* 💰\n'
@@ -532,117 +469,12 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
             const amount = parseFloat(result[i].value).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
             textMsg += `[${amount} BTC](${EXPLORER_URL}/tx/${result[i].hash}) (in: ${result[i].output_count}, out: ${result[i].output_count}) - ${result[i].created_time}\n`
           }
-          this.bitcoin.getTop100Channels()
-            .then(channelResult => {
-              // Retrieve the top 10 only
-              if (channelResult.vanity_names && channelResult.vanity_names.length >= 5) {
-                textMsg += '\n*Top 10 most subscribed channels*\n'
-                let medalIcon = null
-                for (let i = 0; i < 10; i++) {
-                  if (i === 0) {
-                    medalIcon = '🥇'
-                  } else if (i === 1) {
-                    medalIcon = '🥈'
-                  } else if (i === 2) {
-                    medalIcon = '🥉'
-                  } else {
-                    medalIcon = ''
-                  }
-                  textMsg += `${medalIcon} [${channelResult.vanity_names[i]}](${OPEN_URL}/${channelResult.vanity_names[i]}) (${channelResult.subscribers[i]} subscribers)\n`
-                }
-              }
-              this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })
-            })
-            .catch(error => {
-              console.error(error)
-            })
+          this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })
         })
         .catch(error => {
           console.error(error)
-        })
-    })
-
-    this.bot.onText(/^[/|!]tips\S*$/, msg => {
-      const chatId = msg.chat.id
-      this.bot.sendMessage(chatId, 'Error: Provide atleast the name (like @channelname) as argument: /tips <name>')
-    })
-
-    // tips command
-    this.bot.onText(/[/|!]tips@?\S* (.+)/, (msg, match) => {
-      const name = match[1].trim()
-      const chatId = msg.chat.id
-      this.bitcoin.resolve(name)
-        .then(resolve => {
-          if (name in resolve) {
-            const channelOrContent = resolve[name]
-            this.bitcoin.getTop10Tips(channelOrContent.claim_id)
-              .then(tipsResult => {
-                if (tipsResult.length > 0) {
-                  let textMsg = '*Effective amount:* ' + channelOrContent.meta.effective_amount + ' BTC\n'
-                  textMsg += '*Top 10 highest tips*\n'
-                  for (let i = 0; i < tipsResult.length; i++) {
-                    const amount = parseFloat(tipsResult[i].amount).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
-                    textMsg += `[${amount} BTC](${EXPLORER_URL}/tx/${tipsResult[i].hash}) - ${tipsResult[i].created_at} - ${tipsResult[i].name}\n`
-                  }
-                  this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })
-                } else if ('error' in channelOrContent) {
-                  this.bot.sendMessage(chatId, 'Could not resolve the request 😢 (be-sure you start the channel name with @-sign)')
-                } else {
-                  this.bot.sendMessage(chatId, 'No tips received yet 😢')
-                }
-              })
-              .catch(error => {
-                console.error(error)
-              })
-          } else {
-            this.bot.sendMessage(chatId, 'Something went wrong with resolving 😢')
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
-    // TODO: Last channel tips?
-
-    // contenttips command
-    this.bot.onText(/[/|!]contenttips@?\S* (.+)/, (msg, match) => {
-      const contentName = match[1].trim()
-      const chatId = msg.chat.id
-      this.bitcoin.resolve(contentName)
-        .then(resolve => {
-          if (contentName in resolve) {
-            const content = resolve[contentName]
-            this.bitcoin.getTopContentTips(content.claim_id)
-              .then(tipsResult => {
-                if (tipsResult.length > 0) {
-                  this.bitcoin.getChannelNameString(tipsResult[0].publisher_id)
-                    .then(channelResult => {
-                      const channelName = channelResult[0].name
-                      let textMsg = `*Top 10 highest content tips* (channel: [${channelName}](${OPEN_URL}/${channelName}))\n`
-                      for (let i = 0; i < tipsResult.length; i++) {
-                        const amount = parseFloat(tipsResult[i].amount).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
-                        textMsg += `[${amount} BTC](${EXPLORER_URL}/tx/${tipsResult[i].hash}) - ${tipsResult[i].created_at} \n`
-                      }
-                      textMsg += `[View content](${OPEN_URL}/${content.permanent_url.replace(/(^\w+:|^)\/\//, '')})`
-                      this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })
-                    })
-                    .catch(error => {
-                      console.error(error)
-                    })
-                } else {
-                  this.bot.sendMessage(chatId, 'No tips received yet 😢')
-                }
-              })
-              .catch(error => {
-                console.error(error)
-              })
-          } else {
-            this.bot.sendMessage(chatId, 'Something went wrong with resolving 😢')
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
+        }) */
+      this.bot.sendMessage(chatId, 'Not yet implemented')
     })
 
     // Other stuff

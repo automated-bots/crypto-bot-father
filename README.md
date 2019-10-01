@@ -20,7 +20,7 @@ Bitcoin Bot is written in javascript using [Node.js](https://nodejs.org/en/downl
 
 Bitcoin Bot initually will use the [Bitcoin Core](https://github.com/bitcoin/bitcoin) in order to retrieve information from the Bitcoin network.
 
-We will never support the scamming Bitcoin Cash!
+We will never support the scamming Bitcoin Cash! But we could add Ethereum in the future.
 
 ## Who?
 
@@ -60,9 +60,10 @@ Finally, starting the bot server: `npm start` (or `node src/index.js`)
 **Note 2:** Assuming you are running the bitcoind deamon (see requirements), with JSON RPC enabled and txindex enabled. Example of `~/.bitcoin/bitcoin.conf`:
 
 ```sh
-# You can generate this value with the ./share/rpcauth/rpcauth.py script in the Bitcoin Core repository.
-rpcauth=bitcoin:hashedpassword
+# Default username/password: bitcoin/xyz
+rpcauth=bitcoin:b69449980fba89a8459c0461389e78e6$87b68368b06ae8325fd5499637a9511b16763db17c877f00c50e23294fc3652b
 daemon=1
+datadir=/mnt/37e528d8-9102-4d8e-b9e4-97d749a6b92e/Bitcoin/
 server=1
 txindex=1
 disablewallet=1
@@ -105,6 +106,8 @@ The bot can be started via crontab for example:
 rpcauth=bitcoin:hashedpassword
 # Run in the background as a daemon and accept commands.
 daemon=1
+# Specify a non-default location to store blockchain and other data.
+datadir=/your_custom/path/
 # [rpc]
 # Accept command line and JSON-RPC commands.
 server=1

@@ -5,7 +5,7 @@ process.env['NTBA_FIX_350'] = 1
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
 const COINMARKETCAP_API_TOKEN = process.env.COINMARKETCAP_API_TOKEN
 const BITCOIN_HOST = 'localhost'
-const BITCOIN_PORT = process.env.BITCOIN_PORT || 8333
+const BITCOIN_PORT = process.env.BITCOIN_PORT || 8332
 const BITCOIN_RPC_USER = 'bitcoin'
 const BITCOIN_RPC_PASS = process.env.RPC_PASSWORD || 'xyz'
 const botUrl = 'https://bitcoin.melroy.org'
@@ -29,8 +29,6 @@ if (!TELEGRAM_TOKEN) {
 // Create helper objects
 const bitcoin = new Bitcoin(BITCOIN_HOST, BITCOIN_PORT, BITCOIN_RPC_USER, BITCOIN_RPC_PASS)
 const exchange = new Exchange(COINMARKETCAP_API_TOKEN)
-
-// TODO: Only create a TelegramBot object, when bot server is enabled for serving Telegram requests
 
 const telegramBot = new TelegramBot(TELEGRAM_TOKEN)
 // This informs the Telegram servers of the new webhook.

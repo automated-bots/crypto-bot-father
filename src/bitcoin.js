@@ -41,21 +41,6 @@ class Bitcoin {
   }
 
   /**
-   * Get wallet info info from Bitcoin core
-   *
-   * @return {Promise} Axios promise
-   */
-  getWalletInfo () {
-    return this.bitcoind.post('/', {
-      method: 'getwalletinfo',
-      params: {}
-    })
-      .then(response => {
-        return Promise.resolve(response.data.result)
-      })
-  }
-
-  /**
    * Get blockchain info
    * @return {Promise} Axios promise
    */

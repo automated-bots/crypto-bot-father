@@ -16,14 +16,14 @@ After=network.target
 [Service]
 ExecStart=/usr/bin/bitcoind -daemon \
                             -pid=/run/bitcoind/bitcoind.pid \
-                            -conf=/etc/bitcoin/bitcoin.conf \
-                            -datadir=/var/lib/bitcoind
+                            -conf=/etc/bitcoin/bitcoin.conf
 
 # Make sure the config directory is readable by the service user
 PermissionsStartOnly=true
 ExecStartPre=/bin/chgrp bitcoin /etc/bitcoin
 ExecStartPre=/bin/chgrp bitcoin /run/bitcoind
-ExecStartPre=/bin/chgrp bitcoin /var/lib/bitcoind
+# Create your own folder/path with correct settings
+#ExecStartPre=/bin/chgrp bitcoin /var/lib/bitcoind
 
 # Process management
 ####################
@@ -47,9 +47,9 @@ RuntimeDirectoryMode=0710
 ConfigurationDirectory=bitcoin
 ConfigurationDirectoryMode=0710
 
-# /var/lib/bitcoind
-StateDirectory=bitcoind
-StateDirectoryMode=0710
+# /var/lib/bitcoind (has not enough storage)
+#StateDirectory=bitcoind
+#StateDirectoryMode=0710
 
 # Hardening measures
 ####################
