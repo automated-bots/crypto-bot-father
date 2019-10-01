@@ -57,21 +57,14 @@ Finally, starting the bot server: `npm start` (or `node src/index.js`)
 
 **Note 1:** Reverse proxy (eg. Nginx) is required to put between the bot and the world-wide-web. Expose the webserver on port 443 (with SSL). See [nginx_example.conf](nginx_example.conf).
 
-**Note 2:** Assuming you are running the bitcoind deamon (see requirements), with JSON RPC enabled and txindex enabled. Example of `/etc/bitcoin/bitcoin.conf`:
+**Note 2:** Assuming you are running the bitcoind deamon (see requirements), with JSON RPC enabled and txindex enabled. Example of `~/.bitcoin/bitcoin.conf`:
 
 ```sh
-# [core]
 # You can generate this value with the ./share/rpcauth/rpcauth.py script in the Bitcoin Core repository.
 rpcauth=bitcoin:hashedpassword
-# Run in the background as a daemon and accept commands.
 daemon=1
-# [rpc]
-# Accept command line and JSON-RPC commands.
 server=1
-# Maintain a full transaction index, used by the getrawtransaction rpc call.
 txindex=1
-# [wallet]
-# Do not load the wallet and disable wallet RPC calls.
 disablewallet=1
 ```
 
@@ -107,11 +100,19 @@ The bot can be started via crontab for example:
 * Place the Bitcoind file (`bitcoin.conf`) in `/etc/bitcoin` for the Bitcoin Core Daemon service, example of this file:
 
 ```sh
-rpcuser=bitcoin
-rpcpassword=my_secure_password
+# [core]
+# You can generate this value with the ./share/rpcauth/rpcauth.py script in the Bitcoin Core repository.
+rpcauth=bitcoin:hashedpassword
+# Run in the background as a daemon and accept commands.
 daemon=1
+# [rpc]
+# Accept command line and JSON-RPC commands.
 server=1
+# Maintain a full transaction index, used by the getrawtransaction rpc call.
 txindex=1
+# [wallet]
+# Do not load the wallet and disable wallet RPC calls.
+disablewallet=1
 ```
 
 * See [bitcoin.service systemd file](bitcoin.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.
