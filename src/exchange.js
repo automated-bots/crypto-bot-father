@@ -6,8 +6,8 @@ class Exchange {
    * @param {string} coinMarketAPI
    */
   constructor (coinMarketAPI) {
-    // Exchange WhatToMine
-    this.whattomine_api = 'https://whattomine.com/coins/1.json'
+    // CoinBase Exchange
+    this.coinbase_api = 'https://api.coinbase.com/v2/exchange-rates?currency=BTC'
     // Official CoinMarketCap
     this.coinmarket_id = 1 // 1 = BTC
     this.coinmarket = axios.create({
@@ -20,14 +20,14 @@ class Exchange {
   }
 
   /**
-   * Get exchange info from Whattomine.com
+   * Get exchange rates from coinbase.com
    *
-   * @return {Promise} Axios promise (block_time, block_reward, difficulty24, exchange_rate, exchange_rate24, market_cap)
+   * @return {Promise} Axios promise (key->value for BTC pairs, eg. 'ETH')
    */
-  getExchangeInfo () {
-    return axios.get(this.whattomine_api)
+  getExchangeRates () {
+    return axios.get(this.coinbase_api)
       .then(response => {
-        return Promise.resolve(response.data)
+        return Promise.resolve(response.data.data.rates)
       })
   }
 

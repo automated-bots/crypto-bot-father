@@ -1,8 +1,8 @@
 const Misc = require('./miscellaneous')
 
 // Constants
-const BTC_PRICE_FRACTION_DIGITS = 5
-const DOLLAR_PRICE_FRACTION_DIGITS = 8
+const BTC_PRICE_FRACTION_DIGITS = 6 // 8 would be 1 Satoshi
+const DOLLAR_PRICE_FRACTION_DIGITS = 2
 const FAQ_URL = 'https://bitcoin.org/en/faq'
 const OPEN_URL = 'https://open.bitcoin.com'
 const COINMARKET_URL = 'https://coinmarketcap.com/currencies/bitcoin'
@@ -176,16 +176,16 @@ Networks:`
                 .then(exchangeResult => {
                   const medianTime = Misc.printDate(new Date(result.mediantime * 1000))
                   const marketCap = exchangeResult.market_cap.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                  const difficulty = parseFloat(result.difficulty).toLocaleString('en', { maximumFractionDigits: 3 })
-                  const difficulty24h = parseFloat(exchangeResult.difficulty24).toLocaleString('en', { maximumFractionDigits: 3 })
-                  const difficulty3d = parseFloat(exchangeResult.difficulty3).toLocaleString('en', { maximumFractionDigits: 3 })
-                  const difficulty7d = parseFloat(exchangeResult.difficulty7).toLocaleString('en', { maximumFractionDigits: 3 })
+                  const difficulty = parseFloat(result.difficulty).toLocaleString('en', { maximumFractionDigits: 2 })
+                  const difficulty24h = parseFloat(exchangeResult.difficulty24).toLocaleString('en', { maximumFractionDigits: 2 })
+                  const difficulty3d = parseFloat(exchangeResult.difficulty3).toLocaleString('en', { maximumFractionDigits: 2 })
+                  const difficulty7d = parseFloat(exchangeResult.difficulty7).toLocaleString('en', { maximumFractionDigits: 2 })
                   const blockTimeMin = Math.floor(parseFloat(exchangeResult.block_time) / 60)
                   const blockTimeSec = (((parseFloat(exchangeResult.block_time) / 60) % 2) * 60).toFixed(0)
-                  const exchangeRate = parseFloat(exchangeResult.exchange_rate).toFixed(10)
-                  const exchangeRate24h = parseFloat(exchangeResult.exchange_rate24).toFixed(10)
-                  const exchangeRate3d = parseFloat(exchangeResult.exchange_rate3).toFixed(10)
-                  const exchangeRate7d = parseFloat(exchangeResult.exchange_rate7).toFixed(10)
+                  const exchangeRate = parseFloat(exchangeResult.exchange_rate).toFixed(2)
+                  const exchangeRate24h = parseFloat(exchangeResult.exchange_rate24).toFixed(2)
+                  const exchangeRate3d = parseFloat(exchangeResult.exchange_rate3).toFixed(2)
+                  const exchangeRate7d = parseFloat(exchangeResult.exchange_rate7).toFixed(2)
                   const text = `*General* 🖥
 Last block: ${medianTime}
 Median time current best block: ${result.mediantime}
@@ -230,15 +230,17 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
     this.bot.onText(/[/|!]price@?\S*/, msg => {
       this.exchange.getLatestPrices()
         .then(result => {
-          this.exchange.getExchangeInfo()
-            .then(exchangeResult => {
+          this.exchange.getExchangeRates()
+            .then(rateResult => {
               const chatId = msg.chat.id
-              const bitcoinPrice = parseFloat(exchangeResult.exchange_rate).toFixed(10)
-              const bitcoinPriceDateTime = Misc.printDate(new Date(exchangeResult.timestamp * 1000))
+              const euroPrice = parseFloat(rateResult.EUR).toFixed(2)
+              const ltcPrice = parseFloat(rateResult.LTC).toFixed(4)
+              const ethPrice = parseFloat(rateResult.ETH).toFixed(5)
+              const yenPrice = parseFloat(rateResult.JPY).toFixed(2)
+              const poundPrice = parseFloat(rateResult.GBP).toFixed(2)              
               const quote = result.quote.USD
               const maxSupply = result.max_supply.toLocaleString('en')
               const totalSupply = result.total_supply.toLocaleString('en')
-              const circulating = result.circulating_supply.toLocaleString('en', { maximumFractionDigits: 0 })
               const dollarPrice = quote.price.toLocaleString('en', { maximumFractionDigits: DOLLAR_PRICE_FRACTION_DIGITS })
               const dollarPriceLastUpdated = quote.last_updated
               const volume24h = parseFloat(quote.volume_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -252,13 +254,15 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
 Rank on CoinMarketCap: [#${result.cmc_rank}](${COINMARKET_URL})
 Max. available coins: ${maxSupply} BTCs
 Current amount coins: ${totalSupply} BTCs
-Number of coins circulating: ${circulating} BTCs
 
 *Price* 💸
-Price: $${dollarPrice}/BTC
-Last updated dollar: ${dollarPriceLastUpdated}
-Price: 1 BTC = $${bitcoinPrice} 
-Last updated BTC: ${bitcoinPriceDateTime}
+Price: ฿1 = $${dollarPrice}
+Last updated dollar price: ${dollarPriceLastUpdated}
+Price: ฿1 = €${euroPrice}
+Price: ฿1 = ⧫${ethPrice} ETH
+Price: ฿1 = Ł${ltcPrice} LTC
+Price: ฿1 = £${poundPrice}
+Price: ฿1 = ¥${yenPrice}
 Volume 24 hour avg: $${volume24h}
 Volume 7 days avg: $${volume7d}
 Volume 30 days avg: $${volume30d}
