@@ -53,36 +53,33 @@ class Telegram {
     this.bot.onText(/^[/|!]why\S*$/, msg => {
       const chatId = msg.chat.id
       this.bot.sendMessage(chatId, `
-Bitcoin is created to have an open-source and decentralized place to store videos, images, e-books, games or any other content!
-Bitcoin makes use of the blockchain technology to store the meta data, and use peer-to-peer network to retrieve the actual content.
+Bitcoin is P2P electronic cash that is valuable over legacy systems because of the monetary autonomy it brings to its users. 
 
-The content creator can upload the content free to watch or add a certain BTC amount in order to view the content (although most of the content on Bitcoin is free to watch).
-Alternatively, you can tip the content creator with any BTC amount you like.
+Bitcoin seeks to address the root problem with conventional currency: all the trust that's required to make it work --
+Not that justified trust is a bad thing, but trust makes systems brittle, opaque, and costly to operate. 
 
-Basically Bitcoin is an alternative for YouTube, Vimeo and others, but free, open-source, decentralized and run by the community.`)
+Trust failures result in systemic collapses, trust curation creates inequality and monopoly lock-in, 
+and naturally arising trust choke-points can be abused to deny access to due process. 
+Through the use of cryptographic proof, decentralized networks and open source software Bitcoin minimizes and replaces these trust costs.`)
     })
 
     // What is Bitcoin?
     this.bot.onText(/^[/|!]what\S*$/, msg => {
       const chatId = msg.chat.id
-      this.bot.sendMessage(chatId, 'Bitcoin is a decentralized digital content platform, so anyone can share and view the content (for free or for payment). An alternative to YouTube but not limited to videos only, and fully open-source and decentralized!')
+      this.bot.sendMessage(chatId, 'Bitcoin is a peer-to-peer currency. Peer-to-peer means that no central authority issues new money or tracks transactions. These tasks are managed collectively by the network.')
     })
 
     // How does Bitcoin work?
     this.bot.onText(/^[/|!]how\S*$/, msg => {
       const chatId = msg.chat.id
       this.bot.sendMessage(chatId, `
-Foundation is the Bitcoin protocol by using blockchain technology. Bitcoin extended the Bitcoin proof-of-work concept and added address name that points to the metadata.
-Such an address can be put in a Bitcoin URL: eg. bitcoin://mycustomname.
-To make the blockchain more useful extra technolgies like ChainQuery was introduced to search through the blockchain in a much faster and advanced way.
+Bitcoin uses public-key cryptography, peer-to-peer networking, and proof-of-work to process and verify payments.
 
-Also there are wallet servers running so the clients can use a so-called SPV wallet client, without the need of downloading the full blockhchain.
+Bitcoins are sent (or signed over) from one address to another with each user potentially having many, many addresses. 
+Each payment transaction is broadcast to the network and included in the blockchain so that the included bitcoins cannot be spent twice. 
+After an hour or two, each transaction is locked in time by the massive amount of processing power that continues to extend the blockchain.
 
-When new content is uploaded to Bitcoin, the data is encryped, hashed and distributed in pieces through the network to other hosts.
-Distributed Hash Table (DHT) is used as an effective way of creating such a distributed network, similar to the BitTorrent protocol.
-
-Last but not least, desktop clients/module apps, websites and more can use the Bitcoin protocol/SDK in order to actually use Bitcoin. The main application is the Bitcoin Desktop app:
-https://github.com/bitcoinio/bitcoin-desktop/releases`)
+Using these techniques, Bitcoin provides a fast and extremely reliable payment network that anyone can use.`)
     })
 
     // Age, since when does Bitcoin exists (first genesis block)
