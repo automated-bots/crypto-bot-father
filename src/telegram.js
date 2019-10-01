@@ -237,7 +237,7 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
               const ltcPrice = parseFloat(rateResult.LTC).toFixed(4)
               const ethPrice = parseFloat(rateResult.ETH).toFixed(5)
               const yenPrice = parseFloat(rateResult.JPY).toFixed(2)
-              const poundPrice = parseFloat(rateResult.GBP).toFixed(2)              
+              const poundPrice = parseFloat(rateResult.GBP).toFixed(2)
               const quote = result.quote.USD
               const maxSupply = result.max_supply.toLocaleString('en')
               const totalSupply = result.total_supply.toLocaleString('en')
