@@ -1,26 +1,26 @@
-# LBRY Bot
+# Bitcoin Bot
 
-Botfather for [LBRY](https://lbry.com/) - Which knows everything you want to know
+Botfather for [Bitcoin](https://bitcoin.org) - Which knows everything you want to know
 
 ## What?
 
-A Botfather chat bot for LBRY. The one that rule them all!
+A Botfather chat bot for Bitcoin. The one that rule them all!
 
 ## Why?
 
-LBRY Bot can be used in chat applications like IRC, [Telegram](https://telegram.org/apps) or Discord to parse requests from clients and return useful information about LBRY.
+Bitcoin Bot can be used in [Telegram](https://telegram.org/apps) parse requests from clients and return useful information about Bitcoin.
 
-This information could be anything like content, meta-data, network stats, address info, and much more!
+This information could be anything like network stats, address info, market data and much more!
 
-And thus eventually to serve the LBRY user (yes, you)!
+And thus eventually to serve the Bitcoin user (yes, you)!
 
 ## How?
 
-LBRY Bot is written in javascript using [Node.js](https://nodejs.org/en/download/).
+Bitcoin Bot is written in javascript using [Node.js](https://nodejs.org/en/download/).
 
-LBRY Bot initually will use the [lbry-sdk](https://github.com/lbryio/lbry-sdk) (also known as `lbrynet`) in order to retrieve information from the LBRY (eg.  meta-data, resolve URLs and more).
+Bitcoin Bot initually will use the [Bitcoin Core](https://github.com/bitcoin/bitcoin) in order to retrieve information from the Bitcoin network.
 
-The Bot also uses the [lbrycrd](https://github.com/lbryio/lbrycrd) API (for eg. blockchaininfo, network info, mining info). Last but not least, a more efficient [Chainquery](https://github.com/lbryio/chainquery) will be used to retrieve even more data like address, transactions, blocks, claims, channel info and more.
+We will never support the scamming Bitcoin Cash!
 
 ## Who?
 
@@ -28,7 +28,7 @@ Hi, it's me: Melroy van den Berg.
 
 ## When?
 
-Currently busy programming.... Please hold the line.
+Currently busy programming.... Please hold my bear.
 
 ## Develop
 
@@ -36,8 +36,7 @@ Requirements:
 
 * [Node.js v10](https://nodejs.org/en/download/)
 * npm (package manager)
-* [Lbrynet deamon](https://github.com/lbryio/lbry-sdk/releases)
-* [Lbrycrd deamon](https://github.com/lbryio/lbrycrd) with txindex turned on
+* [Bitcoin Core](https://github.com/bitcoin/bitcoin)
 
 ```sh
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
@@ -46,17 +45,10 @@ sudo apt-get install -y nodejs npm
 
 ### Running
 
-| Chat Service  | Token env. name    | Obtain by                                    |
-| ------------- |:------------------:| --------------------------------------------:|
-| Telegram      | TELEGRAM_TOKEN     | [@bothfather](https://telegram.me/BotFather) |
-| Discord       | TODO               | -                                            |
-| IRC           | TODO               | -                                            |
-
-Create & Fill-in the applicable tokens in `tokens.env` file, by using the template (see [tokens.env.example](tokens.env.example)):
+Create Telegram bot via [@bothfather](https://telegram.me/BotFather). Fill-in the applicable tokens in `tokens.env` file, by using the template (see [tokens.env.example](tokens.env.example)):
 
 ```sh
 TELEGRAM_TOKEN=xyz
-DISCORD_TOKEN=xyz
 COINMARKETCAP_API_TOKEN=xyz
 RPC_PASSWORD=xyz
 ```
@@ -65,16 +57,22 @@ Finally, starting the bot server: `npm start` (or `node src/index.js`)
 
 **Note 1:** Reverse proxy (eg. Nginx) is required to put between the bot and the world-wide-web. Expose the webserver on port 443 (with SSL). See [nginx_example.conf](nginx_example.conf).
 
-**Note 2:** Assuming you are running the lbrynet deamon (see requirements).
-
-**Note 3:** Assuming you are running the lbrycrd deamon (see requirements), with JSON RPC enabled and txindex enabled. Example of `~/.lbrycrd/lbrycrd.conf`:
+**Note 2:** Assuming you are running the bitcoind deamon (see requirements), with JSON RPC enabled and txindex enabled. Example of `/etc/bitcoin/bitcoin.conf`:
 
 ```sh
-rpcuser=lbry
-rpcpassword=xyz
+# [core]
+# You can generate this value with the ./share/rpcauth/rpcauth.py script in the Bitcoin Core repository.
+rpcauth=bitcoin:hashedpassword
+# Run in the background as a daemon and accept commands.
 daemon=1
+# [rpc]
+# Accept command line and JSON-RPC commands.
 server=1
+# Maintain a full transaction index, used by the getrawtransaction rpc call.
 txindex=1
+# [wallet]
+# Do not load the wallet and disable wallet RPC calls.
+disablewallet=1
 ```
 
 ### Linting
@@ -101,47 +99,25 @@ The bot can be started via crontab for example:
 
 **General setup:**
 
-* Be-sure both `lbrycrdd` and `lbrynet` binaries are installed into `/usr/bin` directory!
-* Create an user lbry the unix machine (`adduser -M lbry`)
+* Be-sure both `bitcoind` binary is installed into `/usr/bin` directory!
+* Create an user `bitcoin` the unix machine (`adduser -M bitcoin`)
 
-### LBRYcrd setup
+### Core setup
 
-* Place the LBRYcrd file (`lbryd.conf`) in `/etc/lbry` for the LBRY Core Daemon service, example of this file:
+* Place the Bitcoind file (`bitcoin.conf`) in `/etc/bitcoin` for the Bitcoin Core Daemon service, example of this file:
 
 ```sh
-rpcuser=lbry
+rpcuser=bitcoin
 rpcpassword=my_secure_password
 daemon=1
 server=1
 txindex=1
 ```
 
-* See [lbrycrd.service systemd file](lbrycrd.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.
-* Core data will be stored into `/var/lib/lbrycrd`
+* See [bitcoin.service systemd file](bitcoin.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.
+* Core data will be stored into `/var/lib/bitcoind`
 
-### LBRYnet setup
+## Useful links
 
-* Place the LBRYNet file (`lbrynet.yml`) in `/etc/lbry`, example of this file:
-
-```yml
-api: 127.0.0.1:5279
-streaming_server: 127.0.0.1:5280
-allowed_origin: localhost
-data_dir: /var/lib/lbrynet
-download_dir: /var/lib/lbrynet
-wallet_dir: /var/lib/lbryum
-save_files: false
-save_blobs: false
-max_key_fee:
-    currency: LBC
-    amount: 0
-use_keyring: false
-```
-
-* See [lbrynet.service systemd file](lbrynet.service). Place also inside `/etc/systemd/system`.
-* LBRYNet (SDK) data will be stored into `/var/lib/lbrynet`
-
-## Handy links 
-
-* [LBRY nomics from Brendon](https://github.com/eggplantbren/LBRYnomics)
-* [Brendon API](https://www.brendonbrewer.com/lbrynomics/)
+* [Bitcoin Core Blog](https://bitcoincore.org/en/blog/)
+* [Bitcoin.org FAQ](https://bitcoin.org/en/faq)

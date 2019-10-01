@@ -1,7 +1,7 @@
 {
-  "name": "lbry-bot",
+  "name": "bitcoin-bot",
   "version": "0.1.0",
-  "description": "A Botfather chat bot for LBRY. The one that rule them all!",
+  "description": "A Botfather chat bot for Bitcoin. The one that rule them all!",
   "main": "src/index.js",
   "directories": {
     "doc": "docs"
@@ -14,16 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.melroy.org:melroy/lbry-bot.git"
+    "url": "git@gitlab.melroy.org:melroy/bitcoin-bot.git"
   },
   "keywords": [
     "bot",
-    "LBRY",
+    "Bitcoin",
     "chat",
     "father",
-    "discord",
-    "telegram",
-    "irc"
+    "telegram"
   ],
   "author": {
     "name": "Melroy van den Berg",

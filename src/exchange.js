@@ -7,9 +7,9 @@ class Exchange {
    */
   constructor (coinMarketAPI) {
     // Exchange WhatToMine
-    this.whattomine_api = 'https://whattomine.com/coins/164.json'
+    this.whattomine_api = 'https://whattomine.com/coins/1.json'
     // Official CoinMarketCap
-    this.coinmarket_id = 1298 // 1298 = LBC
+    this.coinmarket_id = 1 // 1 = BTC
     this.coinmarket = axios.create({
       baseURL: 'https://pro-api.coinmarketcap.com/v1',
       timeout: 10000,

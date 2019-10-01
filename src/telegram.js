@@ -1,18 +1,17 @@
 const Misc = require('./miscellaneous')
 
 // Constants
-const LBC_PRICE_FRACTION_DIGITS = 5
+const BTC_PRICE_FRACTION_DIGITS = 5
 const DOLLAR_PRICE_FRACTION_DIGITS = 8
-const FAQ_URL = 'https://lbry.com/faq'
-const LBRY_TV_URL = 'https://beta.lbry.tv'
-const OPEN_URL = 'https://open.lbry.com'
-const COINMARKET_URL = 'https://coinmarketcap.com/currencies/library-credit'
-const EXPLORER_URL = 'https://explorer.lbry.com'
+const FAQ_URL = 'https://bitcoin.org/en/faq'
+const OPEN_URL = 'https://open.bitcoin.com'
+const COINMARKET_URL = 'https://coinmarketcap.com/currencies/bitcoin'
+const EXPLORER_URL = 'https://www.blockchain.com/btc'
 
 class Telegram {
-  constructor (bot, lbry, exchange) {
+  constructor (bot, bitcoin, exchange) {
     this.bot = bot
-    this.lbry = lbry
+    this.bitcoin = bitcoin
     this.exchange = exchange
   }
 
@@ -26,27 +25,20 @@ class Telegram {
       const helpText = `
 /help - Return this help output
 /status - Retrieve Lbrynet, Lbrycrd, Chainquery status
-/networkinfo - Get LBRY Network info
+/networkinfo - Get Bitcoin Network info
 /stats - Get blockchain, mining and exchange stats
 /price - Get market (price) info
 
-/lastcontent - Get the last uploaded content
-/lastchannels - Get the last created channels
 /lastblocks - Get the last 10 blocks
-/top10 - Top 10 biggest transactions & top 10 most subscribed channels
-
-/file <uri> - Get meta file content
-/tips <name> - Get the top 10 tips of given name (channel or content)
-/contenttips <content URI> - Get the top 10 tips of given content URI
 /transaction <hash> - Get transaction info
 /address <address> - Get address info
 /transactions <address> - Get last 10 transactions from an address
 /block <hash or block height> - Get block info
 
-/why - Why LBRY?
-/what - What is LBRY?
-/how - How does LBRY work?
-/age - How long does LBRY exists?
+/why - Why Bitcoin?
+/what - What is Bitcoin?
+/how - How does Bitcoin work?
+/age - How long does Bitcoin exists?
 /faq - Frequality Asked Questions`
       this.bot.sendMessage(chatId, helpText)
     })
@@ -57,57 +49,57 @@ class Telegram {
       this.bot.sendMessage(chatId, '[Read FAQ](' + FAQ_URL + ')', { parse_mode: 'markdown' })
     })
 
-    // Why is LBRY created?
+    // Why is Bitcoin created?
     this.bot.onText(/^[/|!]why\S*$/, msg => {
       const chatId = msg.chat.id
       this.bot.sendMessage(chatId, `
-LBRY is created to have an open-source and decentralized place to store videos, images, e-books, games or any other content!
-LBRY makes use of the blockchain technology to store the meta data, and use peer-to-peer network to retrieve the actual content.
+Bitcoin is created to have an open-source and decentralized place to store videos, images, e-books, games or any other content!
+Bitcoin makes use of the blockchain technology to store the meta data, and use peer-to-peer network to retrieve the actual content.
 
-The content creator can upload the content free to watch or add a certain LBC amount in order to view the content (although most of the content on LBRY is free to watch).
-Alternatively, you can tip the content creator with any LBC amount you like.
+The content creator can upload the content free to watch or add a certain BTC amount in order to view the content (although most of the content on Bitcoin is free to watch).
+Alternatively, you can tip the content creator with any BTC amount you like.
 
-Basically LBRY is an alternative for YouTube, Vimeo and others, but free, open-source, decentralized and run by the community.`)
+Basically Bitcoin is an alternative for YouTube, Vimeo and others, but free, open-source, decentralized and run by the community.`)
     })
 
-    // What is LBRY?
+    // What is Bitcoin?
     this.bot.onText(/^[/|!]what\S*$/, msg => {
       const chatId = msg.chat.id
-      this.bot.sendMessage(chatId, 'LBRY is a decentralized digital content platform, so anyone can share and view the content (for free or for payment). An alternative to YouTube but not limited to videos only, and fully open-source and decentralized!')
+      this.bot.sendMessage(chatId, 'Bitcoin is a decentralized digital content platform, so anyone can share and view the content (for free or for payment). An alternative to YouTube but not limited to videos only, and fully open-source and decentralized!')
     })
 
-    // How does LBRY work?
+    // How does Bitcoin work?
     this.bot.onText(/^[/|!]how\S*$/, msg => {
       const chatId = msg.chat.id
       this.bot.sendMessage(chatId, `
-Foundation is the LBRY protocol by using blockchain technology. LBRY extended the Bitcoin proof-of-work concept and added address name that points to the metadata.
-Such an address can be put in a LBRY URL: eg. lbry://mycustomname.
+Foundation is the Bitcoin protocol by using blockchain technology. Bitcoin extended the Bitcoin proof-of-work concept and added address name that points to the metadata.
+Such an address can be put in a Bitcoin URL: eg. bitcoin://mycustomname.
 To make the blockchain more useful extra technolgies like ChainQuery was introduced to search through the blockchain in a much faster and advanced way.
 
 Also there are wallet servers running so the clients can use a so-called SPV wallet client, without the need of downloading the full blockhchain.
 
-When new content is uploaded to LBRY, the data is encryped, hashed and distributed in pieces through the network to other hosts.
+When new content is uploaded to Bitcoin, the data is encryped, hashed and distributed in pieces through the network to other hosts.
 Distributed Hash Table (DHT) is used as an effective way of creating such a distributed network, similar to the BitTorrent protocol.
 
-Last but not least, desktop clients/module apps, websites and more can use the LBRY protocol/SDK in order to actually use LBRY. The main application is the LBRY Desktop app:
-https://github.com/lbryio/lbry-desktop/releases`)
+Last but not least, desktop clients/module apps, websites and more can use the Bitcoin protocol/SDK in order to actually use Bitcoin. The main application is the Bitcoin Desktop app:
+https://github.com/bitcoinio/bitcoin-desktop/releases`)
     })
 
-    // Age, since when does LBRY exists (first block)
-    // Source: https://explorer.lbry.com/blocks/1
+    // Age, since when does Bitcoin exists (first genesis block)
+    // Source: https://www.blockchain.com/btc/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
     this.bot.onText(/^[/|!]age\S*$/, msg => {
       const chatId = msg.chat.id
-      const age = Misc.timestampToDate(Date.now() - 1466646592000) // timestamp ms since creation after genesis block
-      this.bot.sendMessage(chatId, `LBRY age: ${age.year} years, ${age.month} months, ${age.day} days, ${age.hour}h ${age.minute}m ${age.second}s, since the first mined block.`)
+      const age = Misc.timestampToDate(Date.now() - 1231002905000) // timestamp ms since creation on the genesis block
+      this.bot.sendMessage(chatId, `Bitcoin age: ${age.year} years, ${age.month} months, ${age.day} days, ${age.hour}h ${age.minute}m ${age.second}s, since the first mined block.`)
     })
 
     // status command (detailed status report)
     this.bot.onText(/[/|!]status/, msg => {
-      const lbry = this.lbry
+      const bitcoin = this.bitcoin
       const bot = this.bot
       const chatId = msg.chat.id
       let text = ''
-      lbry.getLbryNetStatus()
+      bitcoin.getLbryNetStatus()
         .then(result => {
           text += `*General* 🖥
 Lbrynet daemon running: ${result.is_running}
@@ -115,11 +107,11 @@ Lbrynet connection: ${result.connection_status.code}`
         })
         .catch(error => {
           console.error(error)
-          text += 'Error: Could not LBRYnet (SDK) info!\n'
+          text += 'Error: Could not Bitcoinnet (SDK) info!\n'
         })
         .then(function () {
           // always executed
-          lbry.getNetworkInfo()
+          bitcoin.getNetworkInfo()
             .then(networkResult => {
               text += `
 Lbrycrd version: ${networkResult.subversion}
@@ -133,7 +125,7 @@ Peers connected: ${networkResult.connections}`
             })
             .then(function () {
               // always executed
-              lbry.getPeerInfo()
+              bitcoin.getPeerInfo()
                 .then(peerResult => {
                   text += '\nFirst peer details:'
                   if (peerResult.length > 0) {
@@ -154,7 +146,7 @@ Peers connected: ${networkResult.connections}`
                 })
                 .then(function () {
                   // always executed
-                  lbry.getWalletInfo()
+                  bitcoin.getWalletInfo()
                     .then(walletResult => {
                       const oldestKeyTime = Misc.printDate(new Date(walletResult.keypoololdest * 1000))
                       text += `
@@ -180,58 +172,18 @@ Oldest address in keypool: ${oldestKeyTime}
       this.bot.sendMessage(chatId, 'Error: Provide atleast the URI as argument: /file <uri>')
     })
 
-    // fileinfo command (/file <uri>)
-    this.bot.onText(/[/|!]file@?\S* (.+)/, (msg, match) => {
-      const uri = match[1].trim()
-      this.lbry.getMetaFileData(uri)
-        .then(result => {
-          // Retrieve the channel name as well
-          this.lbry.getChannelNameString(result.channel_claim_id)
-            .then(channelResult => {
-              const chatId = msg.chat.id
-              const title = result.metadata.title
-              const channelName = channelResult[0].name
-              let duration = ''
-              if (result.metadata.video) {
-                const durationMin = Math.floor(parseFloat(result.metadata.video.duration) / 60)
-                const durationSec = (((parseFloat(result.metadata.video.duration) / 60) % 2) * 60).toFixed(0)
-                duration = `\n*Duration:* ${durationMin}m ${durationSec}s`
-              }
-              const thumbnail = result.metadata.thumbnail.url
-              const fileSize = parseFloat(result.metadata.source.size / Math.pow(1024, 2)).toFixed(2) // To Megabyte
-              const uriWithoutProtocol = uri.replace(/(^\w+:|^)\/\//, '')
-              const publicURL = LBRY_TV_URL + '/' + uriWithoutProtocol
-              const textMsg = `
-*Title:* ${title}
-*Channel name:* [${channelName}](${OPEN_URL}/${channelName})
-*Media Type:* ${result.metadata.source.media_type}${duration}
-*Size:* ${fileSize} MB
-[Watch Online!](${publicURL})
-[Watch via LBRY App](${OPEN_URL}/${uriWithoutProtocol})`
-              this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })
-              if (thumbnail) { this.bot.sendPhoto(chatId, thumbnail, { caption: 'Thumbnail: ' + title }) }
-            })
-            .catch(error => {
-              console.error(error)
-            })
-            .catch(error => {
-              console.error(error)
-            })
-        })
-    })
-
     this.bot.onText(/[/|!]networkinfo/, msg => {
       const chatId = msg.chat.id
-      this.lbry.getNetworkInfo()
+      this.bitcoin.getNetworkInfo()
         .then(result => {
           var text = `
 *Network* ℹ️
-LBRY server version: ${result.version}
+Bitcoin server version: ${result.version}
 Protocol version: ${result.protocolversion}
 Connections: ${result.connections}
 P2P active: ${result.networkactive}
-Minimum relay fee:  ${result.relayfee} LBC/kB
-Minimum incremental fee: ${result.incrementalfee} LBC/kB
+Minimum relay fee:  ${result.relayfee} BTC/kB
+Minimum incremental fee: ${result.incrementalfee} BTC/kB
 Networks:`
           const networks = result.networks
           for (let i = 0; i < networks.length; i++) {
@@ -251,9 +203,9 @@ Networks:`
 
     this.bot.onText(/[/|!]stats/, msg => {
       const chatId = msg.chat.id
-      this.lbry.getBlockChainInfo()
+      this.bitcoin.getBlockChainInfo()
         .then(result => {
-          this.lbry.getMiningInfo()
+          this.bitcoin.getMiningInfo()
             .then(miningResult => {
               const hashrateth = (parseFloat(miningResult.networkhashps) / 1000.0 / 1000.0 / 1000.0 / 1000.0).toFixed(2)
               this.exchange.getExchangeInfo()
@@ -286,9 +238,9 @@ Difficulty 7 days avg: ${difficulty7d}
 
 *Reward* 🤑
 Block time: ${blockTimeMin}m ${blockTimeSec}s
-Block reward: ${exchangeResult.block_reward} LBC
-Block reward 24 hours avg: ${exchangeResult.block_reward24} LBC
-Block reward 3 days avg: ${exchangeResult.block_reward3} LBC
+Block reward: ${exchangeResult.block_reward} BTC
+Block reward 24 hours avg: ${exchangeResult.block_reward24} BTC
+Block reward 3 days avg: ${exchangeResult.block_reward3} BTC
 
 *Exchange* 💱
 Exchange rate: ${exchangeRate} BTC-LTC
@@ -334,14 +286,14 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-LTC`
               const days7ChangeIcon = (Math.sign(quote.percent_change_7d) === 1) ? '👍' : '👎'
               const text = `*General* 📈
 Rank on CoinMarketCap: [#${result.cmc_rank}](${COINMARKET_URL})
-Max. available coins: ${maxSupply} LBCs
-Current amount coins: ${totalSupply} LBCs
-Number of coins circulating: ${circulating} LBCs
+Max. available coins: ${maxSupply} BTCs
+Current amount coins: ${totalSupply} BTCs
+Number of coins circulating: ${circulating} BTCs
 
 *Price* 💸
-Price: $${dollarPrice}/LBC
+Price: $${dollarPrice}/BTC
 Last updated dollar: ${dollarPriceLastUpdated}
-Price: 1 LBC = ${bitcoinPrice} BTC 
+Price: 1 BTC = ${bitcoinPrice} BTC 
 Last updated BTC: ${bitcoinPriceDateTime}
 Volume 24 hour avg: $${volume24h}
 Volume 7 days avg: $${volume7d}
@@ -366,16 +318,16 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
     // address command (/address <address>)
     this.bot.onText(/[/|!]address@?\S* (.+)/, (msg, match) => {
       const address = match[1].trim()
-      this.lbry.getAddressInfo(address)
+      this.bitcoin.getAddressInfo(address)
         .then(result => {
           const chatId = msg.chat.id
           if (result.length > 0) {
             const currentAddress = result[0]
-            const balance = parseFloat(currentAddress.balance).toLocaleString('en', { maximumFractionDigits: LBC_PRICE_FRACTION_DIGITS })
+            const balance = parseFloat(currentAddress.balance).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
             const text = `
 *Created at:* ${currentAddress.created_at}
 *Modified at:* ${currentAddress.modified_at}
-*Balance:* ${balance} LBC
+*Balance:* ${balance} BTC
 [View online](${EXPLORER_URL}/address/${address})`
             this.bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
           } else {
@@ -395,11 +347,11 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
     this.bot.onText(/[/|!]transaction@?\S* (.+)/, (msg, match) => {
       const hash = match[1].trim()
       const chatId = msg.chat.id
-      this.lbry.getTransaction(hash)
+      this.bitcoin.getTransaction(hash)
         .then(result => {
           const currentTransaction = result[0]
           let text = `
-*Amount:* ${currentTransaction.value} LBC (input count: ${currentTransaction.input_count}, output count:${currentTransaction.output_count})
+*Amount:* ${currentTransaction.value} BTC (input count: ${currentTransaction.input_count}, output count:${currentTransaction.output_count})
 *🧱 Height:* ${currentTransaction.height}
 *Created at:* ${currentTransaction.created_at}
 *Size:* ${currentTransaction.transaction_size} bytes
@@ -422,23 +374,23 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
     this.bot.onText(/[/|!]transactions@?\S* (.+)/, (msg, match) => {
       const address = match[1].trim()
       const chatId = msg.chat.id
-      this.lbry.getAddressInfo(address)
+      this.bitcoin.getAddressInfo(address)
         .then(result => {
           if (result.length > 0) {
-            this.lbry.getTransactions(result[0].id)
+            this.bitcoin.getTransactions(result[0].id)
               .then(list => {
                 let text = '*Last 10 transactions*'
                 if (list.length > 0) {
                   for (let i = 0; i < list.length; i++) {
                     let amount = ''
                     if (list[i].credit_amount !== '0.00000000') {
-                      amount = parseFloat(list[i].credit_amount).toLocaleString('en', { maximumFractionDigits: LBC_PRICE_FRACTION_DIGITS })
+                      amount = parseFloat(list[i].credit_amount).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
                     } else {
-                      amount = '-' + parseFloat(list[i].debit_amount).toLocaleString('en', { maximumFractionDigits: LBC_PRICE_FRACTION_DIGITS })
+                      amount = '-' + parseFloat(list[i].debit_amount).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
                     }
                     text += `
     Hash: ${list[i].hash}
-    Amount: ${amount} LBC
+    Amount: ${amount} BTC
     Timestamp: ${list[i].created_time}
     [View transaction](${EXPLORER_URL}/tx/${list[i].hash}?address=${address}#${address})
     -----------------------------`
@@ -489,7 +441,7 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
       const chatId = msg.chat.id
       if (Misc.isSha256(hashOrHeight)) {
         // Retrieved block by hash (sha256)
-        this.lbry.getBlockInfo(hashOrHeight)
+        this.bitcoin.getBlockInfo(hashOrHeight)
           .then(result => {
             if (result.length > 0) {
               this.bot.sendMessage(chatId, printBlockInfo(result[0]), { parse_mode: 'markdown' })
@@ -502,7 +454,7 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
           })
       } else {
         // Retrieved block by block height
-        this.lbry.getBlockHeightInfo(hashOrHeight)
+        this.bitcoin.getBlockHeightInfo(hashOrHeight)
           .then(result => {
             if (result.length > 0) {
               this.bot.sendMessage(chatId, printBlockInfo(result[0]), { parse_mode: 'markdown' })
@@ -516,7 +468,7 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
     // lastcontent command
     this.bot.onText(/[/|!]lastcontent/, msg => {
       const chatId = msg.chat.id
-      this.lbry.getLastContentClaims()
+      this.bitcoin.getLastContentClaims()
         .then(result => {
           let textMsg = '*Last 10 uploaded content*\n'
           for (let i = 0; i < result.length; i++) {
@@ -534,7 +486,7 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
     // lastchannels command
     this.bot.onText(/[/|!]lastchannels/, msg => {
       const chatId = msg.chat.id
-      this.lbry.getLastChannelsClaims()
+      this.bitcoin.getLastChannelsClaims()
         .then(result => {
           let textMsg = '*Last 10 new channels*\n'
           for (let i = 0; i < result.length; i++) {
@@ -551,7 +503,7 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
     // lastblocks command (/lastblocks)
     this.bot.onText(/[/|!]lastblocks/, msg => {
       const chatId = msg.chat.id
-      this.lbry.getLastBlocks()
+      this.bitcoin.getLastBlocks()
         .then(result => {
           let textMsg = '*Last 10 blocks* 🧱'
           for (let i = 0; i < result.length; i++) {
@@ -576,14 +528,14 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
     // top10 command (/top10)
     this.bot.onText(/[/|!]top10/, msg => {
       const chatId = msg.chat.id
-      this.lbry.getTop10BiggestTransactions()
+      this.bitcoin.getTop10BiggestTransactions()
         .then(result => {
           let textMsg = '*Top 10 biggest transactions of this year* 💰\n'
           for (let i = 0; i < result.length; i++) {
-            const amount = parseFloat(result[i].value).toLocaleString('en', { maximumFractionDigits: LBC_PRICE_FRACTION_DIGITS })
-            textMsg += `[${amount} LBC](${EXPLORER_URL}/tx/${result[i].hash}) (in: ${result[i].output_count}, out: ${result[i].output_count}) - ${result[i].created_time}\n`
+            const amount = parseFloat(result[i].value).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
+            textMsg += `[${amount} BTC](${EXPLORER_URL}/tx/${result[i].hash}) (in: ${result[i].output_count}, out: ${result[i].output_count}) - ${result[i].created_time}\n`
           }
-          this.lbry.getTop100Channels()
+          this.bitcoin.getTop100Channels()
             .then(channelResult => {
               // Retrieve the top 10 only
               if (channelResult.vanity_names && channelResult.vanity_names.length >= 5) {
@@ -622,18 +574,18 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
     this.bot.onText(/[/|!]tips@?\S* (.+)/, (msg, match) => {
       const name = match[1].trim()
       const chatId = msg.chat.id
-      this.lbry.resolve(name)
+      this.bitcoin.resolve(name)
         .then(resolve => {
           if (name in resolve) {
             const channelOrContent = resolve[name]
-            this.lbry.getTop10Tips(channelOrContent.claim_id)
+            this.bitcoin.getTop10Tips(channelOrContent.claim_id)
               .then(tipsResult => {
                 if (tipsResult.length > 0) {
-                  let textMsg = '*Effective amount:* ' + channelOrContent.meta.effective_amount + ' LBC\n'
+                  let textMsg = '*Effective amount:* ' + channelOrContent.meta.effective_amount + ' BTC\n'
                   textMsg += '*Top 10 highest tips*\n'
                   for (let i = 0; i < tipsResult.length; i++) {
-                    const amount = parseFloat(tipsResult[i].amount).toLocaleString('en', { maximumFractionDigits: LBC_PRICE_FRACTION_DIGITS })
-                    textMsg += `[${amount} LBC](${EXPLORER_URL}/tx/${tipsResult[i].hash}) - ${tipsResult[i].created_at} - ${tipsResult[i].name}\n`
+                    const amount = parseFloat(tipsResult[i].amount).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
+                    textMsg += `[${amount} BTC](${EXPLORER_URL}/tx/${tipsResult[i].hash}) - ${tipsResult[i].created_at} - ${tipsResult[i].name}\n`
                   }
                   this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })
                 } else if ('error' in channelOrContent) {
@@ -659,20 +611,20 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
     this.bot.onText(/[/|!]contenttips@?\S* (.+)/, (msg, match) => {
       const contentName = match[1].trim()
       const chatId = msg.chat.id
-      this.lbry.resolve(contentName)
+      this.bitcoin.resolve(contentName)
         .then(resolve => {
           if (contentName in resolve) {
             const content = resolve[contentName]
-            this.lbry.getTopContentTips(content.claim_id)
+            this.bitcoin.getTopContentTips(content.claim_id)
               .then(tipsResult => {
                 if (tipsResult.length > 0) {
-                  this.lbry.getChannelNameString(tipsResult[0].publisher_id)
+                  this.bitcoin.getChannelNameString(tipsResult[0].publisher_id)
                     .then(channelResult => {
                       const channelName = channelResult[0].name
                       let textMsg = `*Top 10 highest content tips* (channel: [${channelName}](${OPEN_URL}/${channelName}))\n`
                       for (let i = 0; i < tipsResult.length; i++) {
-                        const amount = parseFloat(tipsResult[i].amount).toLocaleString('en', { maximumFractionDigits: LBC_PRICE_FRACTION_DIGITS })
-                        textMsg += `[${amount} LBC](${EXPLORER_URL}/tx/${tipsResult[i].hash}) - ${tipsResult[i].created_at} \n`
+                        const amount = parseFloat(tipsResult[i].amount).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
+                        textMsg += `[${amount} BTC](${EXPLORER_URL}/tx/${tipsResult[i].hash}) - ${tipsResult[i].created_at} \n`
                       }
                       textMsg += `[View content](${OPEN_URL}/${content.permanent_url.replace(/(^\w+:|^)\/\//, '')})`
                       this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })

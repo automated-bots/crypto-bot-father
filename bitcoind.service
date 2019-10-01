@@ -1,37 +1,54 @@
 # It is not recommended to modify this file in-place, because it will
 # be overwritten during package upgrades. If you want to add further
 # options or overwrite existing ones then use
-# $ systemctl edit lbrynet.service
+# $ systemctl edit bitcoind.service
 # See "man systemd.service" for details.
 
-# /etc/lbry/lbrynet.yml is used for futher settings
+# Note that almost all daemon options could be specified in
+# /etc/bitcoin/bitcoin.conf, but keep in mind those explicitly
+# specified as arguments in ExecStart= will override those in the
+# config file.
 
 [Unit]
-Description=LBRYNet
+Description=Bitcoin Core daemon
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/lbrynet start --config /etc/lbry/lbrynet.yml
+ExecStart=/usr/bin/bitcoind -daemon \
+                            -pid=/run/bitcoind/bitcoind.pid \
+                            -conf=/etc/bitcoin/bitcoin.conf \
+                            -datadir=/var/lib/bitcoind
 
 # Make sure the config directory is readable by the service user
 PermissionsStartOnly=true
-ExecStartPre=/bin/chgrp lbry /etc/lbry
-ExecStartPre=/bin/chgrp lbry /var/lib/lbryum
-ExecStartPre=/bin/chgrp lbry /var/lib/lbrynet
+ExecStartPre=/bin/chgrp bitcoin /etc/bitcoin
+ExecStartPre=/bin/chgrp bitcoin /run/bitcoind
+ExecStartPre=/bin/chgrp bitcoin /var/lib/bitcoind
+
+# Process management
+####################
+
+Type=forking
+PIDFile=/run/bitcoin/bitcoind.pid
+Restart=on-failure
 
 # Directory creation and permissions
 ####################################
 
-# Run as lbry:lbry
-User=lbry
-Group=lbry
+# Run as bitcoin:bitcoin
+User=bitcoin
+Group=bitcoin
 
-# /etc/lbry
-ConfigurationDirectory=lbry
+# /run/bitcoind
+RuntimeDirectory=bitcoind
+RuntimeDirectoryMode=0710
+
+# /etc/bitcoin
+ConfigurationDirectory=bitcoin
 ConfigurationDirectoryMode=0710
 
-# /var/lib/lbrynet & /var/lib/lbryum
-StateDirectory=lbrynet lbryum
+# /var/lib/bitcoind
+StateDirectory=bitcoind
 StateDirectoryMode=0710
 
 # Hardening measures
