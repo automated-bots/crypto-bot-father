@@ -24,7 +24,7 @@ class Telegram {
       const chatId = msg.chat.id
       const helpText = `
 /help - Return this help output
-/status - Retrieve Lbrynet, Lbrycrd, Chainquery status
+/status - Retrieve Bitcoin, Lbrycrd, Chainquery status
 /networkinfo - Get Bitcoin Network info
 /stats - Get blockchain, mining and exchange stats
 /price - Get market (price) info
@@ -99,8 +99,8 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
       bitcoin.getLbryNetStatus()
         .then(result => {
           text += `*General* 🖥
-Lbrynet daemon running: ${result.is_running}
-Lbrynet connection: ${result.connection_status.code}`
+Bitcoin daemon running: ${result.is_running}
+Bitcoin connection: ${result.connection_status.code}`
         })
         .catch(error => {
           console.error(error)
