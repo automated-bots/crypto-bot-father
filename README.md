@@ -20,7 +20,8 @@ Bitcoin Bot is written in javascript using [Node.js](https://nodejs.org/en/downl
 
 Bitcoin Bot initually will use the [Bitcoin Core](https://github.com/bitcoin/bitcoin) in order to retrieve information from the Bitcoin network.
 
-We will never support the scamming Bitcoin Cash! But we could add Ethereum in the future.
+We will never support the scamming 'Bitcoin Cash'! But we could add Ethereum in the future. We definitly will add Lightning network stats in the near-future.
+
 
 ## Who?
 
