@@ -13,7 +13,7 @@ class Bitcoin {
     // Local Bitcoin core deamon API
     this.bitcoind = axios.create({
       baseURL: 'http://' + bitcoindHost + ':' + bitcoindPort,
-      timeout: 10000,
+      timeout: 100000,
       auth: {
         username: bitcoindRPCUser,
         password: bitcoindRPCPass
@@ -88,6 +88,16 @@ class Bitcoin {
       .then(response => {
         return Promise.resolve(response.data.result)
       })
+  }
+
+  /*
+   * Get address info
+   * @return {Promise} Axios promise (id & balance)
+   */
+  getAddressInfo (address) {
+    // https://bitcoin.stackexchange.com/questions/10090/how-to-get-an-addresss-balance-with-the-bitcoin-client
+    // https://bitcoin.org/en/developer-reference#getreceivedbyaddress
+    // TODO:
   }
 }
 

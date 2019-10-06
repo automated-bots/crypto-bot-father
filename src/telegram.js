@@ -112,15 +112,19 @@ Peers connected: ${networkResult.connections}`
           // always executed
           bitcoin.getPeerInfo()
             .then(peerResult => {
-              text += '\nFirst peer details:'
+              text += '\nFirst three peers:'
               if (peerResult.length > 0) {
-                const sendTime = Misc.printDate(new Date(peerResult[0].lastsend * 1000))
-                const recieveTime = Misc.printDate(new Date(peerResult[0].lastrecv * 1000))
-                const ping = parseFloat(peerResult[0].pingtime * 1000).toFixed(2)
-                text += `
-Ping: ${ping} ms
-Last send: ${sendTime}
-Last receive: ${recieveTime}`
+                let i
+                for (i = 0; i < 3; i++) {
+                  const sendTime = Misc.printDate(new Date(peerResult[i].lastsend * 1000))
+                  const recieveTime = Misc.printDate(new Date(peerResult[i].lastrecv * 1000))
+                  const ping = parseFloat(peerResult[i].pingtime * 1000).toFixed(2)
+                  text += `
+    Ping: ${ping} ms
+    Last send: ${sendTime}
+    Last receive: ${recieveTime}
+    ---`
+                }
               } else {
                 text += 'Warning: No peers connected...'
               }
@@ -286,9 +290,9 @@ Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
     // address command (/address <address>)
     this.bot.onText(/[/|!]address@?\S* (.+)/, (msg, match) => {
       const address = match[1].trim()
+      const chatId = msg.chat.id
       this.bitcoin.getAddressInfo(address)
         .then(result => {
-          const chatId = msg.chat.id
           if (result.length > 0) {
             const currentAddress = result[0]
             const balance = parseFloat(currentAddress.balance).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })

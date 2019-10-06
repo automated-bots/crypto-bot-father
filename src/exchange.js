@@ -6,6 +6,8 @@ class Exchange {
    * @param {string} coinMarketAPI
    */
   constructor (coinMarketAPI) {
+    // Exchange WhatToMine
+    this.whattomine_api = 'https://whattomine.com/coins/1.json'
     // CoinBase Exchange
     this.coinbase_api = 'https://api.coinbase.com/v2/exchange-rates?currency=BTC'
     // Official CoinMarketCap
@@ -46,6 +48,18 @@ class Exchange {
     })
       .then(response => {
         return Promise.resolve(response.data.data[this.coinmarket_id])
+      })
+  }
+
+  /**
+   * Get exchange info from Whattomine.com
+   *
+   * @return {Promise} Axios promise (block_time, block_reward, difficulty24, exchange_rate, exchange_rate24, market_cap)
+   */
+  getExchangeInfo () {
+    return axios.get(this.whattomine_api)
+      .then(response => {
+        return Promise.resolve(response.data)
       })
   }
 }
