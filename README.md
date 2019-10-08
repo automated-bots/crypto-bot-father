@@ -67,7 +67,6 @@ daemon=1
 datadir=/mnt/37e528d8-9102-4d8e-b9e4-97d749a6b92e/Bitcoin/
 server=1
 txindex=1
-disablewallet=1
 ```
 
 ### Linting
