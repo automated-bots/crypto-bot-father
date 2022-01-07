@@ -38,7 +38,7 @@ There is a Docker image [available on DockerHub](https://hub.docker.com/reposito
 
 ### Running
 
-Create Telegram bot via [@bothfather](https://telegram.me/BotFather). Fill-in the applicable tokens in `tokens.env` file, by using the template (see [tokens.env.example](tokens.env.example)):
+Create Telegram bot via [@bothfather](https://telegram.me/BotFather). Fill-in the applicable tokens/secrets in `secrets.env` file, by using the template (see [secrets.env.example](secrets.env.example)):
 
 ```sh
 TELEGRAM_TOKEN=xyz
