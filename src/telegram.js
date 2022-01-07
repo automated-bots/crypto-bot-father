@@ -28,7 +28,7 @@ class Telegram {
         this.exchange.getExchangeRates(symbol)
           .then(rateResult => {
             const text = ProcessData.price(symbol, quoteResult, rateResult)
-            this.bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
+            this.bot.sendMessage(chatId, text, { parse_mode: 'markdown', disable_web_page_preview: true })
           })
           .catch(error => {
             if (error.response && error.response.status === 400) {
@@ -81,7 +81,7 @@ More info:
     // Give FAQ Link
     this.bot.onText(/^[/|!]faq\S*$/, msg => {
       const chatId = msg.chat.id
-      this.bot.sendMessage(chatId, '[Read FAQ](' + FAQ_URL + ')', { parse_mode: 'markdown' })
+      this.bot.sendMessage(chatId, '[Read FAQ](' + FAQ_URL + ')', { parse_mode: 'markdown', disable_web_page_preview: true })
     })
 
     // Why is Bitcoin created?
@@ -170,7 +170,7 @@ Peers connected: ${networkResult.connections}`
             })
             .then(function () {
               // always executed, finally we send the info back!
-              bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
+              bot.sendMessage(chatId, text, { parse_mode: 'markdown', disable_web_page_preview: true })
             })
         })
     })
@@ -196,7 +196,7 @@ Networks:`
     Reachable: ${networks[i].reachable}
     -----------------------`
           }
-          this.bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
+          this.bot.sendMessage(chatId, text, { parse_mode: 'markdown', disable_web_page_preview: true })
         })
         .catch(error => {
           console.error(error)
@@ -250,7 +250,7 @@ Exchange rate: ${exchangeRate} BTC-USD
 Exchange rate 24 hours avg: ${exchangeRate24h} BTC-USD
 Exchange rate 3 days avg: ${exchangeRate3d} BTC-USD
 Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
-                  this.bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
+                  this.bot.sendMessage(chatId, text, { parse_mode: 'markdown', disable_web_page_preview: true })
                 })
                 .catch(error => {
                   console.error(error)
@@ -291,7 +291,7 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
 *Modified at:* ${currentAddress.modified_at}
 *Balance:* ${balance} BTC
 [View online](${EXPLORER_URL}/address/${address})`
-            this.bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
+            this.bot.sendMessage(chatId, text, { parse_mode: 'markdown', disable_web_page_preview: true })
           } else {
             this.bot.sendMessage(chatId, 'Address is not (yet) used.')
           }
@@ -323,7 +323,7 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
 *Claim Title:* ${currentTransaction.title}
 [View connected claim](${OPEN_URL}/${currentTransaction.name})`
           }
-          this.bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
+          this.bot.sendMessage(chatId, text, { parse_mode: 'markdown', disable_web_page_preview: true })
           // Why not, just send the thumbnail as well!
           if (currentTransaction.thumbnail_url) { this.bot.sendPhoto(chatId, currentTransaction.thumbnail_url, { caption: 'Thumbnail: ' + currentTransaction.title }) }
         })
@@ -357,7 +357,7 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
     [View transaction](${EXPLORER_URL}/tx/${list[i].hash}?address=${address}#${address})
     -----------------------------`
                   }
-                  this.bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
+                  this.bot.sendMessage(chatId, text, { parse_mode: 'markdown', disable_web_page_preview: true })
                 } else {
                   this.bot.sendMessage(chatId, 'No transactions found (yet)')
                 }
@@ -406,7 +406,7 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
         this.bitcoin.getBlockInfo(hashOrHeight)
           .then(result => {
             if (result.length > 0) {
-              this.bot.sendMessage(chatId, printBlockInfo(result[0]), { parse_mode: 'markdown' })
+              this.bot.sendMessage(chatId, printBlockInfo(result[0]), { parse_mode: 'markdown', disable_web_page_preview: true })
             } else {
               this.bot.sendMessage(chatId, 'Block not found')
             }
@@ -419,7 +419,7 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
         this.bitcoin.getBlockHeightInfo(hashOrHeight)
           .then(result => {
             if (result.length > 0) {
-              this.bot.sendMessage(chatId, printBlockInfo(result[0]), { parse_mode: 'markdown' })
+              this.bot.sendMessage(chatId, printBlockInfo(result[0]), { parse_mode: 'markdown', disable_web_page_preview: true })
             } else {
               this.bot.sendMessage(chatId, 'Block not found')
             }
@@ -447,7 +447,7 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
     [View Block](${EXPLORER_URL}/blocks/${block.height})
     ------------------------------------------`
           }
-          this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })
+          this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown', disable_web_page_preview: true })
         })
         .catch(error => {
           console.error(error)
@@ -467,7 +467,7 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
             const amount = parseFloat(result[i].value).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
             textMsg += `[${amount} BTC](${EXPLORER_URL}/tx/${result[i].hash}) (in: ${result[i].output_count}, out: ${result[i].output_count}) - ${result[i].created_time}\n`
           }
-          this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown' })
+          this.bot.sendMessage(chatId, textMsg, { parse_mode: 'markdown', disable_web_page_preview: true })
         })
         .catch(error => {
           console.error(error)
@@ -484,7 +484,7 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
         } else if (msg.text.toString().toLowerCase().startsWith('hello') || msg.text.toString().toLowerCase().startsWith('hi')) {
           this.bot.sendMessage(msg.chat.id, 'Welcome ' + name + ' 🤟!')
         } else if (msg.text.toString().toLowerCase().startsWith('bye')) {
-          this.bot.sendMessage(msg.chat.id, 'Hope to see you around again, 👋 *Bye ' + name + '* 👋!', { parse_mode: 'markdown' })
+          this.bot.sendMessage(msg.chat.id, 'Hope to see you around again, 👋 *Bye ' + name + '* 👋!', { parse_mode: 'markdown', disable_web_page_preview: true })
         }
       }
     })
