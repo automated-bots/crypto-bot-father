@@ -12,10 +12,10 @@ class ProcessData {
     const maxSupply = quoteResult.max_supply.toLocaleString('en')
     const dollarPrice = quote.price.toLocaleString('en', { maximumFractionDigits: DOLLAR_PRICE_FRACTION_DIGITS })
     const lastUpdatedQuote = quote.last_updated
-    const marketCap = parseFloat(quote.market_cap).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const volume24h = parseFloat(quote.volume_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const volume7d = parseFloat(quote.volume_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const volume30d = parseFloat(quote.volume_30d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const marketCap = parseFloat(quote.market_cap).toLocaleString('en', { maximumFractionDigits: 0 })
+    const volume24h = parseFloat(quote.volume_24h).toLocaleString('en', { maximumFractionDigits: 0 })
+    const volume7d = parseFloat(quote.volume_7d).toLocaleString('en', { maximumFractionDigits: 0 })
+    const volume30d = parseFloat(quote.volume_30d).toLocaleString('en', { maximumFractionDigits: 0 })
     const percentChange1h = parseFloat(quote.percent_change_1h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     const percentChange24h = parseFloat(quote.percent_change_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     const percentChange7d = parseFloat(quote.percent_change_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -26,7 +26,7 @@ class ProcessData {
     const changeIcon7d = (Math.sign(quote.percent_change_7d) === 1) ? '🔼' : '🔽'
     const changeIcon30d = (Math.sign(quote.percent_change_30d) === 1) ? '🔼' : '🔽'
     const changeIcon90d = (Math.sign(quote.percent_change_90d) === 1) ? '🔼' : '🔽'
-    const text = `*General Coin/Token Data*
+    const text = `*General coin data for ${symbol}*
 Rank: [#${quoteResult.cmc_rank}](${COINMARKET_URL})
 Circulating supply: ${circulatingSupply} ${symbol}s
 Total supply: ${totalSupply} ${symbol}s
@@ -48,7 +48,7 @@ Volume 30D: ${volume30d} USD
 *Change*
 Last Hour: ${percentChange1h}% ${changeIcon1h}
 Last 24H: ${percentChange24h}% ${changeIcon24h}
-Last 7D: ${percentChange7d}% ${changeIcon7d}
+Last 7D:  ${percentChange7d}% ${changeIcon7d}
 Last 30D: ${percentChange30d}% ${changeIcon30d}
 Last 90D: ${percentChange90d}% ${changeIcon90d}`
     return text
