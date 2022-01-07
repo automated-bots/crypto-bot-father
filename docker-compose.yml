@@ -6,5 +6,6 @@ services:
     restart: always
     volumes:
       - /home/username/folder/to/secrets.env:/app/secrets.env
-    ports:
-      - "3007:3007"
+    #ports:
+    #  - "3007:3007"
+    network_mode: "host"

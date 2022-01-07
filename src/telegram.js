@@ -5,8 +5,7 @@ const RuntimeError = require('./runtime-error')
 // Constants
 const BTC_PRICE_FRACTION_DIGITS = 6 // 8 would be 1 Satoshi
 const FAQ_URL = 'https://bitcoin.melroy.org/en/faq'
-const OPEN_URL = 'https://open.bitcoin.com'
-const EXPLORER_URL = 'https://www.blockchain.com/btc'
+const EXPLORER_URL = 'https://blockstream.info'
 
 class Telegram {
   constructor (bot, bitcoin, exchange) {
@@ -23,11 +22,12 @@ class Telegram {
     * @param {Integer} chatId Telegram chat ID
     */
   sendPriceQuoteMessage (symbol, chatId) {
-    this.exchange.getLatestPrices(symbol)
+    const symbolUpper = symbol.toUpperCase()
+    this.exchange.getLatestPrices(symbolUpper)
       .then(quoteResult => {
-        this.exchange.getExchangeRates(symbol)
+        this.exchange.getExchangeRates(symbolUpper)
           .then(rateResult => {
-            const text = ProcessData.price(symbol, quoteResult, rateResult)
+            const text = ProcessData.price(symbolUpper, quoteResult, rateResult)
             this.bot.sendMessage(chatId, text, { parse_mode: 'markdown', disable_web_page_preview: true })
           })
           .catch(error => {
@@ -290,7 +290,7 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
 *Created at:* ${currentAddress.created_at}
 *Modified at:* ${currentAddress.modified_at}
 *Balance:* ${balance} BTC
-[View online](${EXPLORER_URL}/address/${address})`
+[Open Blockchain Explorer](${EXPLORER_URL}/address/${address})`
             this.bot.sendMessage(chatId, text, { parse_mode: 'markdown', disable_web_page_preview: true })
           } else {
             this.bot.sendMessage(chatId, 'Address is not (yet) used.')
@@ -311,21 +311,13 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
       const chatId = msg.chat.id
       this.bitcoin.getTransaction(hash)
         .then(result => {
-          const currentTransaction = result[0]
-          let text = `
-*Amount:* ${currentTransaction.value} BTC (input count: ${currentTransaction.input_count}, output count:${currentTransaction.output_count})
-*🧱 Height:* ${currentTransaction.height}
-*Created at:* ${currentTransaction.created_at}
-*Size:* ${currentTransaction.transaction_size} bytes
-[View transaction online](${EXPLORER_URL}/tx/${hash})`
-          if (currentTransaction.title) {
-            text += `\n
-*Claim Title:* ${currentTransaction.title}
-[View connected claim](${OPEN_URL}/${currentTransaction.name})`
-          }
+          const transactionDate = Misc.printDate(new Date(result.time * 1000))
+          const text = `**Transaction details for [${hash}](${EXPLORER_URL}/tx/${hash})**
+Amount: ${result.amount}
+Confirmations: ${result.confirmations}
+Date:  ${transactionDate}
+In blockheight: [${result.blockheight}](${EXPLORER_URL}/block/${result.blockhash})`
           this.bot.sendMessage(chatId, text, { parse_mode: 'markdown', disable_web_page_preview: true })
-          // Why not, just send the thumbnail as well!
-          if (currentTransaction.thumbnail_url) { this.bot.sendPhoto(chatId, currentTransaction.thumbnail_url, { caption: 'Thumbnail: ' + currentTransaction.title }) }
         })
         .catch(error => {
           console.error(error)

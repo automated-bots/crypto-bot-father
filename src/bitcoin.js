@@ -90,13 +90,29 @@ class Bitcoin {
   }
 
   /*
-   * Get address info
+   * Get address details
    * @return {Promise} Axios promise (id & balance)
    */
   getAddressInfo (address) {
     // https://bitcoin.stackexchange.com/questions/10090/how-to-get-an-addresss-balance-with-the-bitcoin-client
     // https://bitcoin.org/en/developer-reference#getreceivedbyaddress
     // TODO:
+  }
+
+  /**
+   * Get transaction details
+   * @param {*} hash Bitcoin transaction hash
+   */
+  getTransaction (hash) {
+    return this.bitcoind.post('/', {
+      jsonrpc: '1.0',
+      id: 'Bitcoin Bot',
+      method: 'gettransaction',
+      params: { hash }
+    })
+      .then(response => {
+        return Promise.resolve(response.data.result)
+      })
   }
 }
 

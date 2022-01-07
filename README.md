@@ -43,6 +43,8 @@ Create Telegram bot via [@bothfather](https://telegram.me/BotFather). Fill-in th
 ```sh
 TELEGRAM_TOKEN=xyz
 COINMARKETCAP_API_TOKEN=xyz
+BITCOIN_RPC_HOST=localhost
+BITCOIN_RPC_PORT=8332
 BITCOIN_RPC_USERNAME=bitcoin
 BITCOIN_RPC_PASSWORD=xyz
 TELEGRAM_BOT_URL=https://yourdomain.com
@@ -52,7 +54,9 @@ Where:
 
 * `TELEGRAM_TOKEN` = Secret Bot API token
 * `COINMARKETCAP_API_TOKEN` = Secret Coinmarketcap.com API token
-* `BITCOIN_RPC_USERNAME` = Bitcoin core daemon RPC username
+* `BITCOIN_RPC_HOST` = Bitcoin core host (default: localhost), optionally.
+* `BITCOIN_RPC_PORT` = Bitcoin core RPC port (default: 8332), optionally.
+* `BITCOIN_RPC_USERNAME` = Bitcoin core daemon RPC username (default: bitcoin)
 * `BITCOIN_RPC_PASSWORD` = Bitcoin core daemon RPC password
 * `TELEGRAM_BOT_URL` = your public domain name you use to communicate against the Telegram web API server.
 
@@ -94,9 +98,12 @@ datadir=/your_custom/path/
 server=1
 # Maintain a full transaction index, used by the getrawtransaction rpc call.
 txindex=1
-# [wallet]
-# Do not load the wallet and disable wallet RPC calls.
-disablewallet=1
+```
+
+Next, do not forget to create a (test) wallet:
+
+```sh
+bitcoin-cli createwallet "testwallet"
 ```
 
 * See [bitcoin.service systemd file](bitcoin.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.

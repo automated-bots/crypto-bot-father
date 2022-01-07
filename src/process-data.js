@@ -1,3 +1,4 @@
+const Misc = require('./miscellaneous')
 const COINMARKET_URL = 'https://coinmarketcap.com/currencies'
 const DOLLAR_PRICE_FRACTION_DIGITS = 2
 
@@ -12,7 +13,7 @@ class ProcessData {
     const totalSupply = (quoteResult.total_supply) ? quoteResult.total_supply.toLocaleString('en') : 'N/A'
     const maxSupply = (quoteResult.max_supply) ? quoteResult.max_supply.toLocaleString('en') : 'N/A'
     const dollarPrice = quote.price.toLocaleString('en', { maximumFractionDigits: DOLLAR_PRICE_FRACTION_DIGITS })
-    const lastUpdatedQuote = quote.last_updated
+    const lastUpdatedQuote = Misc.printDate(new Date(quote.last_updated))
     const marketCap = parseFloat(quote.market_cap).toLocaleString('en', { maximumFractionDigits: 0 })
     const volume24h = parseFloat(quote.volume_24h).toLocaleString('en', { maximumFractionDigits: 0 })
     const volume7d = parseFloat(quote.volume_7d).toLocaleString('en', { maximumFractionDigits: 0 })
