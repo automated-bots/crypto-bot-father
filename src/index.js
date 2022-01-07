@@ -1,6 +1,6 @@
 // NTBA = node-telegram-bot-api fixes
-process.env['NTBA_FIX_319'] = 1
-process.env['NTBA_FIX_350'] = 1
+process.env.NTBA_FIX_319 = 1
+process.env.NTBA_FIX_350 = 1
 // constants
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
 const COINMARKETCAP_API_TOKEN = process.env.COINMARKETCAP_API_TOKEN

@@ -1,11 +1,11 @@
 const Misc = require('./miscellaneous')
+const ProcessData = require('./process-data')
+const RuntimeError = require('./runtime-error')
 
 // Constants
 const BTC_PRICE_FRACTION_DIGITS = 6 // 8 would be 1 Satoshi
-const DOLLAR_PRICE_FRACTION_DIGITS = 2
-const FAQ_URL = 'https://bitcoin.org/en/faq'
+const FAQ_URL = 'https://bitcoin.melroy.org/en/faq'
 const OPEN_URL = 'https://open.bitcoin.com'
-const COINMARKET_URL = 'https://coinmarketcap.com/currencies/bitcoin'
 const EXPLORER_URL = 'https://www.blockchain.com/btc'
 
 class Telegram {
@@ -16,6 +16,38 @@ class Telegram {
   }
 
   /**
+    * Retrieve latest quote information and exchange rates.
+    * Send message to Telegram.
+    *
+    * @param {String} symbol Crypto symbol
+    * @param {Integer} chatId Telegram chat ID
+    */
+  sendPriceQuoteMessage (symbol, chatId) {
+    this.exchange.getLatestPrices(symbol)
+      .then(quoteResult => {
+        this.exchange.getExchangeRates(symbol)
+          .then(rateResult => {
+            const text = ProcessData.price(symbol, quoteResult, rateResult)
+            this.bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
+          })
+          .catch(error => {
+            if (error.response && error.response.status === 400) {
+              this.bot.sendMessage(chatId, 'Error: Invalid currency symbol')
+            } else {
+              console.error(error)
+            }
+          })
+      })
+      .catch(error => {
+        if (error instanceof RuntimeError) {
+          this.bot.sendMessage(chatId, 'Error: ' + error.message)
+        } else {
+          console.error(error)
+        }
+      })
+  }
+
+  /**
    * Telegram commands
    */
   setCommands () {
@@ -23,23 +55,26 @@ class Telegram {
     this.bot.onText(/[/|!]help/, msg => {
       const chatId = msg.chat.id
       const helpText = `
-/help - Return this help output
-/status - Retrieve Bitcoin Core Deamon info
-/networkinfo - Get Bitcoin Network info
-/stats - Get blockchain, mining and exchange stats
-/price - Get market (price) info
+General:
+  /help - Return this help output
+  /price <symbol> - Get latest crypto quote
 
-/lastblocks - Get the last 10 blocks
-/transaction <hash> - Get transaction info
-/address <address> - Get address info
-/transactions <address> - Get last 10 transactions from an address
-/block <hash or block height> - Get block info
+Bitcoin:
+  /status - Retrieve Bitcoin Core Deamon info
+  /networkinfo - Get Bitcoin Network info
+  /stats - Get Bitcoin blockchain, mining and exchange stats
+  /lastblocks - Get the last 10 blocks on Bitcoin
+  /transaction <hash> - Get Bitcoin transaction details
+  /address <address> - Get Bitcoin address details
+  /transactions <address> - Get last 10 Bitcoin transactions from an address
+  /block <hash or block height> - Get Bitcoin block details
 
-/why - Why Bitcoin?
-/what - What is Bitcoin?
-/how - How does Bitcoin work?
-/age - How long does Bitcoin exists?
-/faq - Frequality Asked Questions`
+More info:
+  /why - Why Bitcoin?
+  /what - What is Bitcoin?
+  /how - How does Bitcoin work?
+  /age - How long does Bitcoin exists?
+  /faq - Frequality Asked Questions`
       this.bot.sendMessage(chatId, helpText)
     })
 
@@ -144,8 +179,8 @@ Peers connected: ${networkResult.connections}`
       const chatId = msg.chat.id
       this.bitcoin.getNetworkInfo()
         .then(result => {
-          var text = `
-*Network* ℹ️
+          let text = `
+*Bitcoin Network*
 Bitcoin server version: ${result.version}
 Protocol version: ${result.protocolversion}
 Connections: ${result.connections}
@@ -230,61 +265,16 @@ Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
         })
     })
 
-    // price command (/price)
-    this.bot.onText(/[/|!]price@?\S*/, msg => {
-      this.exchange.getLatestPrices()
-        .then(result => {
-          this.exchange.getExchangeRates()
-            .then(rateResult => {
-              const chatId = msg.chat.id
-              const euroPrice = parseFloat(rateResult.EUR).toFixed(2)
-              const ltcPrice = parseFloat(rateResult.LTC).toFixed(4)
-              const ethPrice = parseFloat(rateResult.ETH).toFixed(5)
-              const yenPrice = parseFloat(rateResult.JPY).toFixed(2)
-              const poundPrice = parseFloat(rateResult.GBP).toFixed(2)
-              const quote = result.quote.USD
-              const maxSupply = result.max_supply.toLocaleString('en')
-              const totalSupply = result.total_supply.toLocaleString('en')
-              const dollarPrice = quote.price.toLocaleString('en', { maximumFractionDigits: DOLLAR_PRICE_FRACTION_DIGITS })
-              const dollarPriceLastUpdated = quote.last_updated
-              const volume24h = parseFloat(quote.volume_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-              const volume7d = parseFloat(quote.volume_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-              const volume30d = parseFloat(quote.volume_30d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-              const marketCap = parseFloat(quote.market_cap).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-              const hourChangeIcon = (Math.sign(quote.percent_change_1h) === 1) ? '👍' : '👎'
-              const hour24ChangeIcon = (Math.sign(quote.percent_change_24h) === 1) ? '👍' : '👎'
-              const days7ChangeIcon = (Math.sign(quote.percent_change_7d) === 1) ? '👍' : '👎'
-              const text = `*General* 📈
-Rank on CoinMarketCap: [#${result.cmc_rank}](${COINMARKET_URL})
-Max. available coins: ${maxSupply} BTCs
-Current amount coins: ${totalSupply} BTCs
+    // price command (/price): default Bitcoin
+    this.bot.onText(/^[/|!]price\S*$/, msg => {
+      // Fall-back to Bitcoin (symbol: BTC)
+      this.sendPriceQuoteMessage('BTC', msg.chat.id)
+    })
 
-*Price* 💸
-Price: ฿1 = $${dollarPrice}
-Last updated dollar price: ${dollarPriceLastUpdated}
-Price: ฿1 = €${euroPrice}
-Price: ฿1 = ⧫${ethPrice} ETH
-Price: ฿1 = Ł${ltcPrice} LTC
-Price: ฿1 = £${poundPrice}
-Price: ฿1 = ¥${yenPrice}
-Volume 24 hour avg: $${volume24h}
-Volume 7 days avg: $${volume7d}
-Volume 30 days avg: $${volume30d}
-Market capital: $${marketCap}
-
-*% Change*
-Last hour: ${quote.percent_change_1h}% ${hourChangeIcon}
-Last 24 hours: ${quote.percent_change_24h}% ${hour24ChangeIcon}
-Last 7 days: ${quote.percent_change_7d}% ${days7ChangeIcon}`
-              this.bot.sendMessage(chatId, text, { parse_mode: 'markdown' })
-            })
-            .catch(error => {
-              console.error(error)
-            })
-        })
-        .catch(error => {
-          console.error(error)
-        })
+    // price command (/price <symbol>) - provide your own symbol
+    this.bot.onText(/[/|!]price@?\S* (.+)/, (msg, match) => {
+      const symbol = match[1].trim()
+      this.sendPriceQuoteMessage(symbol, msg.chat.id)
     })
 
     // address command (/address <address>)

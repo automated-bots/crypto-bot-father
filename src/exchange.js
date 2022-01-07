@@ -1,53 +1,59 @@
 const axios = require('axios')
+const RuntimeError = require('./runtime-error')
 
 class Exchange {
   /**
    * Constructor
-   * @param {string} coinMarketAPI
+   * @param {string} coinMarketAPIToken Secret API token of coinmarketcap.com
    */
-  constructor (coinMarketAPI) {
+  constructor (coinMarketAPIToken) {
     // Exchange WhatToMine
     this.whattomine_api = 'https://whattomine.com/coins/1.json'
     // CoinBase Exchange
-    this.coinbase_api = 'https://api.coinbase.com/v2/exchange-rates?currency=BTC'
-    // Official CoinMarketCap
-    this.coinmarket_id = 1 // 1 = BTC
+    this.coinbase_api = 'https://api.coinbase.com/v2/exchange-rates?currency='
+    // CoinMarketCap API
     this.coinmarket = axios.create({
       baseURL: 'https://pro-api.coinmarketcap.com/v1',
       timeout: 10000,
       headers: {
-        'X-CMC_PRO_API_KEY': coinMarketAPI
+        'X-CMC_PRO_API_KEY': coinMarketAPIToken
       }
     })
   }
 
   /**
-   * Get exchange rates from coinbase.com
+   * Get exchange rates from coinbase.com. No authentication required.
    *
-   * @return {Promise} Axios promise (key->value for BTC pairs, eg. 'ETH')
+   * @param symbol Crypto symbol to get currency rates for
+   * @return {Promise} Axios promise (example of data: {'USD': '631.0', 'EUR': '714.4', 'BTH': '0.021'})
    */
-  getExchangeRates () {
-    return axios.get(this.coinbase_api)
+  getExchangeRates (symbol) {
+    return axios.get(this.coinbase_api + symbol)
       .then(response => {
         return Promise.resolve(response.data.data.rates)
       })
   }
 
   /**
-   * Get lastest prices (quotes) from CoinMarketCap
+   * Get lastest prices (quotes) from CoinMarketCap, provide the symbol as input.
    *
+   * @param symbol Crypto symbol
    * @return {Promise} Axios promise
    */
-  getLatestPrices () {
+  getLatestPrices (symbol) {
     return this.coinmarket.get('/cryptocurrency/quotes/latest', {
       params: {
-        id: this.coinmarket_id,
-        aux: 'num_market_pairs,cmc_rank,date_added,tags,platform,max_supply,circulating_supply,total_supply,market_cap_by_total_supply,' +
-        'volume_24h_reported,volume_7d,volume_7d_reported,volume_30d,volume_30d_reported'
+        symbol: symbol,
+        aux: 'num_market_pairs,cmc_rank,date_added,tags,platform,max_supply,circulating_supply,total_supply,' +
+          'market_cap_by_total_supply,volume_24h_reported,volume_7d,volume_7d_reported,volume_30d,volume_30d_reported,is_active,is_fiat'
       }
     })
       .then(response => {
-        return Promise.resolve(response.data.data[this.coinmarket_id])
+        if (symbol in response.data.data) {
+          return Promise.resolve(response.data.data[symbol])
+        } else {
+          return Promise.reject(new RuntimeError('Symbol you searched for is not found.'))
+        }
       })
   }
 

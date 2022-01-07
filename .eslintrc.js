@@ -1,8 +1,7 @@
 module.exports = {
   env: {
     es6: true,
-    node: true,
-    mocha: true
+    node: true
   },
   extends: [
     'standard'
@@ -13,7 +12,7 @@ module.exports = {
     TelegramSecretHash: 'writable'
   },
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 'latest',
     sourceType: 'module'
   },
   rules: {

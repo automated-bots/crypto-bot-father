@@ -1,6 +1,6 @@
 # Documentation
 
-General documentation about Bitcoin Protocol.
+General documentation about how to setup your own crypto bot father.
 
 ## Telegram bot
 

@@ -1,5 +1,5 @@
-# Secret tokens
-tokens.env
+# Secret API tokens
+secrets.env
 
 # Logs
 logs

@@ -1,0 +1,10 @@
+version: "3"
+services:
+  crypto-bot:
+    image: danger89/crypto-bot-father:latest
+    container_name: crypto-bot-father
+    restart: always
+    volumes:
+      - /home/username/folder/to/secrets.env:/app/secrets.env
+    ports:
+      - "3007:3007"

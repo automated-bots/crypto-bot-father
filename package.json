@@ -1,20 +1,19 @@
 {
-  "name": "bitcoin-bot",
-  "version": "0.1.0",
-  "description": "A Botfather chat bot for Bitcoin. The one that rule them all!",
+  "name": "crypto-bot-father",
+  "version": "0.5.0",
+  "description": "A crypto bot father for Telegram. The one that rule them all!",
   "main": "src/index.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
     "start": "export $(cat tokens.env | xargs) && node .",
-    "test": "mocha --reporter spec",
     "lint": "eslint src --ext .js",
     "fix": "eslint src --ext .js --fix"
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.melroy.org:melroy/bitcoin-bot.git"
+    "url": "git@gitlab.melroy.org:melroy/crypto-bot-father.git"
   },
   "keywords": [
     "bot",
@@ -29,21 +28,16 @@
   },
   "license": "AGPL-3.0",
   "dependencies": {
-    "axios": "^0.19.0",
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "node-telegram-bot-api": "^0.30.0",
-    "qs": "^6.8.0"
+    "axios": "^0.24.0",
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2",
+    "node-telegram-bot-api": "^0.56.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "eslint": "^6.1.0",
-    "eslint-config-standard": "^13.0.1",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^9.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "mocha": "^6.2.0",
-    "sinon": "^7.4.1"
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0"
   }
 }

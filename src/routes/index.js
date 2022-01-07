@@ -9,4 +9,8 @@ app.get('/', (req, res) => {
   .use('/about', aboutRoute)
   .use('/telegram', telegramRoute)
 
+app.get('/health', (req, res) => {
+  res.status(200).json({ result: 'OK' })
+})
+
 module.exports = app
