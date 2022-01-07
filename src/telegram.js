@@ -56,7 +56,7 @@ class Telegram {
       const chatId = msg.chat.id
       const helpText = `
 General:
-  /help - Return this help output
+  /help - Show help output
   /price <symbol> - Get latest crypto quote
 
 Bitcoin:
