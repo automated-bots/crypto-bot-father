@@ -50,5 +50,5 @@ tel.setCommands()
 
 // Start server
 app.listen(port, () => {
-  console.log(`Bitcoin Bot service is listening on ${port}`)
+  console.log(`Crypto Bot Father server is listening on ${port}`)
 })
