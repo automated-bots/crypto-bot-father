@@ -6,10 +6,11 @@ class ProcessData {
     const euroPrice = parseFloat(rateResult.EUR).toFixed(2)
     const btcPrice = parseFloat(rateResult.BTC).toFixed(5)
     const ethPrice = parseFloat(rateResult.ETH).toFixed(5)
+    const name = (quoteResult.name) ? quoteResult.name : symbol
     const quote = quoteResult.quote.USD
-    const circulatingSupply = quoteResult.circulating_supply.toLocaleString('en')
-    const totalSupply = quoteResult.total_supply.toLocaleString('en')
-    const maxSupply = quoteResult.max_supply.toLocaleString('en')
+    const circulatingSupply = (quoteResult.circulating_supply) ? quoteResult.circulating_supply.toLocaleString('en') : 'N/A'
+    const totalSupply = (quoteResult.total_supply) ? quoteResult.total_supply.toLocaleString('en') : 'N/A'
+    const maxSupply = (quoteResult.max_supply) ? quoteResult.max_supply.toLocaleString('en') : 'N/A'
     const dollarPrice = quote.price.toLocaleString('en', { maximumFractionDigits: DOLLAR_PRICE_FRACTION_DIGITS })
     const lastUpdatedQuote = quote.last_updated
     const marketCap = parseFloat(quote.market_cap).toLocaleString('en', { maximumFractionDigits: 0 })
@@ -26,7 +27,7 @@ class ProcessData {
     const changeIcon7d = (Math.sign(quote.percent_change_7d) === 1) ? '🔼' : '🔽'
     const changeIcon30d = (Math.sign(quote.percent_change_30d) === 1) ? '🔼' : '🔽'
     const changeIcon90d = (Math.sign(quote.percent_change_90d) === 1) ? '🔼' : '🔽'
-    const text = `*General coin data for ${symbol}*
+    const text = `*General coin data for ${name}*
 Rank: [#${quoteResult.cmc_rank}](${COINMARKET_URL})
 Circulating supply: ${circulatingSupply} ${symbol}s
 Total supply: ${totalSupply} ${symbol}s

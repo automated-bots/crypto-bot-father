@@ -49,8 +49,9 @@ class Exchange {
       }
     })
       .then(response => {
-        if (symbol in response.data.data) {
-          return Promise.resolve(response.data.data[symbol])
+        const symbolUpper = symbol.toUpperCase()
+        if (symbolUpper in response.data.data) {
+          return Promise.resolve(response.data.data[symbolUpper])
         } else {
           return Promise.reject(new RuntimeError('Symbol you searched for is not found.'))
         }
