@@ -8,7 +8,7 @@ const BITCOIN_HOST = 'localhost'
 const BITCOIN_PORT = process.env.BITCOIN_PORT || 8332
 const BITCOIN_RPC_USER = process.env.BITCOIN_RPC_USERNAME || 'bitcoin'
 const BITCOIN_RPC_PASS = process.env.BITCOIN_RPC_PASSWORD || 'xyz'
-const botUrl = 'https://bitcoin.melroy.org'
+const botUrl = process.env.TELEGRAM_BOT_URL || 'https://cryptofather.melroy.org'
 const port = process.env.PORT || 3007
 
 const crypto = require('crypto')

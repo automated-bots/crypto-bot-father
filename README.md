@@ -1,48 +1,40 @@
-# Bitcoin Bot
+# Crypto Bot Father
 
-Botfather for [Bitcoin](https://bitcoin.org) - Which knows everything you want to know
+Botfather for all cryptocurrencies for Telegram - Ask him anything about crypto
 
 ## What?
 
-A Botfather chat bot for Bitcoin. The one that rule them all!
+A Telegram chat bot for crypto. The one that rule them all!
 
 ## Why?
 
-Bitcoin Bot can be used in [Telegram](https://telegram.org/apps) parse requests from clients and return useful information about Bitcoin.
+Crypto Bot Father can be used in [Telegram](https://telegram.org/apps) parse requests from clients and return useful information about crypto (like Bitcoin).
 
-This information could be anything like network stats, address info, market data and much more!
-
-And thus eventually to serve the Bitcoin user (yes, you)!
+This information could be anything like market price quotes, network stats, block or address details and much more!
 
 ## How?
 
-Bitcoin Bot is written in javascript using [Node.js](https://nodejs.org/en/download/).
+This bot is written in javascript using [Node.js](https://nodejs.org/en/download/).
 
-Bitcoin Bot initually will use the [Bitcoin Core](https://github.com/bitcoin/bitcoin) in order to retrieve information from the Bitcoin network.
-
-We will never support the scamming 'Bitcoin Cash'! But we could add Ethereum in the future. We definitly will add Lightning network stats in the near-future.
-
+The bot uses different public API endpoints for any cryptocurrency. As well as on-chain data from the [Bitcoin Core](https://github.com/bitcoin/bitcoin) in order to retrieve information from the Bitcoin network.
 
 ## Who?
 
 Hi, it's me: Melroy van den Berg.
 
-## When?
 
-Currently busy programming.... Please hold my bear.
+## Docker image
 
-## Develop
+There is a Docker image [available on DockerHub](https://hub.docker.com/repository/docker/danger89/crypto-bot-father).
 
-Requirements:
+## Developer
 
-* [Node.js v10](https://nodejs.org/en/download/)
+### Requirements
+
+* [Node.js](https://nodejs.org/en/download/)
 * npm (package manager)
 * [Bitcoin Core](https://github.com/bitcoin/bitcoin)
-
-```sh
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get install -y nodejs npm
-```
+* Telegram bot via [@bothfather](https://telegram.me/BotFather)
 
 ### Running
 
@@ -51,8 +43,18 @@ Create Telegram bot via [@bothfather](https://telegram.me/BotFather). Fill-in th
 ```sh
 TELEGRAM_TOKEN=xyz
 COINMARKETCAP_API_TOKEN=xyz
-RPC_PASSWORD=xyz
+BITCOIN_RPC_USERNAME=bitcoin
+BITCOIN_RPC_PASSWORD=xyz
+TELEGRAM_BOT_URL=https://yourdomain.com
 ```
+
+Where:
+
+* `TELEGRAM_TOKEN` = Secret Bot API token
+* `COINMARKETCAP_API_TOKEN` = Secret Coinmarketcap.com API token
+* `BITCOIN_RPC_USERNAME` = Bitcoin core daemon RPC username
+* `BITCOIN_RPC_PASSWORD` = Bitcoin core daemon RPC password
+* `TELEGRAM_BOT_URL` = your public domain name you use to communicate against the Telegram web API server.
 
 Finally, starting the bot server: `npm start` (or `node src/index.js`)
 
@@ -64,7 +66,7 @@ Finally, starting the bot server: `npm start` (or `node src/index.js`)
 # Default username/password: bitcoin/xyz
 rpcauth=bitcoin:b69449980fba89a8459c0461389e78e6$87b68368b06ae8325fd5499637a9511b16763db17c877f00c50e23294fc3652b
 daemon=1
-datadir=/mnt/37e528d8-9102-4d8e-b9e4-97d749a6b92e/Bitcoin/
+datadir=/media/Data_disk/bitcoin/
 server=1
 txindex=1
 ```
@@ -74,27 +76,6 @@ txindex=1
 Run lint: `npm run lint`
 
 Fix lint issues: `npm run fix`
-
-### Unit Testing
-
-Run test: `npm test`
-
-## Production
-
-Starting the bot, can be done via:
-
-* `./start_bot_prod.sh`
-
-The bot can be started via crontab for example:
-
-```sh
-@reboot sh /path/to/start_bot_prod.sh
-```
-
-**General setup:**
-
-* Be-sure both `bitcoind` binary is installed into `/usr/bin` directory!
-* Create an user `bitcoin` the unix machine (`adduser -M bitcoin`)
 
 ### Core setup
 
@@ -120,6 +101,8 @@ disablewallet=1
 
 * See [bitcoin.service systemd file](bitcoin.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.
 * Core data will be stored into `/var/lib/bitcoind`
+* Be-sure both `bitcoind` binary is installed into `/usr/bin` directory!
+* Create an user `bitcoin` the unix machine (`adduser -M bitcoin`)
 
 ## Useful links
 
