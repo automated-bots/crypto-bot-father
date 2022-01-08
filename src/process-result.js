@@ -9,7 +9,60 @@ const DOLLAR_PRICE_FRACTION_DIGITS = 2
  * Especially useful for big message that also requires pre-processing.
  */
 class ProcessResult {
-  static price (symbol, quoteResult, rateResult) {
+  static priceOverview (symbol, quoteResult, rateResult) {
+    const euroPrice = parseFloat(rateResult.EUR).toFixed(2)
+    const poundSterlingPrice = parseFloat(rateResult.GBP).toFixed(2)
+    const japaneseYenPrice = parseFloat(rateResult.JYP).toFixed(2)
+    const swissFrancPrice = parseFloat(rateResult.CHF).toFixed(2)
+    const australianDollarPrice = parseFloat(rateResult.AUD).toFixed(2)
+    const canadianDollarPrice = parseFloat(rateResult.CAD).toFixed(2)
+    const chineseRenminbiPrice = parseFloat(rateResult.CNH).toFixed(2)
+    const hongKongDollarPrice = parseFloat(rateResult.HKD).toFixed(2)
+    const bitcoinPrice = parseFloat(rateResult.BTC).toFixed(5)
+    const usdcPrice = parseFloat(rateResult.USDC).toFixed(2)
+    const ustPrice = parseFloat(rateResult.UST).toFixed(2)
+    const ethereumPrice = parseFloat(rateResult.ETH).toFixed(5)
+    const solanaPrice = parseFloat(rateResult.SOL).toFixed(5)
+    const cardanoPrice = parseFloat(rateResult.ADA).toFixed(5)
+    const polkadotPrice = parseFloat(rateResult.DOT).toFixed(5)
+    const avalanchePrice = parseFloat(rateResult.AVAX).toFixed(5)
+    const chainlinkPrice = parseFloat(rateResult.LINK).toFixed(5)
+    const litecoinPrice = parseFloat(rateResult.LTC).toFixed(5)
+    const lunaPrice = parseFloat(rateResult.WLUNA).toFixed(5)
+    const bitcoinCashPrice = parseFloat(rateResult.BCH).toFixed(5)
+    const dogecoinPrice = parseFloat(rateResult.DOGE).toFixed(5)
+    const name = (quoteResult.name) ? quoteResult.name : symbol
+    const quote = quoteResult.quote.USD
+    const dollarPrice = quote.price.toLocaleString('en', { maximumFractionDigits: DOLLAR_PRICE_FRACTION_DIGITS })
+
+    return `*Current prices of ${name} (${symbol}) in fiat*
+ • ${dollarPrice} USD
+ • ${euroPrice} EUR
+ • ${poundSterlingPrice} GBP
+ • ${japaneseYenPrice} JPY
+ • ${swissFrancPrice} CHF
+ • ${australianDollarPrice} AUD
+ • ${canadianDollarPrice} CAD
+ • ${chineseRenminbiPrice} CNH
+ • ${hongKongDollarPrice} HKD
+
+*Current prices of ${name} in crypto valuta*
+• ${bitcoinPrice} [BTC](${COINMARKET_URL}/currencies/bitcoin)
+• ${usdcPrice} [USDC](${COINMARKET_URL}/currencies/usd-coin)
+• ${ustPrice} [UST](${COINMARKET_URL}/currencies/terrausd)
+• ${ethereumPrice} [ETH](${COINMARKET_URL}/currencies/ethereum)
+• ${solanaPrice} [SOL](${COINMARKET_URL}/currencies/solana)
+• ${cardanoPrice} [ADA](${COINMARKET_URL}/currencies/cardano)
+• ${polkadotPrice} [DOT](${COINMARKET_URL}/currencies/polkadot-new)
+• ${avalanchePrice} [AVAX](${COINMARKET_URL}/currencies/avalanche)
+• ${chainlinkPrice} [LINK](${COINMARKET_URL}/currencies/chainlink)
+• ${litecoinPrice} [LTC](${COINMARKET_URL}/currencies/litecoin)
+• ${lunaPrice} [WLUNA]()(${COINMARKET_URL}/currencies/terra-luna)
+• ${bitcoinCashPrice} [BCH](${COINMARKET_URL}/currencies/bitcoin-cash)
+• ${dogecoinPrice} [DOGE](${COINMARKET_URL}/currencies/dogecoin)`
+  }
+
+  static marketStats (symbol, quoteResult, rateResult) {
     const euroPrice = parseFloat(rateResult.EUR).toFixed(2)
     const btcPrice = parseFloat(rateResult.BTC).toFixed(5)
     const ethPrice = parseFloat(rateResult.ETH).toFixed(5)
@@ -35,11 +88,12 @@ class ProcessResult {
     const changeIcon30d = (Math.sign(quote.percent_change_30d) === 1) ? '🔼' : '🔽'
     const changeIcon90d = (Math.sign(quote.percent_change_90d) === 1) ? '🔼' : '🔽'
     return `*General coin data for ${name}*
-Rank: [#${quoteResult.cmc_rank}](${COINMARKET_URL})
+Rank: #${quoteResult.cmc_rank}
 Circulating supply: ${circulatingSupply} ${symbol}s
 Total supply: ${totalSupply} ${symbol}s
 Max. supply: ${maxSupply} ${symbol}s
 Market Cap: $${marketCap}
+Visit on: [CoinMarketCap](${COINMARKET_URL}/currencies/${quoteResult.slug})
 
 *Price* 💱
 Price: 1 ${symbol} = ${dollarPrice} USD

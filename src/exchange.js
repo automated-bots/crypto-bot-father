@@ -1,5 +1,5 @@
 const axios = require('axios')
-const RuntimeError = require('./runtime-error')
+const RuntimeError = require('./errors/runtime-error')
 
 class Exchange {
   /**

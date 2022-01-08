@@ -1,5 +1,5 @@
 const ProcessResult = require('./process-result')
-const RuntimeError = require('./runtime-error')
+const RuntimeError = require('./errors/runtime-error')
 const Misc = require('./miscellaneous')
 
 /**
@@ -91,10 +91,10 @@ Reachable: ${networks[i].reachable}
   }
 
   /**
-   * Retrieve Bitcoin stats
+   * Retrieve Bitcoin information
    * @returns {Promise} message
    */
-  async bitcoinStats () {
+  async bitcoinInfo () {
     const blockchainResult = await this.bitcoin.getBlockChainInfo()
     const miningResult = await this.bitcoin.getMiningInfo()
     const exchangeResult = await this.exchange.getExchangeInfo(1) // 1 = Bitcoin
@@ -141,7 +141,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
   }
 
   /**
-    * Retrieve latest quote information and exchange rates.
+    * Retrieve latest quote information and exchange rates (fiat & crypto).
     * @param {String} symbol Crypto symbol
     * @return {Promise} message
     */
@@ -150,7 +150,29 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
     try {
       const quoteResult = await this.exchange.getLatestPrices(symbolUpper)
       const rateResult = await this.exchange.getExchangeRates(symbolUpper)
-      return ProcessResult.price(symbolUpper, quoteResult, rateResult)
+      return ProcessResult.priceQuote(symbolUpper, quoteResult, rateResult)
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        return 'Error: Invalid currency symbol'
+      } else if (error instanceof RuntimeError) {
+        return 'Error: ' + error.message
+      } else {
+        throw error
+      }
+    }
+  }
+
+  /**
+    * Retrieve latest market statistics
+    * @param {String} symbol Crypto symbol
+    * @return {Promise} message
+  */
+  async marketStats (symbol) {
+    const symbolUpper = symbol.toUpperCase()
+    try {
+      const quoteResult = await this.exchange.getLatestPrices(symbolUpper)
+      const rateResult = await this.exchange.getExchangeRates(symbolUpper)
+      return ProcessResult.priceOverview(symbolUpper, quoteResult, rateResult)
     } catch (error) {
       if (error.response && error.response.status === 400) {
         return 'Error: Invalid currency symbol'
