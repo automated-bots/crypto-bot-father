@@ -8,7 +8,7 @@ class Exchange {
    */
   constructor (coinMarketAPIToken) {
     // Exchange WhatToMine
-    this.whattomine_api = 'https://whattomine.com/coins/1.json'
+    this.whattomine_api = 'https://whattomine.com/coins'
     // CoinBase Exchange
     this.coinbase_api = 'https://api.coinbase.com/v2/exchange-rates?currency='
     // CoinMarketCap API
@@ -58,12 +58,13 @@ class Exchange {
   }
 
   /**
-   * Get exchange info from Whattomine.com
+   * Get Exchange info from Whattomine.com
    *
+   * @param {Number} id Whattomine crypto ID
    * @return {Promise} Axios promise (block_time, block_reward, difficulty24, exchange_rate, exchange_rate24, market_cap)
    */
-  getExchangeInfo () {
-    return axios.get(this.whattomine_api)
+  getExchangeInfo (id) {
+    return axios.get(this.whattomine_api + '/' + id + '.json')
       .then(response => {
         return Promise.resolve(response.data)
       })

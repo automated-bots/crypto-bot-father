@@ -97,7 +97,7 @@ Reachable: ${networks[i].reachable}
   async bitcoinStats () {
     const blockchainResult = await this.bitcoin.getBlockChainInfo()
     const miningResult = await this.bitcoin.getMiningInfo()
-    const exchangeResult = await this.exchange.getExchangeInfo()
+    const exchangeResult = await this.exchange.getExchangeInfo(1) // 1 = Bitcoin
     const bestBlockResult = await this.bitcoin.getBlock(blockchainResult.bestblockhash)
     return ProcessResult.stats(blockchainResult, miningResult, exchangeResult, bestBlockResult)
   }
