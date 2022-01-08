@@ -9,7 +9,7 @@ class Telegram {
   /**
    * Constructor
    * @param {Object} bot Telegram bot object
-   * @param {Object} fetcher Fether object
+   * @param {Object} fetcher fetcher object
    */
   constructor (bot, fetcher) {
     this.bot = bot
@@ -87,7 +87,7 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
     })
 
     this.bot.onText(/^[/|!]age\S*$/, msg => {
-      const message = this.fether.bitcoinAge()
+      const message = this.fetcher.bitcoinAge()
       this.bot.sendMessage(msg.chat.id, message)
     })
 
@@ -116,7 +116,7 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
     // price command (/price): default Bitcoin
     this.bot.onText(/^[/|!]price\S*$/, msg => {
       // Fall-back to Bitcoin (symbol: BTC)
-      this.fether.priceQuote('BTC')
+      this.fetcher.priceQuote('BTC')
         .then(message => this.bot.sendMessage(msg.chat.id, message, { parse_mode: 'markdown', disable_web_page_preview: true }))
         .catch(error => console.error(error))
     })
@@ -124,7 +124,7 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
     // price command (/price <symbol>) - provide your own symbol
     this.bot.onText(/[/|!]price@?\S* (.+)/, (msg, match) => {
       const symbol = match[1].trim()
-      this.fether.priceQuote(symbol)
+      this.fetcher.priceQuote(symbol)
         .then(message => this.bot.sendMessage(msg.chat.id, message, { parse_mode: 'markdown', disable_web_page_preview: true }))
         .catch(error => console.error(error))
     })
@@ -132,7 +132,7 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
     // address command (/address <address>)
     this.bot.onText(/[/|!]address@?\S* (.+)/, (msg, match) => {
       const address = match[1].trim()
-      this.fether.bitcoinAddress(address)
+      this.fetcher.bitcoinAddress(address)
         .then(message => this.bot.sendMessage(msg.chat.id, message, { parse_mode: 'markdown', disable_web_page_preview: true }))
         .catch(error => console.error(error))
     })

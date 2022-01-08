@@ -33,10 +33,10 @@ const exchange = new Exchange(COINMARKETCAP_API_TOKEN)
 const fether = new Fetcher(bitcoin, exchange)
 
 const telegramBot = new TelegramBot(TELEGRAM_TOKEN)
+const tel = new Telegram(telegramBot, fether)
+
 // This informs the Telegram servers of the new webhook.
 telegramBot.setWebHook(`${botUrl}/telegram/bot${TelegramSecretHash}`)
-
-const tel = new Telegram(telegramBot, fether)
 
 // Create the Express app
 const app = express()
