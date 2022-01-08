@@ -1,7 +1,7 @@
 const Misc = require('./miscellaneous')
 
 // Constants
-const COINMARKET_URL = 'https://coinmarketcap.com/currencies'
+const COINMARKET_URL = 'https://coinmarketcap.com'
 const DOLLAR_PRICE_FRACTION_DIGITS = 2
 
 /**
@@ -41,19 +41,19 @@ Total supply: ${totalSupply} ${symbol}s
 Max. supply: ${maxSupply} ${symbol}s
 Market Cap: $${marketCap}
 
-*Price*
+*Price* 💱
 Price: 1 ${symbol} = ${dollarPrice} USD
 Price: 1 ${symbol} = ${euroPrice} EUR
 Price: 1 ${symbol} = ${btcPrice} BTC
 Price: 1 ${symbol} = ${ethPrice} ETH
 Last updated: ${lastUpdatedQuote}
 
-*Trading Volume*
+*Trading Volume* 📊
 Volume 24H: ${volume24h} USD
 Volume 7D: ${volume7d} USD
 Volume 30D: ${volume30d} USD
 
-*Change*
+*Change* 📈
 Last Hour: ${percentChange1h}% ${changeIcon1h}
 Last 24H: ${percentChange24h}% ${changeIcon24h}
 Last 7D:  ${percentChange7d}% ${changeIcon7d}
@@ -61,14 +61,14 @@ Last 30D: ${percentChange30d}% ${changeIcon30d}
 Last 90D: ${percentChange90d}% ${changeIcon90d}`
   }
 
-  static stats (blockchainResult, miningResult, exchangeResult) {
+  static stats (blockchainResult, miningResult, exchangeResult, bestBlockResult) {
     const hashrateth = (parseFloat(miningResult.networkhashps) / 1000.0 / 1000.0 / 1000.0 / 1000.0).toFixed(2)
     const medianTime = Misc.printDate(new Date(blockchainResult.mediantime * 1000))
     const marketCap = exchangeResult.market_cap.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const difficulty = parseFloat(blockchainResult.difficulty).toLocaleString('en', { maximumFractionDigits: 2 })
-    const difficulty24h = parseFloat(exchangeResult.difficulty24).toLocaleString('en', { maximumFractionDigits: 2 })
-    const difficulty3d = parseFloat(exchangeResult.difficulty3).toLocaleString('en', { maximumFractionDigits: 2 })
-    const difficulty7d = parseFloat(exchangeResult.difficulty7).toLocaleString('en', { maximumFractionDigits: 2 })
+    const difficulty = parseFloat(blockchainResult.difficulty).toLocaleString('en', { maximumFractionDigits: 0 })
+    const difficulty24h = parseFloat(exchangeResult.difficulty24).toLocaleString('en', { maximumFractionDigits: 0 })
+    const difficulty3d = parseFloat(exchangeResult.difficulty3).toLocaleString('en', { maximumFractionDigits: 0 })
+    const difficulty7d = parseFloat(exchangeResult.difficulty7).toLocaleString('en', { maximumFractionDigits: 0 })
     const blockTimeMin = Math.floor(parseFloat(exchangeResult.block_time) / 60)
     const blockTimeSec = (((parseFloat(exchangeResult.block_time) / 60) % 2) * 60).toFixed(0)
     const exchangeRate = parseFloat(exchangeResult.exchange_rate).toFixed(2)
@@ -78,7 +78,7 @@ Last 90D: ${percentChange90d}% ${changeIcon90d}`
     return `*General* 🖥
 Last block: ${medianTime}
 Median time current best block: ${blockchainResult.mediantime}
-Hash best block: ${blockchainResult.bestblockhash}
+Best block height: [${bestBlockResult.height}](${Misc.blockchainExplorerUrl()}/block/${blockchainResult.bestblockhash})
 Net Hashrate: ${hashrateth} Thash/s
 Mempool size: ${miningResult.pooledtx}
 Market capital: ${marketCap}
@@ -92,14 +92,14 @@ Difficulty 7 days avg: ${difficulty7d}
 *Reward* 🤑
 Block time: ${blockTimeMin}m ${blockTimeSec}s
 Block reward: ${exchangeResult.block_reward} BTC
-Block reward 24 hours avg: ${exchangeResult.block_reward24} BTC
-Block reward 3 days avg: ${exchangeResult.block_reward3} BTC
+Block reward 24H avg: ${exchangeResult.block_reward24} BTC
+Block reward 3D avg: ${exchangeResult.block_reward3} BTC
 
 *Exchange* 💱
-Exchange rate: ${exchangeRate} BTC-USD
-Exchange rate 24 hours avg: ${exchangeRate24h} BTC-USD
-Exchange rate 3 days avg: ${exchangeRate3d} BTC-USD
-Exchange rate 7 days avg: ${exchangeRate7d} BTC-USD`
+Exchange rate: ${exchangeRate} BTC/USD
+Exchange rate 24H avg: ${exchangeRate24h} BTC/USD
+Exchange rate 3D avg: ${exchangeRate3d} BTC/USD
+Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
   }
 }
 

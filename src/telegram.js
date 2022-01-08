@@ -1,8 +1,6 @@
 const Misc = require('./miscellaneous')
 
 // Constants
-const BITCOIN_EXPLORER_URL = 'https://blockstream.info'
-
 const FAQ_URL = 'https://bitcoin.melroy.org/en/faq'
 
 class Telegram {
@@ -173,7 +171,7 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
         const blockTime = Misc.printDate(new Date(block.block_time * 1000))
         const difficulty = parseFloat(block.difficulty).toLocaleString('en', { maximumFractionDigits: 2 })
         const textMsg = `
-*🧱 Height:* ${block.height}
+*Block Height:* ${block.height}
 *Hash:* ${block.hash}
 *Confirmations:* ${block.confirmations}
 *Size:* ${block.block_size} bytes
@@ -184,7 +182,7 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
 *Difficulty:* ${difficulty}
 *Chainwork:* ${block.chainwork}
 *MerkleRoot:* ${block.merkle_root}
-[View Block](${BITCOIN_EXPLORER_URL}/blocks/${block.height})`
+[View Block](${Misc.blockchainExplorerUrl()}/blocks/${block.height})`
         return textMsg
       }
       const hashOrHeight = match[1].trim()

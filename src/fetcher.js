@@ -2,9 +2,6 @@ const ProcessResult = require('./process-result')
 const RuntimeError = require('./runtime-error')
 const Misc = require('./miscellaneous')
 
-// Constants
-const BITCOIN_EXPLORER_URL = 'https://blockstream.info'
-
 /**
  * Fetch or calculate the data we need
  */
@@ -74,7 +71,7 @@ Last receive: ${recieveTime}
   async bitcoinNetworkInfo () {
     const result = await this.bitcoin.getNetworkInfo()
     let text = `
-*Bitcoin Network*
+*Bitcoin Network Info*
 Bitcoin server version: ${result.version}
 Protocol version: ${result.protocolversion}
 Connections: ${result.connections}
@@ -101,7 +98,8 @@ Reachable: ${networks[i].reachable}
     const blockchainResult = await this.bitcoin.getBlockChainInfo()
     const miningResult = await this.bitcoin.getMiningInfo()
     const exchangeResult = await this.exchange.getExchangeInfo()
-    return ProcessResult.stats(blockchainResult, miningResult, exchangeResult)
+    const bestBlockResult = await this.bitcoin.getBlock(blockchainResult.bestblockhash)
+    return ProcessResult.stats(blockchainResult, miningResult, exchangeResult, bestBlockResult)
   }
 
   /**
@@ -114,10 +112,10 @@ Reachable: ${networks[i].reachable}
     const rawTransaction = await this.bitcoin.getRawTransaction(hash)
     const blockInfo = await this.bitcoin.getBlock(rawTransaction.blockhash)
     const transactionDate = Misc.printDate(new Date(rawTransaction.time * 1000))
-    const text = `**Transaction details for [${hash}](${BITCOIN_EXPLORER_URL}/tx/${hash})**
+    const text = `**Transaction details for [${hash}](${Misc.blockchainExplorerUrl()}/tx/${hash})**
 Confirmations: ${rawTransaction.confirmations}
 Date:  ${transactionDate}
-In Block Height: [${blockInfo.height}](${BITCOIN_EXPLORER_URL}/block/${rawTransaction.blockhash}) with ${blockInfo.nTx} transactions`
+In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${rawTransaction.blockhash}) with ${blockInfo.nTx} transactions`
     return text
   }
 

@@ -1,6 +1,14 @@
 
 class Misc {
   /**
+   * Get blockchain Explorer URL
+   * @returns URL
+   */
+  static blockchainExplorerUrl () {
+    return 'https://blockstream.info'
+  }
+
+  /**
    * Convert Date object to string
    * @param {Date} - date
    * @return {string} formatted date string
