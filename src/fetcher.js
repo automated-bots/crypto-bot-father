@@ -141,16 +141,16 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
   }
 
   /**
-    * Retrieve latest quote information and exchange rates (fiat & crypto).
+    * Retrieve latest quote information and exchange rates (fiat + crypto).
     * @param {String} symbol Crypto symbol
     * @return {Promise} message
     */
-  async priceQuote (symbol) {
+  async priceQuotes (symbol) {
     const symbolUpper = symbol.toUpperCase()
     try {
       const quoteResult = await this.exchange.getLatestPrices(symbolUpper)
       const rateResult = await this.exchange.getExchangeRates(symbolUpper)
-      return ProcessResult.priceQuote(symbolUpper, quoteResult, rateResult)
+      return ProcessResult.priceOverview(symbolUpper, quoteResult, rateResult)
     } catch (error) {
       if (error.response && error.response.status === 400) {
         return 'Error: Invalid currency symbol'

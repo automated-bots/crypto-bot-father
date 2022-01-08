@@ -58,7 +58,7 @@ More info:
     // price command (/price): default Bitcoin
     this.bot.onText(/^[/|!]price\S*$/, msg => {
       // Fall-back to Bitcoin (symbol: BTC)
-      this.fetcher.priceQuote('BTC')
+      this.fetcher.priceQuotes('BTC')
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
@@ -66,7 +66,7 @@ More info:
     // price command (/price <symbol>) - provide your own symbol
     this.bot.onText(/[/|!]price@?\S* (.+)/, (msg, match) => {
       const symbol = match[1].trim()
-      this.fetcher.priceQuote(symbol)
+      this.fetcher.priceQuotes(symbol)
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
