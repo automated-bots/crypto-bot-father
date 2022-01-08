@@ -172,7 +172,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
     try {
       const quoteResult = await this.exchange.getLatestPrices(symbolUpper)
       const rateResult = await this.exchange.getExchangeRates(symbolUpper)
-      return ProcessResult.priceOverview(symbolUpper, quoteResult, rateResult)
+      return ProcessResult.marketStats(symbolUpper, quoteResult, rateResult)
     } catch (error) {
       if (error.response && error.response.status === 400) {
         return 'Error: Invalid currency symbol'
