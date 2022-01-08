@@ -18,6 +18,7 @@ class Bitcoin {
         password: bitcoindRPCPass
       }
     })
+    this.rpcId = 'Crypto Bot'
   }
 
   /*******************************
@@ -32,7 +33,7 @@ class Bitcoin {
   getPeerInfo () {
     return this.bitcoind.post('/', {
       method: 'getpeerinfo',
-      params: {}
+      params: []
     })
       .then(response => {
         return Promise.resolve(response.data.result)
@@ -46,9 +47,9 @@ class Bitcoin {
   getBlockChainInfo () {
     return this.bitcoind.post('/', {
       jsonrpc: '1.0',
-      id: 'Bitcoin Bot',
+      id: this.rpcId,
       method: 'getblockchaininfo',
-      params: {}
+      params: []
     })
       .then(response => {
         return Promise.resolve(response.data.result)
@@ -63,9 +64,9 @@ class Bitcoin {
   getNetworkInfo () {
     return this.bitcoind.post('/', {
       jsonrpc: '1.0',
-      id: 'Bitcoin Bot',
+      id: this.rpcId,
       method: 'getnetworkinfo',
-      params: {}
+      params: []
     })
       .then(response => {
         return Promise.resolve(response.data.result)
@@ -80,9 +81,9 @@ class Bitcoin {
   getMiningInfo () {
     return this.bitcoind.post('/', {
       jsonrpc: '1.0',
-      id: 'Bitcoin Bot',
+      id: this.rpcId,
       method: 'getmininginfo',
-      params: {}
+      params: []
     })
       .then(response => {
         return Promise.resolve(response.data.result)
@@ -100,15 +101,33 @@ class Bitcoin {
   }
 
   /**
-   * Get transaction details
-   * @param {*} hash Bitcoin transaction hash
+   * Get raw transaction details (already decoded)
+   * @param {String} hash Transaction hash
+   * @erturn {Promise} Axios promise
    */
-  getTransaction (hash) {
+  getRawTransaction (hash) {
     return this.bitcoind.post('/', {
       jsonrpc: '1.0',
-      id: 'Bitcoin Bot',
-      method: 'gettransaction',
-      params: { hash }
+      id: this.rpcId,
+      method: 'getrawtransaction',
+      params: [hash, true]
+    })
+      .then(response => {
+        return Promise.resolve(response.data.result)
+      })
+  }
+
+  /**
+   * Get block (decoded verbosity 1)
+   * @param {String} hash Block header hash
+   * @erturn {Promise} Axios promise
+   */
+  getBlock (hash) {
+    return this.bitcoind.post('/', {
+      jsonrpc: '1.0',
+      id: this.rpcId,
+      method: 'getblock',
+      params: [hash]
     })
       .then(response => {
         return Promise.resolve(response.data.result)

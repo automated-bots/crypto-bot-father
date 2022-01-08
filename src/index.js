@@ -18,6 +18,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const Bitcoin = require('./bitcoin')
 const Exchange = require('./exchange')
+const Fetcher = require('./fetcher')
 const Telegram = require('./telegram')
 const routes = require('./routes')
 
@@ -29,12 +30,13 @@ if (!TELEGRAM_TOKEN) {
 // Create helper objects
 const bitcoin = new Bitcoin(BITCOIN_RPC_HOST, BITCOIN_RPC_PORT, BITCOIN_RPC_USER, BITCOIN_RPC_PASS)
 const exchange = new Exchange(COINMARKETCAP_API_TOKEN)
+const fether = new Fetcher(bitcoin, exchange)
 
 const telegramBot = new TelegramBot(TELEGRAM_TOKEN)
 // This informs the Telegram servers of the new webhook.
 telegramBot.setWebHook(`${botUrl}/telegram/bot${TelegramSecretHash}`)
 
-const tel = new Telegram(telegramBot, bitcoin, exchange)
+const tel = new Telegram(telegramBot, fether)
 
 // Create the Express app
 const app = express()
