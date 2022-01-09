@@ -103,6 +103,14 @@ Reachable: ${networks[i].reachable}
   }
 
   /**
+   * Estimate the Bitcoin fee
+   */
+  async bitcoinEstimateFee () {
+    const fee = await this.bitcoin.estimateFees()
+    return `Estimated fee for confirmation in 6 blocks: ${fee} BTC/kB`
+  }
+
+  /**
    * Retrieve Bitcoin trannsaction details
    * @param {String} hash Bitcoin transaction hash
    * @returns {Promise} message
@@ -126,7 +134,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
    */
   async bitcoinAddress (address) {
     // const addressResult = await this.bitcoin.getAddressInfo(address)
-    // TODO ..
+    // TODO: https://stackoverflow.com/questions/67124777/bitcoin-rpc-get-balance-of-address-outside-wallet
     return 'not yet implemented'
   }
 

@@ -40,6 +40,7 @@ Bitcoin:
   /btcstatus - Retrieve Bitcoin Core Deamon info
   /btcnetwork - Get Bitcoin Network info
   /btcinfo - Get Bitcoin blockchain, mining and exchange stats
+  /btcfee - Get fee estimation for 6 target blocks
   /btclastblocks - Get the last 10 blocks on Bitcoin
   /btctransaction <hash> - Get Bitcoin transaction details
   /btcaddress <address> - Get Bitcoin address details
@@ -107,6 +108,13 @@ More info:
     // Bitcoin information command (/btcinfo)
     this.bot.onText(/[/|!]btcinfo/, msg => {
       this.fetcher.bitcoinInfo()
+        .then(message => this.sendMessage(msg.chat.id, message))
+        .catch(error => console.error(error))
+    })
+
+    // Bitcoin estimate fee command (/btcfee)
+    this.bot.onText(/[/|!]btcfee/, msg => {
+      this.fetcher.bitcoinEstimateFee()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })

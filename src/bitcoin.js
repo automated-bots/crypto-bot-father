@@ -90,6 +90,24 @@ class Bitcoin {
       })
   }
 
+  /**
+   * Estimate fee
+   * @param {String} mode Estimate mode (default: CONSERVATIVE, options: 'ECONOMICAL' or 'CONSERVATIVE' or 'UNSET')
+   * @param {Number} blocks Number of blocks found in estimation (default: 6)
+   * @return {Promise} Axios promise
+   */
+  estimateFees (mode = 'CONSERVATIVE', blocks = 6) {
+    return this.bitcoind.post('/', {
+      jsonrpc: '1.0',
+      id: this.rpcId,
+      method: 'estimatesmartfee',
+      params: [blocks, mode]
+    })
+      .then(response => {
+        return Promise.resolve(response.data.result)
+      })
+  }
+
   /*
    * Get address details
    * @return {Promise} Axios promise (id & balance)
