@@ -163,6 +163,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
     try {
       const blockInfo = await this.bitcoin.getBlock(hash)
       const blockDate = Misc.printDate(new Date(blockInfo.time * 1000))
+      const nextBlockText = (blockInfo.nextblockhash) ? `[${blockInfo.nextblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.nextblockhash})` : 'N/A'
       return `**Block details for: [${hash}](${Misc.blockchainExplorerUrl()}/block/${hash})**
 Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${hash})
 Confirmations: ${blockInfo.confirmations}
@@ -170,7 +171,7 @@ Nr of transactions: ${blockInfo.nTx}
 Block time: ${blockDate}
 Difficulty: ${blockInfo.difficulty}
 Preview block hash: [${blockInfo.previousblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.previousblockhash})
-Next block hash: [${blockInfo.nextblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.nextblockhash})`
+Next block hash: ${nextBlockText}`
     } catch (error) {
       // The Bitcoin core returns a 500 HTTP error code
       if (error.response && error.response.status === 500) {
