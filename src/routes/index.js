@@ -4,7 +4,7 @@ const aboutRoute = require('./about')
 const telegramRoute = require('./telegram')
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to LBRY bot' })
+  res.json({ message: 'Welcome to Crypto bot father' })
 })
   .use('/about', aboutRoute)
   .use('/telegram', telegramRoute)
