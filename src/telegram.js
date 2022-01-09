@@ -149,7 +149,7 @@ More info:
     })
 
     this.bot.onText(/^[/|!]btcblock\S*$/, msg => {
-      this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin block hash or block height as argument: /btcblock <hash or block height>')
+      this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin block hash as argument: /btcblock <hash>')
     })
 
     // Bitcoin block command (/btcblock <hash>)
