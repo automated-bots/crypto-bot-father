@@ -69,8 +69,9 @@ Last receive: ${recieveTime}
    * @return {Promise} message
    */
   async bitcoinNetworkInfo () {
-    const result = await this.bitcoin.getNetworkInfo()
-    let text = `
+    try {
+      const result = await this.bitcoin.getNetworkInfo()
+      let text = `
 *Bitcoin Network Info*
 Bitcoin server version: ${result.version}
 Protocol version: ${result.protocolversion}
@@ -79,15 +80,28 @@ P2P active: ${result.networkactive}
 Minimum relay fee:  ${result.relayfee} BTC/kB
 Minimum incremental fee: ${result.incrementalfee} BTC/kB
 Networks:`
-    const networks = result.networks
-    for (let i = 0; i < networks.length; i++) {
-      text += `
+      const networks = result.networks
+      for (let i = 0; i < networks.length; i++) {
+        text += `
 Name: ${networks[i].name}
 Only net: ${networks[i].limited}
 Reachable: ${networks[i].reachable}
 -----------------------`
+      }
+      return text
+    } catch (error) {
+      // The Bitcoin core returns a 500 HTTP error code
+      if (error.response && error.response.status === 500) {
+        if ('error' in error.response.data) {
+          return 'Error: ' + error.response.data.error.message
+        } else {
+          console.error(error)
+          return 'Error: Something went wrong. '
+        }
+      } else {
+        throw error
+      }
     }
-    return text
   }
 
   /**
@@ -116,15 +130,29 @@ Reachable: ${networks[i].reachable}
    * @returns {Promise} message
    */
   async bitcoinTransaction (hash) {
-    // TODO: Retrieve inputs and outputs to determine fee & amounts
-    const rawTransaction = await this.bitcoin.getRawTransaction(hash)
-    const blockInfo = await this.bitcoin.getBlock(rawTransaction.blockhash)
-    const transactionDate = Misc.printDate(new Date(rawTransaction.time * 1000))
-    const text = `**Transaction details for [${hash}](${Misc.blockchainExplorerUrl()}/tx/${hash})**
-Confirmations: ${rawTransaction.confirmations}
-Date:  ${transactionDate}
-In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${rawTransaction.blockhash}) with ${blockInfo.nTx} transactions`
-    return text
+    try {
+      // TODO: Retrieve inputs and outputs to determine fee & amounts
+      const rawTransaction = await this.bitcoin.getRawTransaction(hash)
+      const blockInfo = await this.bitcoin.getBlock(rawTransaction.blockhash)
+      const transactionDate = Misc.printDate(new Date(rawTransaction.time * 1000))
+      const text = `**Transaction details for [${hash}](${Misc.blockchainExplorerUrl()}/tx/${hash})**
+  Confirmations: ${rawTransaction.confirmations}
+  Date:  ${transactionDate}
+  In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${rawTransaction.blockhash}) with ${blockInfo.nTx} transactions`
+      return text
+    } catch (error) {
+      // The Bitcoin core returns a 500 HTTP error code
+      if (error.response && error.response.status === 500) {
+        if ('error' in error.response.data) {
+          return 'Error: ' + error.response.data.error.message
+        } else {
+          console.error(error)
+          return 'Error: Something went wrong. '
+        }
+      } else {
+        throw error
+      }
+    }
   }
 
   /**
@@ -142,11 +170,16 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
   Block time: ${blockDate}
   Difficulty: ${blockInfo.difficulty}
   Preview block hash: ${blockInfo.previousblockhash}
-  Next block hash: ${blockInfo.nextblockhash}
-      `
+  Next block hash: ${blockInfo.nextblockhash}`
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        return 'Error: Block was not found'
+      // The Bitcoin core returns a 500 HTTP error code
+      if (error.response && error.response.status === 500) {
+        if ('error' in error.response.data) {
+          return 'Error: ' + error.response.data.error.message
+        } else {
+          console.error(error)
+          return 'Error: Something went wrong. '
+        }
       } else {
         throw error
       }
@@ -186,6 +219,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
       const rateResult = await this.exchange.getExchangeRates(symbolUpper)
       return ProcessResult.priceOverview(symbolUpper, quoteResult, rateResult)
     } catch (error) {
+      // The exechange returns a 400 HTTP error code
       if (error.response && error.response.status === 400) {
         return 'Error: Invalid currency symbol'
       } else if (error instanceof RuntimeError) {
@@ -208,6 +242,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
       const rateResult = await this.exchange.getExchangeRates(symbolUpper)
       return ProcessResult.marketStats(symbolUpper, quoteResult, rateResult)
     } catch (error) {
+      // The exchange returns a 400 HTTP error code
       if (error.response && error.response.status === 400) {
         return 'Error: Invalid currency symbol'
       } else if (error instanceof RuntimeError) {
