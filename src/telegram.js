@@ -45,7 +45,7 @@ Bitcoin:
   /btctransaction <hash> - Get Bitcoin transaction details
   /btcaddress <address> - Get Bitcoin address details
   /btctransactions <address> - Get last 10 Bitcoin transactions from an address
-  /btcblock <hash or block height> - Get Bitcoin block details
+  /btcblock <hash> - Get Bitcoin block details
 
 More info:
   /why - Why Bitcoin?
@@ -133,7 +133,7 @@ More info:
 
     this.bot.onText(/[/|!]btctransaction@?\S* (.+)/, (msg, match) => {
       const hash = match[1].trim()
-      // TODO!
+      // TODO: Improve details like fee & total transaction amounts
       this.fetcher.bitcoinTransaction(hash)
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
@@ -142,7 +142,7 @@ More info:
     // transactions command (/btctransactions <address>)
     this.bot.onText(/[/|!]btctransactions@?\S* (.+)/, (msg, match) => {
       const address = match[1].trim()
-      // TODO!
+      // TODO: Fully missing
       this.fetcher.bitcoinTransactions(address)
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
@@ -152,98 +152,30 @@ More info:
       this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin block hash or block height as argument: /btcblock <hash or block height>')
     })
 
-    // block command (/block <hash or block height>)
-    this.bot.onText(/[/|!]block@?\S* (.+)/, (msg, match) => {
-      function printBlockInfo (block) {
-        const blockTime = Misc.printDate(new Date(block.block_time * 1000))
-        const difficulty = parseFloat(block.difficulty).toLocaleString('en', { maximumFractionDigits: 2 })
-        const textMsg = `
-*Block Height:* ${block.height}
-*Hash:* ${block.hash}
-*Confirmations:* ${block.confirmations}
-*Size:* ${block.block_size} bytes
-*Bits:* ${block.bits}
-*Nonce:* ${block.nonce}
-*Time:* ${blockTime}
-*Version:* ${block.version}
-*Difficulty:* ${difficulty}
-*Chainwork:* ${block.chainwork}
-*MerkleRoot:* ${block.merkle_root}
-[View Block](${Misc.blockchainExplorerUrl()}/blocks/${block.height})`
-        return textMsg
-      }
-      const hashOrHeight = match[1].trim()
-      const chatId = msg.chat.id
-      if (Misc.isSha256(hashOrHeight)) {
+    // Bitcoin block command (/btcblock <hash>)
+    this.bot.onText(/[/|!]btcblock@?\S* (.+)/, (msg, match) => {
+      const hash = match[1].trim()
+      if (Misc.isSha256(hash)) {
         // Retrieved block by hash (sha256)
-        this.bitcoin.getBlockInfo(hashOrHeight)
-          .then(result => {
-            if (result.length > 0) {
-              this.sendMessage(chatId, printBlockInfo(result[0]))
-            } else {
-              this.sendMessage(chatId, 'Block not found')
-            }
-          })
+        this.fetcher.bitcoinBlock(hash)
+          .then(message => this.sendMessage(msg.chat.id, message))
           .catch(error => console.error(error))
       } else {
-        // Retrieved block by block height
-        this.bitcoin.getBlockHeightInfo(hashOrHeight)
-          .then(result => {
-            if (result.length > 0) {
-              this.sendMessage(chatId, printBlockInfo(result[0]))
-            } else {
-              this.sendMessage(chatId, 'Block not found')
-            }
-          })
+        // TODO: Retrieve by block hash
+        this.sendMessage(msg.chat.id, 'Please provide a block hash, other parameters are not yet supported.')
       }
     })
 
     // lastblocks command (/btclastblocks)
     // TODO: Implemented getLastBlocks
     this.bot.onText(/[/|!]btclastblocks/, msg => {
-      const chatId = msg.chat.id
-      /*
-      this.bitcoin.getLastBlocks()
-        .then(result => {
-          let textMsg = '*Last 10 blocks* 🧱'
-          for (let i = 0; i < result.length; i++) {
-            const block = result[i]
-            const blockTime = Misc.printDate(new Date(block.block_time * 1000))
-            const difficulty = parseFloat(block.difficulty).toLocaleString('en', { maximumFractionDigits: 3 })
-            textMsg += `
-    *Height:* ${block.height}
-    *Time:* ${blockTime}
-    *Size:* ${block.block_size} bytes
-    *Difficulty:* ${difficulty}
-    [View Block](${BITCOIN_EXPLORER_URL}/blocks/${block.height})
-    ------------------------------------------`
-          }
-          this.sendMessage(chatId, textMsg)
-        })
-        .catch(error => {
-          console.error(error)
-        }) */
-      this.sendMessage(chatId, 'Not yet implemented')
+      this.sendMessage(msg.chat.id, 'Not yet implemented')
     })
 
     // top10 command (/btctop10)
     // TODO: implement getTop10BiggestTransactions
     this.bot.onText(/[/|!]btctop10/, msg => {
-      const chatId = msg.chat.id
-      /*
-      this.bitcoin.getTop10BiggestTransactions()
-        .then(result => {
-          let textMsg = '*Top 10 biggest transactions of this year* 💰\n'
-          for (let i = 0; i < result.length; i++) {
-            const amount = parseFloat(result[i].value).toLocaleString('en', { maximumFractionDigits: BTC_PRICE_FRACTION_DIGITS })
-            textMsg += `[${amount} BTC](${BITCOIN_EXPLORER_URL}/tx/${result[i].hash}) (in: ${result[i].output_count}, out: ${result[i].output_count}) - ${result[i].created_time}\n`
-          }
-          this.sendMessage(chatId, textMsg)
-        })
-        .catch(error => {
-          console.error(error)
-        }) */
-      this.sendMessage(chatId, 'Not yet implemented')
+      this.sendMessage(msg.chat.id, 'Not yet implemented')
     })
 
     // Why is Bitcoin created?

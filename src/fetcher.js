@@ -128,6 +128,32 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
   }
 
   /**
+   * Retrieve Bitcoin block details
+   * @param {String} hash Bitcoin block hash
+   */
+  async bitcoinBlock (hash) {
+    try {
+      const blockInfo = await this.bitcoin.getBlock(hash)
+      const blockDate = Misc.printDate(new Date(blockInfo.time * 1000))
+      return `**Block details for: ${hash}**
+  Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${hash})
+  Confirmations: ${blockInfo.confirmations}
+  Nr of transactions: ${blockInfo.nTx}
+  Block time: ${blockDate}
+  Difficulty: ${blockInfo.difficulty}
+  Preview block hash: ${blockInfo.previousblockhash}
+  Next block hash: ${blockInfo.nextblockhash}
+      `
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        return 'Error: Block was not found'
+      } else {
+        throw error
+      }
+    }
+  }
+
+  /**
    * Retrieve Bitcoin address details
    * @param {String} hash Bitcoin address
    * @return {Promise} message
