@@ -136,9 +136,9 @@ Reachable: ${networks[i].reachable}
       const blockInfo = await this.bitcoin.getBlock(rawTransaction.blockhash)
       const transactionDate = Misc.printDate(new Date(rawTransaction.time * 1000))
       const text = `**Transaction details for [${hash}](${Misc.blockchainExplorerUrl()}/tx/${hash})**
-  Confirmations: ${rawTransaction.confirmations}
-  Date:  ${transactionDate}
-  In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${rawTransaction.blockhash}) with ${blockInfo.nTx} transactions`
+Confirmations: ${rawTransaction.confirmations}
+Date:  ${transactionDate}
+In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${rawTransaction.blockhash}) with ${blockInfo.nTx} transactions`
       return text
     } catch (error) {
       // The Bitcoin core returns a 500 HTTP error code
@@ -163,14 +163,14 @@ Reachable: ${networks[i].reachable}
     try {
       const blockInfo = await this.bitcoin.getBlock(hash)
       const blockDate = Misc.printDate(new Date(blockInfo.time * 1000))
-      return `**Block details for: ${hash}**
-  Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${hash})
-  Confirmations: ${blockInfo.confirmations}
-  Nr of transactions: ${blockInfo.nTx}
-  Block time: ${blockDate}
-  Difficulty: ${blockInfo.difficulty}
-  Preview block hash: ${blockInfo.previousblockhash}
-  Next block hash: ${blockInfo.nextblockhash}`
+      return `**Block details for: [${hash}](${Misc.blockchainExplorerUrl()}/block/${hash})**
+Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${hash})
+Confirmations: ${blockInfo.confirmations}
+Nr of transactions: ${blockInfo.nTx}
+Block time: ${blockDate}
+Difficulty: ${blockInfo.difficulty}
+Preview block hash: [${blockInfo.previousblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.previousblockhash})
+Next block hash: [${blockInfo.nextblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.nextblockhash})`
     } catch (error) {
       // The Bitcoin core returns a 500 HTTP error code
       if (error.response && error.response.status === 500) {
