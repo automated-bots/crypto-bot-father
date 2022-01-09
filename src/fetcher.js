@@ -106,8 +106,8 @@ Reachable: ${networks[i].reachable}
    * Estimate the Bitcoin fee
    */
   async bitcoinEstimateFee () {
-    const fee = await this.bitcoin.estimateFees()
-    return `Estimated fee for confirmation in 6 blocks: ${fee} BTC/kB`
+    const estimateFee = await this.bitcoin.estimateFees()
+    return `Estimated fee for confirmation in 6 blocks: ${estimateFee.feerate} BTC/kB`
   }
 
   /**
