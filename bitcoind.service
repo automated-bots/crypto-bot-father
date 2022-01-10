@@ -10,13 +10,20 @@
 # config file.
 
 [Unit]
-Description=Bitcoin Core daemon
-After=network.target
+Description=Bitcoin daemon
+Documentation=https://github.com/bitcoin/bitcoin/blob/master/doc/init.md
+
+After=network-online.target
+Wants=network-online.target
+
 
 [Service]
-ExecStart=/usr/bin/bitcoind -daemon \
+# Depends on where your bitcoind is located (could also be: /usr/bin/bitcoind)
+# Be sure '/media/your_data_mount/bitcoin' folder below has the correct chmod rights (bitcoin:bitcoin)
+ExecStart=/usr/local/bin/bitcoind -daemon -txindex \
                             -pid=/run/bitcoind/bitcoind.pid \
-                            -conf=/etc/bitcoin/bitcoin.conf
+                            -conf=/etc/bitcoin/bitcoin.conf \
+                            -datadir=/media/your_data_mount/bitcoin
 
 # Make sure the config directory is readable by the service user
 PermissionsStartOnly=true
@@ -47,7 +54,7 @@ RuntimeDirectoryMode=0710
 ConfigurationDirectory=bitcoin
 ConfigurationDirectoryMode=0710
 
-# /var/lib/bitcoind (has not enough storage)
+# /var/lib/bitcoind (has not enough storage, see -datadir)
 #StateDirectory=bitcoind
 #StateDirectoryMode=0710
 

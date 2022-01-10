@@ -106,7 +106,7 @@ Next, do not forget to create a (test) wallet:
 bitcoin-cli createwallet "testwallet"
 ```
 
-* See [bitcoin.service systemd file](bitcoin.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.
+* See [bitcoind.service systemd file](bitcoind.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.
 * Core data will be stored into `/var/lib/bitcoind`
 * Be-sure both `bitcoind` binary is installed into `/usr/bin` directory!
 * Create an user `bitcoin` the unix machine (`adduser -M bitcoin`)
