@@ -10,27 +10,27 @@ const DOLLAR_PRICE_FRACTION_DIGITS = 2
  */
 class ProcessResult {
   static priceOverview (symbol, quoteResult, rateResult) {
-    const euroPrice = parseFloat(rateResult.EUR).toFixed(2)
-    const poundSterlingPrice = parseFloat(rateResult.GBP).toFixed(2)
-    const japaneseYenPrice = parseFloat(rateResult.JPY).toFixed(2)
-    const swissFrancPrice = parseFloat(rateResult.CHF).toFixed(2)
-    const australianDollarPrice = parseFloat(rateResult.AUD).toFixed(2)
-    const canadianDollarPrice = parseFloat(rateResult.CAD).toFixed(2)
-    const chineseRenminbiPrice = parseFloat(rateResult.CNH).toFixed(2)
-    const hongKongDollarPrice = parseFloat(rateResult.HKD).toFixed(2)
-    const bitcoinPrice = parseFloat(rateResult.BTC).toFixed(8)
-    const usdcPrice = parseFloat(rateResult.USDC).toFixed(2)
-    const ustPrice = parseFloat(rateResult.UST).toFixed(2)
-    const ethereumPrice = parseFloat(rateResult.ETH).toFixed(5)
-    const solanaPrice = parseFloat(rateResult.SOL).toFixed(5)
-    const cardanoPrice = parseFloat(rateResult.ADA).toFixed(2)
-    const polkadotPrice = parseFloat(rateResult.DOT).toFixed(5)
-    const avalanchePrice = parseFloat(rateResult.AVAX).toFixed(5)
-    const chainlinkPrice = parseFloat(rateResult.LINK).toFixed(5)
-    const litecoinPrice = parseFloat(rateResult.LTC).toFixed(5)
-    const lunaPrice = parseFloat(rateResult.WLUNA).toFixed(3)
-    const bitcoinCashPrice = parseFloat(rateResult.BCH).toFixed(5)
-    const dogecoinPrice = parseFloat(rateResult.DOGE).toFixed(2)
+    const euroPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.EUR))
+    const poundSterlingPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.GBP))
+    const japaneseYenPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.JPY))
+    const swissFrancPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.CHF))
+    const australianDollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.AUD))
+    const canadianDollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.CAD))
+    const chineseRenminbiPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.CNH))
+    const hongKongDollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.HKD))
+    const bitcoinPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.BTC), 8)
+    const usdcPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.USDC))
+    const ustPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.UST))
+    const ethereumPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.ETH), 6)
+    const solanaPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.SOL), 5)
+    const cardanoPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.ADA))
+    const polkadotPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.DOT), 5)
+    const avalanchePrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.AVAX), 5)
+    const chainlinkPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.LINK), 5)
+    const litecoinPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.LTC), 5)
+    const lunaPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.WLUNA), 4)
+    const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.BCH), 8)
+    const dogecoinPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.DOGE))
     const name = (quoteResult.name) ? quoteResult.name : symbol
     const quote = quoteResult.quote.USD
     const dollarPrice = quote.price.toLocaleString('en', { maximumFractionDigits: DOLLAR_PRICE_FRACTION_DIGITS })
@@ -63,9 +63,9 @@ class ProcessResult {
   }
 
   static marketStats (symbol, quoteResult, rateResult) {
-    const euroPrice = parseFloat(rateResult.EUR).toFixed(2)
-    const btcPrice = parseFloat(rateResult.BTC).toFixed(5)
-    const ethPrice = parseFloat(rateResult.ETH).toFixed(5)
+    const euroPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.EUR))
+    const btcPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.BTC), 7)
+    const ethPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.ETH), 5)
     const name = (quoteResult.name) ? quoteResult.name : symbol
     const quote = quoteResult.quote.USD
     const circulatingSupply = (quoteResult.circulating_supply) ? quoteResult.circulating_supply.toLocaleString('en') : 'N/A'
@@ -115,7 +115,7 @@ Last 30D: ${percentChange30d}% ${changeIcon30d}
 Last 90D: ${percentChange90d}% ${changeIcon90d}`
   }
 
-  static stats (blockchainResult, miningResult, exchangeResult, bestBlockResult) {
+  static bitcoinStats (blockchainResult, miningResult, exchangeResult, bestBlockResult) {
     const hashrateth = (parseFloat(miningResult.networkhashps) / 1000.0 / 1000.0 / 1000.0 / 1000.0).toFixed(2)
     const medianTime = Misc.printDate(new Date(blockchainResult.mediantime * 1000))
     const marketCap = exchangeResult.market_cap.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })

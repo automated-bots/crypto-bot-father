@@ -1,4 +1,6 @@
 
+// Create our number formatter.
+
 class Misc {
   /**
    * Get blockchain Explorer URL
@@ -14,8 +16,39 @@ class Misc {
    * @return {string} formatted date string
    */
   static printDate (date) {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' }
-    return date.toLocaleDateString('en-US', options) + ' ' + date.toLocaleTimeString('en-US')
+    return new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeStyle: 'medium' }).format(date)
+  }
+
+  static formatCurrencySymbol (value, currency = 'USD', fractionDigits = 2) {
+    return new Intl.NumberFormat('en-GB', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+      currencyDisplay: 'narrowSymbol'
+    }).format(value)
+  }
+
+  // Using ISO currency
+  static printCurrencyCode (value, currency = 'USD', fractionDigits = 2) {
+    return new Intl.NumberFormat('en-GB', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+      currencyDisplay: 'code'
+    }).format(value)
+  }
+
+  // Without any symbol
+  static printCurrencyWithoutSymbol (value, fractionDigits = 2) {
+    return new Intl.NumberFormat('en-GB', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+      currencyDisplay: 'code'
+    }).format(value).replace(/[a-z]{3}/i, '').trim()
   }
 
   /**

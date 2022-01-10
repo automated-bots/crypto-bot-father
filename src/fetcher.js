@@ -113,7 +113,7 @@ Reachable: ${networks[i].reachable}
     const miningResult = await this.bitcoin.getMiningInfo()
     const exchangeResult = await this.exchange.getExchangeInfo(1) // 1 = Bitcoin
     const bestBlockResult = await this.bitcoin.getBlock(blockchainResult.bestblockhash)
-    return ProcessResult.stats(blockchainResult, miningResult, exchangeResult, bestBlockResult)
+    return ProcessResult.bitcoinStats(blockchainResult, miningResult, exchangeResult, bestBlockResult)
   }
 
   /**
