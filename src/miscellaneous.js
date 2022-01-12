@@ -19,6 +19,10 @@ class Misc {
     return new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeStyle: 'medium' }).format(date)
   }
 
+  /**
+   * With currency symbol (eg. $243,429.67), default USD
+   * @return {string} formatted currency string
+   */
   static formatCurrencySymbol (value, currency = 'USD', fractionDigits = 2) {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
@@ -29,7 +33,10 @@ class Misc {
     }).format(value)
   }
 
-  // Using ISO currency
+  /**
+   * Using ISO currency  (eg. USD 2,352,712.23), default USD
+   * @return {string} formatted currency string
+   */
   static printCurrencyCode (value, currency = 'USD', fractionDigits = 2) {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
@@ -40,7 +47,10 @@ class Misc {
     }).format(value)
   }
 
-  // Without any symbol
+  /**
+   * Without any symbol (eg. 23,046.91)
+   * @return {string} formatted currency string
+   */
   static printCurrencyWithoutSymbol (value, fractionDigits = 2) {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
@@ -48,6 +58,38 @@ class Misc {
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
       currencyDisplay: 'code'
+    }).format(value).replace(/[a-z]{3}/i, '').trim()
+  }
+
+  /**
+   * Notation compact, display short symbol (eg. $2.5T), default USD
+   * @return {string} formatted currency string
+   */
+  static printCurrencyNotationCompactSymbol (value, currency = 'USD', fractionDigits = 2) {
+    return new Intl.NumberFormat('en-GB', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+      currencyDisplay: 'narrowSymbol',
+      notation: 'compact',
+      compactDisplay: 'short'
+    }).format(value)
+  }
+
+  /**
+   * Notation compact, display short, without any symbol (eg. 2.5T)
+   * @return {string} formatted currency string
+   */
+  static printCurrencyNotationCompactWithoutSymbol (value, fractionDigits = 2) {
+    return new Intl.NumberFormat('en-GB', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+      currencyDisplay: 'code',
+      notation: 'compact',
+      compactDisplay: 'short'
     }).format(value).replace(/[a-z]{3}/i, '').trim()
   }
 

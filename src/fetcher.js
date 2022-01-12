@@ -253,6 +253,15 @@ Next block hash: ${nextBlockText}`
       }
     }
   }
+
+  /**
+   * Giving you a generic market overview of the top 30 coins (not tokens)
+   * @return {Promise} message
+   */
+  async marketOverview () {
+    const listingResults = await this.exchange.getLatestMarketOverview()
+    return ProcessResult.marketOverview(listingResults)
+  }
 }
 
 module.exports = Fetcher

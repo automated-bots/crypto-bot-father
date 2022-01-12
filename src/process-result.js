@@ -2,7 +2,6 @@ const Misc = require('./miscellaneous')
 
 // Constants
 const COINMARKET_URL = 'https://coinmarketcap.com'
-const DOLLAR_PRICE_FRACTION_DIGITS = 2
 
 /**
  * Static methods to help processing the result data.
@@ -33,7 +32,7 @@ class ProcessResult {
     const dogecoinPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.DOGE))
     const name = (quoteResult.name) ? quoteResult.name : symbol
     const quote = quoteResult.quote.USD
-    const dollarPrice = quote.price.toLocaleString('en', { maximumFractionDigits: DOLLAR_PRICE_FRACTION_DIGITS })
+    const dollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(quote.price))
 
     return `*Current prices of ${name} (${symbol}) in fiat*
  • ${dollarPrice} USD
@@ -71,7 +70,7 @@ class ProcessResult {
     const circulatingSupply = (quoteResult.circulating_supply) ? quoteResult.circulating_supply.toLocaleString('en') : 'N/A'
     const totalSupply = (quoteResult.total_supply) ? quoteResult.total_supply.toLocaleString('en') : 'N/A'
     const maxSupply = (quoteResult.max_supply) ? quoteResult.max_supply.toLocaleString('en') : 'N/A'
-    const dollarPrice = quote.price.toLocaleString('en', { maximumFractionDigits: DOLLAR_PRICE_FRACTION_DIGITS })
+    const dollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(quote.price))
     const lastUpdatedQuote = Misc.printDate(new Date(quote.last_updated))
     const marketCap = parseFloat(quote.market_cap).toLocaleString('en', { maximumFractionDigits: 0 })
     const volume24h = parseFloat(quote.volume_24h).toLocaleString('en', { maximumFractionDigits: 0 })
@@ -87,7 +86,7 @@ class ProcessResult {
     const changeIcon7d = (Math.sign(quote.percent_change_7d) === 1) ? '🔼' : '🔽'
     const changeIcon30d = (Math.sign(quote.percent_change_30d) === 1) ? '🔼' : '🔽'
     const changeIcon90d = (Math.sign(quote.percent_change_90d) === 1) ? '🔼' : '🔽'
-    return `*General coin data for ${name}*
+    return `*General coin data for ${name} (${symbol})*
 Rank: #${quoteResult.cmc_rank}
 Circulating supply: ${circulatingSupply} ${symbol}s
 Total supply: ${totalSupply} ${symbol}s
@@ -108,11 +107,11 @@ Volume 7D: ${volume7d} USD
 Volume 30D: ${volume30d} USD
 
 *Change* 📈
-Last Hour: ${percentChange1h}% ${changeIcon1h}
-Last 24H: ${percentChange24h}% ${changeIcon24h}
-Last 7D:  ${percentChange7d}% ${changeIcon7d}
-Last 30D: ${percentChange30d}% ${changeIcon30d}
-Last 90D: ${percentChange90d}% ${changeIcon90d}`
+Last Hour: ${changeIcon1h} ${percentChange1h}%
+Last 24H: ${changeIcon24h} ${percentChange24h}%
+Last 7D:  ${changeIcon7d} ${percentChange7d}%
+Last 30D: ${changeIcon30d} ${percentChange30d}%
+Last 90D: ${changeIcon90d} ${percentChange90d}%`
   }
 
   static bitcoinStats (blockchainResult, miningResult, exchangeResult, bestBlockResult) {
@@ -154,6 +153,22 @@ Exchange rate: ${exchangeRate} BTC/USD
 Exchange rate 24H avg: ${exchangeRate24h} BTC/USD
 Exchange rate 3D avg: ${exchangeRate3d} BTC/USD
 Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
+  }
+
+  static marketOverview (listingResults) {
+    let text = '*Crypto Market Overview - Top 30 coins listed*\n'
+    for (const coin of listingResults) {
+      const quote = coin.quote.USD
+      const dollarPrice = Misc.formatCurrencySymbol(parseFloat(quote.price))
+      const percentChange24h = parseFloat(quote.percent_change_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange7d = parseFloat(quote.percent_change_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const changeIcon24h = (Math.sign(quote.percent_change_24h) === 1) ? '🔼' : '🔽'
+      const changeIcon7d = (Math.sign(quote.percent_change_7d) === 1) ? '🔼' : '🔽'
+      const marketCap = Misc.printCurrencyNotationCompactSymbol(parseFloat(quote.market_cap))
+      const volume24h = Misc.printCurrencyNotationCompactSymbol(parseFloat(quote.volume_24h))
+      text += `• #${coin.cmc_rank} ${coin.name} (${coin.symbol}) - ${dollarPrice}, 24H: ${changeIcon24h} ${percentChange24h}%, 7D: ${changeIcon7d} ${percentChange7d}%, Cap: ${marketCap}, Vol 24H: ${volume24h}\n`
+    }
+    return text
   }
 }
 
