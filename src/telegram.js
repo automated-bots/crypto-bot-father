@@ -35,7 +35,7 @@ General:
   /help - Show help output
   /price <symbol> - Get latest crypto price overview
   /stats <symbol> - Get latest market statistics
-  /overview - General crypto market overview
+  /overview [<limit>] - General crypto market overview, limit is optional
 
 Bitcoin:
   /btcstatus - Retrieve Bitcoin Core Deamon info
