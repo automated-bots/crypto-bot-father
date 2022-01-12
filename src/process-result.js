@@ -158,10 +158,10 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
 
   static marketOverview (listingResults) {
     const config = {
-      border: getBorderCharacters('norc'),
+      border: getBorderCharacters('void'),
       columnDefault: {
         paddingLeft: 0,
-        paddingRight: 0
+        paddingRight: 1
       },
       drawHorizontalLine: (lineIndex, rowCount) => {
         return lineIndex === 0 || lineIndex === 1 || lineIndex === rowCount
