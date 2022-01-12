@@ -33,8 +33,8 @@ class Telegram {
       const text = `
 General:
   /help - Show help output
-  /price <symbol> - Get latest crypto price overview
-  /stats <symbol> - Get latest market statistics
+  /price <symbol> - Get latest crypto price overview (default BTC)
+  /stats <symbol> - Get latest market statistics (default BTC)
   /overview [<limit>] - General crypto market overview, limit is optional
 
 Bitcoin:
