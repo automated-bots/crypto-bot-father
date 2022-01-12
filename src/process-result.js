@@ -161,7 +161,7 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
       border: getBorderCharacters('norc'),
       columnDefault: {
         paddingLeft: 0,
-        paddingRight: 1
+        paddingRight: 0
       },
       drawHorizontalLine: (lineIndex, rowCount) => {
         return lineIndex === 0 || lineIndex === 1 || lineIndex === rowCount
@@ -169,7 +169,7 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
     }
     let text = '*Crypto Market Overview (coins only)*\n'
     const tableData = []
-    tableData.push(['nr', 'symbol', 'price', '%24H', '%7D', 'Cap', 'Vol 24H'])
+    tableData.push(['Nr', 'Symbol', 'Price', '%24H', '%7D', 'Cap', 'Vol 24H'])
     for (const coin of listingResults) {
       const quote = coin.quote.USD
       const dollarPrice = Misc.formatCurrencySymbol(parseFloat(quote.price))
@@ -179,7 +179,7 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
       const volume24h = Misc.printCurrencyNotationCompactSymbol(parseFloat(quote.volume_24h))
       tableData.push([coin.cmc_rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, marketCap, volume24h])
     }
-    text += '```' + table(tableData, config) + '````'
+    text += '```\n' + table(tableData, config) + '\n```'
     return text
   }
 }
