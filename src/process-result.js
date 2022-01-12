@@ -1,3 +1,4 @@
+import { table, getBorderCharacters } from 'table'
 const Misc = require('./miscellaneous')
 
 // Constants
@@ -156,18 +157,29 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
   }
 
   static marketOverview (listingResults) {
-    let text = '*Crypto Market Overview - Top 30 coins listed*\n'
+    const config = {
+      border: getBorderCharacters('norc'),
+      columnDefault: {
+        paddingLeft: 0,
+        paddingRight: 1
+      },
+      drawHorizontalLine: (lineIndex, rowCount) => {
+        return lineIndex === 0 || lineIndex === 1 || lineIndex === rowCount
+      }
+    }
+    let text = '*Crypto Market Overview (coins only)*\n'
+    const tableData = []
+    tableData.push(['nr', 'symbol', 'price', '%24H', '%7D', 'Cap', 'Vol 24H'])
     for (const coin of listingResults) {
       const quote = coin.quote.USD
       const dollarPrice = Misc.formatCurrencySymbol(parseFloat(quote.price))
       const percentChange24h = parseFloat(quote.percent_change_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       const percentChange7d = parseFloat(quote.percent_change_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const changeIcon24h = (Math.sign(quote.percent_change_24h) === 1) ? '🔼' : '🔽'
-      const changeIcon7d = (Math.sign(quote.percent_change_7d) === 1) ? '🔼' : '🔽'
       const marketCap = Misc.printCurrencyNotationCompactSymbol(parseFloat(quote.market_cap))
       const volume24h = Misc.printCurrencyNotationCompactSymbol(parseFloat(quote.volume_24h))
-      text += `• #${coin.cmc_rank} ${coin.symbol} - ${dollarPrice}, 24H: ${changeIcon24h} ${percentChange24h}%, 7D: ${changeIcon7d} ${percentChange7d}%, Cap: ${marketCap}, Vol 24H: ${volume24h}\n`
+      tableData.push([coin.cmc_rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, marketCap, volume24h])
     }
+    text += '```' + table(tableData, config) + '````'
     return text
   }
 }
