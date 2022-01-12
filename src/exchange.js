@@ -81,7 +81,7 @@ class Exchange {
       }
     })
       .then(response => {
-        if ('data' in response.data && response.data.data.isArray()) {
+        if ('data' in response.data && Array.isArray(response.data.data)) {
           return Promise.resolve(response.data.data)
         } else {
           let errorMessage = ''

@@ -35,7 +35,7 @@ General:
   /help - Show help output
   /price <symbol> - Get latest crypto price overview
   /stats <symbol> - Get latest market statistics
-  /marketoverview - General crypto market overview
+  /overview - General crypto market overview
 
 Bitcoin:
   /btcstatus - Retrieve Bitcoin Core Deamon info
@@ -89,8 +89,8 @@ More info:
         .catch(error => console.error(error))
     })
 
-    // Market overview command (/marketoverview)
-    this.bot.onText(/[/|!]marketoverview/, msg => {
+    // Market overview command (/overview)
+    this.bot.onText(/[/|!]overview/, msg => {
       this.fetcher.marketOverview()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
