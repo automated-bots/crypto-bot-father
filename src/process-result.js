@@ -169,7 +169,7 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
     }
     let text = '*Crypto Market Overview (coins only)*\n'
     const tableData = []
-    tableData.push(['Nr', 'Symbl', '$ Price', '%24H', '%7D', '$ Cap', '$Vol24H'])
+    tableData.push(['Symbl', '$ Price', '%24H', '%7D', '$ Cap', '$Vol24H'])
     for (const coin of listingResults) {
       const quote = coin.quote.USD
       const dollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(quote.price))
@@ -177,7 +177,7 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
       const percentChange7d = parseFloat(quote.percent_change_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(quote.market_cap))
       const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(quote.volume_24h))
-      tableData.push([coin.cmc_rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, marketCap, volume24h])
+      tableData.push([coin.symbol, dollarPrice, percentChange24h, percentChange7d, marketCap, volume24h])
     }
     text += '```\n' + table(tableData, config) + '\n```'
     return text
