@@ -1,4 +1,4 @@
-import { table, getBorderCharacters } from 'table'
+const { table, getBorderCharacters } = require('table')
 const Misc = require('./miscellaneous')
 
 // Constants
