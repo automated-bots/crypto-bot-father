@@ -166,7 +166,7 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
       const changeIcon7d = (Math.sign(quote.percent_change_7d) === 1) ? '🔼' : '🔽'
       const marketCap = Misc.printCurrencyNotationCompactSymbol(parseFloat(quote.market_cap))
       const volume24h = Misc.printCurrencyNotationCompactSymbol(parseFloat(quote.volume_24h))
-      text += `• #${coin.cmc_rank} ${coin.name} (${coin.symbol}) - ${dollarPrice}, 24H: ${changeIcon24h} ${percentChange24h}%, 7D: ${changeIcon7d} ${percentChange7d}%, Cap: ${marketCap}, Vol 24H: ${volume24h}\n`
+      text += `• #${coin.cmc_rank} ${coin.symbol} - ${dollarPrice}, 24H: ${changeIcon24h} ${percentChange24h}%, 7D: ${changeIcon7d} ${percentChange7d}%, Cap: ${marketCap}, Vol 24H: ${volume24h}\n`
     }
     return text
   }

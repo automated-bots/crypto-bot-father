@@ -90,10 +90,28 @@ More info:
     })
 
     // Market overview command (/overview)
-    this.bot.onText(/[/|!]overview/, msg => {
+    this.bot.onText(/^[/|!]overview\S*$/, msg => {
       this.fetcher.marketOverview()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
+    })
+
+    // Market overview command (/overview) - in-/decrease limit to coins
+    this.bot.onText(/[/|!]overview@?\S* (.+)/, (msg, match) => {
+      const limit = parseInt(match[1].trim())
+      if (isNaN(limit)) {
+        this.sendMessage(msg.chat.id, 'Error: Provide a number as argument.')
+      } else {
+        if (limit <= 0) {
+          this.sendMessage(msg.chat.id, 'Error: A number above the 0 will help. Try again.')
+        } else if (limit > 50) {
+          this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited by 50, top 50. Try again.')
+        } else {
+          this.fetcher.marketOverview(limit)
+            .then(message => this.sendMessage(msg.chat.id, message))
+            .catch(error => console.error(error))
+        }
+      }
     })
 
     // Bitcoin core status command (/btcstatus)
@@ -109,7 +127,7 @@ More info:
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => {
           console.error(error)
-          this.sendMessage(msg.chat.id, 'Could not fetch network info, still verifying blocks... Or can\'t connect to the Bitcoin Core Daemon API.')
+          this.sendMessage(msg.chat.id, 'Error: Could not fetch network info, still verifying blocks... Or can\'t connect to the Bitcoin Core Daemon API.')
         })
     })
 
@@ -170,14 +188,14 @@ More info:
           .catch(error => console.error(error))
       } else {
         // TODO: Retrieve by block hash
-        this.sendMessage(msg.chat.id, 'Please provide a block hash, other parameters are not yet supported.')
+        this.sendMessage(msg.chat.id, 'Info: Please provide a block hash, other parameters are not yet supported.')
       }
     })
 
     // lastblocks command (/btclastblocks)
     // TODO: Implemented getLastBlocks
     this.bot.onText(/[/|!]btclastblocks/, msg => {
-      this.sendMessage(msg.chat.id, 'Not yet implemented')
+      this.sendMessage(msg.chat.id, '**Not yet implemented**')
     })
 
     // top10 command (/btctop10)
@@ -231,7 +249,7 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
       if (msg.text) {
         const name = msg.from.first_name
         if (msg.text.toString() === '!' || msg.text.toString() === '/') {
-          this.sendMessage(msg.chat.id, 'Please use /help or !help to get more info.')
+          this.sendMessage(msg.chat.id, 'Info: Please use /help or !help to get more info.')
         } else if (msg.text.toString().toLowerCase().startsWith('hello') || msg.text.toString().toLowerCase().startsWith('hi')) {
           this.sendMessage(msg.chat.id, 'Welcome ' + name + ' 🤟!')
         } else if (msg.text.toString().toLowerCase().startsWith('bye')) {
