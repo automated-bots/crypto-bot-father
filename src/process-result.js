@@ -192,7 +192,7 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
       },
       header: {
         alignment: 'center',
-        content: '**Detailed Crypto Market Overview**\nBetter use your desktop to see the table.'
+        content: 'Detailed Crypto Market Overview\nBetter use your desktop PC to see the table.'
       },
       drawHorizontalLine: (lineIndex, rowCount) => {
         return lineIndex === 0 || lineIndex === 1 || lineIndex === rowCount
@@ -200,7 +200,7 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
     }
     let text = ''
     const tableData = []
-    tableData.push(['Nr', 'Symbol', '$ Price', '%24H', '%7D', '%30D', '90D', '$ Cap', '$Vol24H', '%Domin', 'Max Supply', 'Cir. Supply'])
+    tableData.push(['Nr', 'Symbol', '$ Price', '%24H', '%7D', '%30D', '90D', '$ Cap', '$Vol24H', '%Domin', 'Max Supp', 'Cir. Supp'])
     for (const coin of listingResults) {
       const quote = coin.quote.USD
       const dollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(quote.price))
