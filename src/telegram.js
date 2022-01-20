@@ -36,6 +36,7 @@ General:
   /price <symbol> - Get latest crypto price overview (default BTC)
   /stats <symbol> - Get latest market statistics (default BTC)
   /overview [<limit>] - General crypto market overview, limit is optional
+  /detailedoverview [<limit>] - Detailed crypto market overview, limit is optional
 
 Bitcoin:
   /btcstatus - Retrieve Bitcoin Core Deamon info
@@ -108,6 +109,31 @@ More info:
           this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited by 50, top 50. Try again.')
         } else {
           this.fetcher.marketOverview(limit)
+            .then(message => this.sendMessage(msg.chat.id, message))
+            .catch(error => console.error(error))
+        }
+      }
+    })
+
+    // Detailed market overview command (/detailedoverview)
+    this.bot.onText(/^[/|!]detailedoverview\S*$/, msg => {
+      this.fetcher.detailedMarketOverview()
+        .then(message => this.sendMessage(msg.chat.id, message))
+        .catch(error => console.error(error))
+    })
+
+    // Detailed market overview command (/detailedoverview) - in-/decrease limit to coins
+    this.bot.onText(/[/|!]detailedoverview@?\S* (.+)/, (msg, match) => {
+      const limit = parseInt(match[1].trim())
+      if (isNaN(limit)) {
+        this.sendMessage(msg.chat.id, 'Error: Provide a number as argument.')
+      } else {
+        if (limit <= 0) {
+          this.sendMessage(msg.chat.id, 'Error: A number above the 0 will help. Try again.')
+        } else if (limit > 50) {
+          this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited by 50, top 50. Try again.')
+        } else {
+          this.fetcher.detailedMarketOverview(limit)
             .then(message => this.sendMessage(msg.chat.id, message))
             .catch(error => console.error(error))
         }

@@ -262,6 +262,15 @@ Next block hash: ${nextBlockText}`
     const listingResults = await this.exchange.getLatestMarketOverview(limit)
     return ProcessResult.marketOverview(listingResults)
   }
+
+  /**
+   * Giving you a detailed market overview of the top 25 tokens & coins
+   * @return {Promise} message
+   */
+  async detailedMarketOverview (limit = 25) {
+    const listingResults = await this.exchange.getLatestMarketOverview(limit, false)
+    return ProcessResult.detailedMarketOverview(listingResults)
+  }
 }
 
 module.exports = Fetcher

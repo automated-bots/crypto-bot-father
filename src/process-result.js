@@ -182,6 +182,42 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
     text += '```\n' + table(tableData, config) + '\n```'
     return text
   }
+
+  static detailedMarketOverview (listingResults) {
+    const config = {
+      border: getBorderCharacters('ramac'),
+      columnDefault: {
+        paddingLeft: 1,
+        paddingRight: 1
+      },
+      header: {
+        alignment: 'center',
+        content: 'Detailed Crypto Market Overview\nBetter use your desktop to see the table.'
+      },
+      drawHorizontalLine: (lineIndex, rowCount) => {
+        return lineIndex === 0 || lineIndex === 1 || lineIndex === rowCount
+      }
+    }
+    let text = ''
+    const tableData = []
+    tableData.push(['Nr', 'Symbol', '$ Price', '%24H', '%7D', '%30D', '90D', '$ Cap', '$Vol24H', '%Dominance', 'Max Supply', 'Circul. Supply'])
+    for (const coin of listingResults) {
+      const quote = coin.quote.USD
+      const dollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(quote.price))
+      const percentChange24h = parseFloat(quote.percent_change_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange7d = parseFloat(quote.percent_change_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange30d = parseFloat(quote.percent_change_30d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange90d = parseFloat(quote.percent_change_90d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(quote.market_cap))
+      const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(quote.volume_24h))
+      const marketCapDominance = parseFloat(quote.market_cap_dominance).toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+      const maxSupply = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(coin.max_supply))
+      const circulatingSupply = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(coin.circulating_supply))
+      tableData.push([coin.cmc_rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, percentChange30d, percentChange90d, volume24h, marketCap, marketCapDominance, maxSupply, circulatingSupply])
+    }
+    text += '```\n' + table(tableData, config) + '\n```'
+    return text
+  }
 }
 
 module.exports = ProcessResult
