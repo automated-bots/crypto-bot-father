@@ -10,7 +10,11 @@ app.get('/', (req, res) => {
   .use('/telegram', telegramRoute)
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ result: 'OK' })
+  if (global.ErrorState) {
+    res.status(500).json({ result: 'NOK' })
+  } else {
+    res.status(200).json({ result: 'OK' })
+  }
 })
 
 module.exports = app

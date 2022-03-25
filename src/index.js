@@ -21,6 +21,7 @@ const Exchange = require('./exchange')
 const Fetcher = require('./fetcher')
 const Telegram = require('./telegram')
 const routes = require('./routes')
+global.ErrorState = false
 
 if (!TELEGRAM_TOKEN) {
   console.error('\x1b[31mERROR: Provide your Telegram token, by setting the TELEGRAM_TOKEN enviroment variable first! See README.md.\nExit.\x1b[0m')
@@ -34,6 +35,11 @@ const fether = new Fetcher(bitcoin, exchange)
 
 const telegramBot = new TelegramBot(TELEGRAM_TOKEN)
 const tel = new Telegram(telegramBot, fether)
+
+telegramBot.on('error', (error) => {
+  console.error(error)
+  global.ErrorState = true
+})
 
 // Create the Express app
 const app = express()
