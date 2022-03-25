@@ -1,6 +1,6 @@
 {
   "name": "crypto-bot-father",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "A crypto bot father for Telegram. The one that rule them all!",
   "main": "src/index.js",
   "directories": {
