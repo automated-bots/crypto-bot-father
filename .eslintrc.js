@@ -16,5 +16,6 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
+    'object-shorthand': 0
   }
 }
