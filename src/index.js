@@ -43,12 +43,18 @@ telegramBot.on('error', (error) => {
 
 // Create the Express app
 const app = express()
-app.set('telegram_bot', telegramBot)
+// app.set('telegram_bot', telegramBot)
 // parse the updates to JSON
 app.use(bodyParser.json())
 
-// This informs the Telegram servers of the new webhook.
+// This informs the Telegram servers of the new webhook
 telegramBot.setWebHook(`${botUrl}/telegram/bot${global.TelegramSecretHash}`)
+
+// Add telegram object to request
+app.use((req, res, next) => {
+  req.telegram_bot = telegramBot
+  next()
+})
 
 // Set routes
 app.use('/', routes)
