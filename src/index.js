@@ -55,6 +55,12 @@ app.use((req, res, next) => {
   next()
 })
 
+// Test interface
+app.get('/test', async (req, res) => {
+  const quote = await fether.priceQuotes('BTC')
+  res.send(quote)
+})
+
 // Set routes
 app.use('/', routes)
 

@@ -11,30 +11,31 @@ const COINMARKET_URL = 'https://coinmarketcap.com'
 class ProcessResult {
   static priceOverview (symbol, rates) {
     symbol = symbol.toUpperCase()
+    const ratesList = rates.rates
     // Fiat
-    const dollarPrice = Misc.printCurrencyWithoutSymbol(rates.USD)
-    const euroPrice = Misc.printCurrencyWithoutSymbol(rates.EUR)
-    const poundSterlingPrice = Misc.printCurrencyWithoutSymbol(rates.GBP)
-    const japaneseYenPrice = Misc.printCurrencyWithoutSymbol(rates.JPY)
-    const swissFrancPrice = Misc.printCurrencyWithoutSymbol(rates.CHF)
-    const australianDollarPrice = Misc.printCurrencyWithoutSymbol(rates.AUD)
-    const canadianDollarPrice = Misc.printCurrencyWithoutSymbol(rates.CAD)
-    const chineseRenminbiPrice = Misc.printCurrencyWithoutSymbol(rates.CNH)
-    const hongKongDollarPrice = Misc.printCurrencyWithoutSymbol(rates.HKD)
+    const dollarPrice = Misc.printCurrencyWithoutSymbol(ratesList.USD)
+    const euroPrice = Misc.printCurrencyWithoutSymbol(ratesList.EUR)
+    const poundSterlingPrice = Misc.printCurrencyWithoutSymbol(ratesList.GBP)
+    const japaneseYenPrice = Misc.printCurrencyWithoutSymbol(ratesList.JPY)
+    const swissFrancPrice = Misc.printCurrencyWithoutSymbol(ratesList.CHF)
+    const australianDollarPrice = Misc.printCurrencyWithoutSymbol(ratesList.AUD)
+    const canadianDollarPrice = Misc.printCurrencyWithoutSymbol(ratesList.CAD)
+    const chineseRenminbiPrice = Misc.printCurrencyWithoutSymbol(ratesList.CNH)
+    const hongKongDollarPrice = Misc.printCurrencyWithoutSymbol(ratesList.HKD)
     // Crypto
-    const bitcoinPrice = Misc.printCurrencyWithoutSymbol(rates.BTC, 8)
-    const usdcPrice = Misc.printCurrencyWithoutSymbol(rates.USDC)
-    const ustPrice = Misc.printCurrencyWithoutSymbol(rates.UST)
-    const ethereumPrice = Misc.printCurrencyWithoutSymbol(rates.ETH, 6)
-    const solanaPrice = Misc.printCurrencyWithoutSymbol(rates.SOL, 5)
-    const cardanoPrice = Misc.printCurrencyWithoutSymbol(rates.ADA)
-    const polkadotPrice = Misc.printCurrencyWithoutSymbol(rates.DOT, 5)
-    const avalanchePrice = Misc.printCurrencyWithoutSymbol(rates.AVAX, 5)
-    const chainlinkPrice = Misc.printCurrencyWithoutSymbol(rates.LINK, 5)
-    const litecoinPrice = Misc.printCurrencyWithoutSymbol(rates.LTC, 5)
-    const lunaPrice = Misc.printCurrencyWithoutSymbol(rates.WLUNA, 4)
-    const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(rates.BCH, 8)
-    const dogecoinPrice = Misc.printCurrencyWithoutSymbol(rates.DOGE)
+    const bitcoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.BTC, 8)
+    const usdcPrice = Misc.printCurrencyWithoutSymbol(ratesList.USDC)
+    const ustPrice = Misc.printCurrencyWithoutSymbol(ratesList.UST)
+    const ethereumPrice = Misc.printCurrencyWithoutSymbol(ratesList.ETH, 6)
+    const solanaPrice = Misc.printCurrencyWithoutSymbol(ratesList.SOL, 5)
+    const cardanoPrice = Misc.printCurrencyWithoutSymbol(ratesList.ADA)
+    const polkadotPrice = Misc.printCurrencyWithoutSymbol(ratesList.DOT, 5)
+    const avalanchePrice = Misc.printCurrencyWithoutSymbol(ratesList.AVAX, 5)
+    const chainlinkPrice = Misc.printCurrencyWithoutSymbol(ratesList.LINK, 5)
+    const litecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.LTC, 5)
+    const lunaPrice = Misc.printCurrencyWithoutSymbol(ratesList.WLUNA, 4)
+    const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(ratesList.BCH, 8)
+    const dogecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.DOGE)
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
 
@@ -67,14 +68,15 @@ class ProcessResult {
 
   static marketStats (symbol, quote, meta, rates) {
     symbol = symbol.toUpperCase()
+    const listRates = rates.rates
     const name = (quote.name) ? quote.name : symbol
     const circulatingSupply = (meta.circulating_supply) ? meta.circulating_supply.toLocaleString('en') : 'N/A'
     const totalSupply = (meta.total_supply) ? meta.total_supply.toLocaleString('en') : 'N/A'
     const maxSupply = (meta.max_supply) ? meta.max_supply.toLocaleString('en') : 'N/A'
     const dollarPrice = Misc.printCurrencyWithoutSymbol(quote.price)
-    const euroPrice = Misc.printCurrencyWithoutSymbol(rates.EUR)
-    const btcPrice = Misc.printCurrencyWithoutSymbol(rates.BTC, 7)
-    const ethPrice = Misc.printCurrencyWithoutSymbol(rates.ETH, 5)
+    const euroPrice = Misc.printCurrencyWithoutSymbol(listRates.EUR)
+    const btcPrice = Misc.printCurrencyWithoutSymbol(listRates.BTC, 7)
+    const ethPrice = Misc.printCurrencyWithoutSymbol(listRates.ETH, 5)
     const lastUpdatedQuote = Misc.printDate(new Date(quote.last_updated))
     const marketCap = quote.market_cap.toLocaleString('en', { maximumFractionDigits: 0 })
     const volume24h = quote.volume_24h.toLocaleString('en', { maximumFractionDigits: 0 })

@@ -104,7 +104,7 @@ Reachable: ${networks[i].reachable}
           return 'Error: Something went wrong. '
         }
       } else {
-        throw error
+        throw error // Re-throw error
       }
     }
   }
@@ -155,7 +155,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
           return 'Error: Something went wrong. '
         }
       } else {
-        throw error
+        throw error // Re-throw error
       }
     }
   }
@@ -187,7 +187,7 @@ Next block hash: ${nextBlockText}`
           return 'Error: Something went wrong. '
         }
       } else {
-        throw error
+        throw error // Re-throw error
       }
     }
   }
@@ -221,15 +221,19 @@ Next block hash: ${nextBlockText}`
   async priceQuotes (symbol) {
     try {
       const rates = await this.jsFinance.get('/rates/' + symbol)
-      return ProcessResult.priceOverview(symbol, rates)
+      if (rates.data) {
+        return ProcessResult.priceOverview(symbol, rates.data)
+      } else {
+        return 'Empty API response'
+      }
     } catch (error) {
-      // The exechange returns a 400 HTTP error code
-      if (error.response && error.response.status === 400) {
-        return 'Error: Invalid currency symbol'
+      // JS-Finance returns a non 2xx error code
+      if (error.response && 'detailed_message' in error.response.data) {
+        return 'Error: ' + error.response.data.detailed_message
       } else if (error instanceof RuntimeError) {
         return 'Error: ' + error.message
       } else {
-        throw error
+        throw error // Re-throw error
       }
     }
   }
@@ -248,15 +252,19 @@ Next block hash: ${nextBlockText}`
       })
       const meta = await this.jsFinance.get('/cryptos/meta/' + symbol)
       const rates = await this.jsFinance.get('/rates/' + symbol)
-      return ProcessResult.marketStats(symbol, quote, meta, rates)
+      if (quote.data && meta.data && rates.data) {
+        return ProcessResult.marketStats(symbol, quote.data, meta.data, rates.data)
+      } else {
+        return 'Empty API response'
+      }
     } catch (error) {
-      // The exchange returns a 400 HTTP error code
-      if (error.response && error.response.status === 400) {
-        return 'Error: Invalid currency symbol'
+      // JS-Finance returns a non 2xx error code
+      if (error.response && 'detailed_message' in error.response.data) {
+        return 'Error: ' + error.response.data.detailed_message
       } else if (error instanceof RuntimeError) {
         return 'Error: ' + error.message
       } else {
-        throw error
+        throw error // Re-throw error
       }
     }
   }
