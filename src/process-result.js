@@ -9,33 +9,36 @@ const COINMARKET_URL = 'https://coinmarketcap.com'
  * Especially useful for big message that also requires pre-processing.
  */
 class ProcessResult {
-  static priceOverview (symbol, quoteResult, rateResult) {
-    const euroPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.EUR))
-    const poundSterlingPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.GBP))
-    const japaneseYenPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.JPY))
-    const swissFrancPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.CHF))
-    const australianDollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.AUD))
-    const canadianDollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.CAD))
-    const chineseRenminbiPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.CNH))
-    const hongKongDollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.HKD))
-    const bitcoinPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.BTC), 8)
-    const usdcPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.USDC))
-    const ustPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.UST))
-    const ethereumPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.ETH), 6)
-    const solanaPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.SOL), 5)
-    const cardanoPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.ADA))
-    const polkadotPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.DOT), 5)
-    const avalanchePrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.AVAX), 5)
-    const chainlinkPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.LINK), 5)
-    const litecoinPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.LTC), 5)
-    const lunaPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.WLUNA), 4)
-    const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.BCH), 8)
-    const dogecoinPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.DOGE))
-    const name = (quoteResult.name) ? quoteResult.name : symbol
-    const quote = quoteResult.quote.USD
-    const dollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(quote.price))
+  static priceOverview (symbol, rates) {
+    symbol = symbol.toUpperCase()
+    // Fiat
+    const dollarPrice = Misc.printCurrencyWithoutSymbol(rates.USD)
+    const euroPrice = Misc.printCurrencyWithoutSymbol(rates.EUR)
+    const poundSterlingPrice = Misc.printCurrencyWithoutSymbol(rates.GBP)
+    const japaneseYenPrice = Misc.printCurrencyWithoutSymbol(rates.JPY)
+    const swissFrancPrice = Misc.printCurrencyWithoutSymbol(rates.CHF)
+    const australianDollarPrice = Misc.printCurrencyWithoutSymbol(rates.AUD)
+    const canadianDollarPrice = Misc.printCurrencyWithoutSymbol(rates.CAD)
+    const chineseRenminbiPrice = Misc.printCurrencyWithoutSymbol(rates.CNH)
+    const hongKongDollarPrice = Misc.printCurrencyWithoutSymbol(rates.HKD)
+    // Crypto
+    const bitcoinPrice = Misc.printCurrencyWithoutSymbol(rates.BTC, 8)
+    const usdcPrice = Misc.printCurrencyWithoutSymbol(rates.USDC)
+    const ustPrice = Misc.printCurrencyWithoutSymbol(rates.UST)
+    const ethereumPrice = Misc.printCurrencyWithoutSymbol(rates.ETH, 6)
+    const solanaPrice = Misc.printCurrencyWithoutSymbol(rates.SOL, 5)
+    const cardanoPrice = Misc.printCurrencyWithoutSymbol(rates.ADA)
+    const polkadotPrice = Misc.printCurrencyWithoutSymbol(rates.DOT, 5)
+    const avalanchePrice = Misc.printCurrencyWithoutSymbol(rates.AVAX, 5)
+    const chainlinkPrice = Misc.printCurrencyWithoutSymbol(rates.LINK, 5)
+    const litecoinPrice = Misc.printCurrencyWithoutSymbol(rates.LTC, 5)
+    const lunaPrice = Misc.printCurrencyWithoutSymbol(rates.WLUNA, 4)
+    const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(rates.BCH, 8)
+    const dogecoinPrice = Misc.printCurrencyWithoutSymbol(rates.DOGE)
+    const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
+    const baseName = (rates.base_name) ? rates.base_name : symbol
 
-    return `*Current prices of ${name} (${symbol}) in fiat*
+    return `*Current prices of ${baseName} (${baseCurrency}) in fiat*
  • ${dollarPrice} USD
  • ${euroPrice} EUR
  • ${poundSterlingPrice} GBP
@@ -46,7 +49,7 @@ class ProcessResult {
  • ${chineseRenminbiPrice} CNH
  • ${hongKongDollarPrice} HKD
 
-*Current prices of ${name} in crypto valuta*
+*Current prices of ${baseName} in crypto valuta*
 • ${bitcoinPrice} [BTC](${COINMARKET_URL}/currencies/bitcoin)
 • ${usdcPrice} [USDC](${COINMARKET_URL}/currencies/usd-coin)
 • ${ustPrice} [UST](${COINMARKET_URL}/currencies/terrausd)
@@ -62,38 +65,38 @@ class ProcessResult {
 • ${dogecoinPrice} [DOGE](${COINMARKET_URL}/currencies/dogecoin)`
   }
 
-  static marketStats (symbol, quoteResult, rateResult) {
-    const euroPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.EUR))
-    const btcPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.BTC), 7)
-    const ethPrice = Misc.printCurrencyWithoutSymbol(parseFloat(rateResult.ETH), 5)
-    const name = (quoteResult.name) ? quoteResult.name : symbol
-    const quote = quoteResult.quote.USD
-    const circulatingSupply = (quoteResult.circulating_supply) ? quoteResult.circulating_supply.toLocaleString('en') : 'N/A'
-    const totalSupply = (quoteResult.total_supply) ? quoteResult.total_supply.toLocaleString('en') : 'N/A'
-    const maxSupply = (quoteResult.max_supply) ? quoteResult.max_supply.toLocaleString('en') : 'N/A'
-    const dollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(quote.price))
+  static marketStats (symbol, quote, meta, rates) {
+    symbol = symbol.toUpperCase()
+    const name = (quote.name) ? quote.name : symbol
+    const circulatingSupply = (meta.circulating_supply) ? meta.circulating_supply.toLocaleString('en') : 'N/A'
+    const totalSupply = (meta.total_supply) ? meta.total_supply.toLocaleString('en') : 'N/A'
+    const maxSupply = (meta.max_supply) ? meta.max_supply.toLocaleString('en') : 'N/A'
+    const dollarPrice = Misc.printCurrencyWithoutSymbol(quote.price)
+    const euroPrice = Misc.printCurrencyWithoutSymbol(rates.EUR)
+    const btcPrice = Misc.printCurrencyWithoutSymbol(rates.BTC, 7)
+    const ethPrice = Misc.printCurrencyWithoutSymbol(rates.ETH, 5)
     const lastUpdatedQuote = Misc.printDate(new Date(quote.last_updated))
-    const marketCap = parseFloat(quote.market_cap).toLocaleString('en', { maximumFractionDigits: 0 })
-    const volume24h = parseFloat(quote.volume_24h).toLocaleString('en', { maximumFractionDigits: 0 })
-    const volume7d = parseFloat(quote.volume_7d).toLocaleString('en', { maximumFractionDigits: 0 })
-    const volume30d = parseFloat(quote.volume_30d).toLocaleString('en', { maximumFractionDigits: 0 })
-    const percentChange1h = parseFloat(quote.percent_change_1h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const percentChange24h = parseFloat(quote.percent_change_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const percentChange7d = parseFloat(quote.percent_change_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const percentChange30d = parseFloat(quote.percent_change_30d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const percentChange90d = parseFloat(quote.percent_change_90d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const marketCap = quote.market_cap.toLocaleString('en', { maximumFractionDigits: 0 })
+    const volume24h = quote.volume_24h.toLocaleString('en', { maximumFractionDigits: 0 })
+    const volume7d = quote.volume_7d.toLocaleString('en', { maximumFractionDigits: 0 })
+    const volume30d = quote.volume_30d.toLocaleString('en', { maximumFractionDigits: 0 })
+    const percentChange1h = quote.percent_change_1h.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const percentChange24h = quote.percent_change_24h.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const percentChange7d = quote.percent_change_7d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const percentChange30d = quote.percent_change_30d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const percentChange90d = quote.percent_change_90d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     const changeIcon1h = (Math.sign(quote.percent_change_1h) === 1) ? '🔼' : '🔽'
     const changeIcon24h = (Math.sign(quote.percent_change_24h) === 1) ? '🔼' : '🔽'
     const changeIcon7d = (Math.sign(quote.percent_change_7d) === 1) ? '🔼' : '🔽'
     const changeIcon30d = (Math.sign(quote.percent_change_30d) === 1) ? '🔼' : '🔽'
     const changeIcon90d = (Math.sign(quote.percent_change_90d) === 1) ? '🔼' : '🔽'
     return `*General coin data for ${name} (${symbol})*
-Rank: #${quoteResult.cmc_rank}
+Rank: #${meta.rank}
 Circulating supply: ${circulatingSupply} ${symbol}s
 Total supply: ${totalSupply} ${symbol}s
 Max. supply: ${maxSupply} ${symbol}s
 Market Cap: $${marketCap}
-Visit on: [CoinMarketCap](${COINMARKET_URL}/currencies/${quoteResult.slug})
+Visit on: [CoinMarketCap](${meta.cmc_url})
 
 *Price* 💱
 Price: 1 ${symbol} = ${dollarPrice} USD

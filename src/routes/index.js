@@ -1,15 +1,15 @@
 const express = require('express')
-const app = express()
+const router = express.Router()
 const aboutRoute = require('./about')
 const telegramRoute = require('./telegram')
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.json({ message: 'Welcome to Crypto bot father' })
 })
   .use('/about', aboutRoute)
   .use('/telegram', telegramRoute)
 
-app.get('/health', (req, res) => {
+router.get('/health', (req, res) => {
   if (global.ErrorState) {
     res.status(500).json({ result: 'NOK' })
   } else {
@@ -17,4 +17,4 @@ app.get('/health', (req, res) => {
   }
 })
 
-module.exports = app
+module.exports = router

@@ -1,3 +1,4 @@
+const axios = require('axios')
 const ProcessResult = require('./process-result')
 const RuntimeError = require('./errors/runtime-error')
 const Misc = require('./miscellaneous')
@@ -9,6 +10,10 @@ class Fetcher {
   constructor (bitcoin, exchange) {
     this.bitcoin = bitcoin
     this.exchange = exchange
+    this.jsFinance = axios.create({
+      baseURL: 'https://finance.melroy.org/v1',
+      timeout: 10000
+    })
   }
 
   /**
@@ -214,11 +219,9 @@ Next block hash: ${nextBlockText}`
     * @return {Promise} message
     */
   async priceQuotes (symbol) {
-    const symbolUpper = symbol.toUpperCase()
     try {
-      const quoteResult = await this.exchange.getLatestPrices(symbolUpper)
-      const rateResult = await this.exchange.getExchangeRates(symbolUpper)
-      return ProcessResult.priceOverview(symbolUpper, quoteResult, rateResult)
+      const rates = await this.jsFinance.get('/rates/' + symbol)
+      return ProcessResult.priceOverview(symbol, rates)
     } catch (error) {
       // The exechange returns a 400 HTTP error code
       if (error.response && error.response.status === 400) {
@@ -237,11 +240,15 @@ Next block hash: ${nextBlockText}`
     * @return {Promise} message
   */
   async marketStats (symbol) {
-    const symbolUpper = symbol.toUpperCase()
     try {
-      const quoteResult = await this.exchange.getLatestPrices(symbolUpper)
-      const rateResult = await this.exchange.getExchangeRates(symbolUpper)
-      return ProcessResult.marketStats(symbolUpper, quoteResult, rateResult)
+      const quote = await this.jsFinance.get('/cryptos/quote/' + symbol, {
+        params: {
+          quote_currency: 'USD'
+        }
+      })
+      const meta = await this.jsFinance.get('/cryptos/meta/' + symbol)
+      const rates = await this.jsFinance.get('/rates/' + symbol)
+      return ProcessResult.marketStats(symbol, quote, meta, rates)
     } catch (error) {
       // The exchange returns a 400 HTTP error code
       if (error.response && error.response.status === 400) {
