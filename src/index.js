@@ -43,7 +43,6 @@ telegramBot.on('error', (error) => {
 
 // Create the Express app
 const app = express()
-// app.set('telegram_bot', telegramBot)
 // parse the updates to JSON
 app.use(bodyParser.json())
 
