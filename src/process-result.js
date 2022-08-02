@@ -70,28 +70,28 @@ class ProcessResult {
     symbol = symbol.toUpperCase()
     const listRates = rates.rates
     const name = (quote.name) ? quote.name : symbol
-    const circulatingSupply = (meta.circulating_supply) ? meta.circulating_supply.toLocaleString('en') : 'N/A'
-    const totalSupply = (meta.total_supply) ? meta.total_supply.toLocaleString('en') : 'N/A'
-    const maxSupply = (meta.max_supply) ? meta.max_supply.toLocaleString('en') : 'N/A'
     const dollarPrice = Misc.printCurrencyWithoutSymbol(quote.price)
     const euroPrice = Misc.printCurrencyWithoutSymbol(listRates.EUR)
     const btcPrice = Misc.printCurrencyWithoutSymbol(listRates.BTC, 7)
     const ethPrice = Misc.printCurrencyWithoutSymbol(listRates.ETH, 5)
-    const lastUpdatedQuote = Misc.printDate(new Date(quote.last_updated))
+    const circulatingSupply = (meta.circulating_supply) ? meta.circulating_supply.toLocaleString('en') : 'N/A'
+    const totalSupply = (meta.total_supply) ? meta.total_supply.toLocaleString('en') : 'N/A'
+    const maxSupply = (meta.max_supply) ? meta.max_supply.toLocaleString('en') : 'N/A'
     const marketCap = quote.market_cap.toLocaleString('en', { maximumFractionDigits: 0 })
     const volume24h = quote.volume_24h.toLocaleString('en', { maximumFractionDigits: 0 })
     const volume7d = quote.volume_7d.toLocaleString('en', { maximumFractionDigits: 0 })
     const volume30d = quote.volume_30d.toLocaleString('en', { maximumFractionDigits: 0 })
-    const percentChange1h = quote.percent_change_1h.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const percentChange24h = quote.percent_change_24h.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const percentChange7d = quote.percent_change_7d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const percentChange30d = quote.percent_change_30d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const percentChange90d = quote.percent_change_90d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const changeIcon1h = (Math.sign(quote.percent_change_1h) === 1) ? '🔼' : '🔽'
-    const changeIcon24h = (Math.sign(quote.percent_change_24h) === 1) ? '🔼' : '🔽'
-    const changeIcon7d = (Math.sign(quote.percent_change_7d) === 1) ? '🔼' : '🔽'
-    const changeIcon30d = (Math.sign(quote.percent_change_30d) === 1) ? '🔼' : '🔽'
-    const changeIcon90d = (Math.sign(quote.percent_change_90d) === 1) ? '🔼' : '🔽'
+    const percentChanged1h = quote.percentage_changed_1h.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const percentChanged24h = quote.percentage_changed_24h.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const percentChanged7d = quote.percentage_changed_7d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const percentChanged30d = quote.percentage_changed_30d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const percentChanged90d = quote.percentage_changed_90d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const lastUpdatedQuote = Misc.printDate(new Date(quote.last_updated))
+    const changeIcon1h = (Math.sign(quote.percentage_changed_1h) === 1) ? '🔼' : '🔽'
+    const changeIcon24h = (Math.sign(quote.percentage_changed_24h) === 1) ? '🔼' : '🔽'
+    const changeIcon7d = (Math.sign(quote.percentage_changed_7d) === 1) ? '🔼' : '🔽'
+    const changeIcon30d = (Math.sign(quote.percentage_changed_30d) === 1) ? '🔼' : '🔽'
+    const changeIcon90d = (Math.sign(quote.percentage_changed_90d) === 1) ? '🔼' : '🔽'
     return `*General coin data for ${name} (${symbol})*
 Rank: #${meta.rank}
 Circulating supply: ${circulatingSupply} ${symbol}s
@@ -113,11 +113,11 @@ Volume 7D: ${volume7d} USD
 Volume 30D: ${volume30d} USD
 
 *Change* 📈
-Last Hour: ${changeIcon1h} ${percentChange1h}%
-Last 24H: ${changeIcon24h} ${percentChange24h}%
-Last 7D:  ${changeIcon7d} ${percentChange7d}%
-Last 30D: ${changeIcon30d} ${percentChange30d}%
-Last 90D: ${changeIcon90d} ${percentChange90d}%`
+Last Hour: ${changeIcon1h} ${percentChanged1h}%
+Last 24H: ${changeIcon24h} ${percentChanged24h}%
+Last 7D:  ${changeIcon7d} ${percentChanged7d}%
+Last 30D: ${changeIcon30d} ${percentChanged30d}%
+Last 90D: ${changeIcon90d} ${percentChanged90d}%`
   }
 
   static bitcoinStats (blockchainResult, miningResult, exchangeResult, bestBlockResult) {

@@ -31,10 +31,10 @@ if (!TELEGRAM_TOKEN) {
 // Create helper objects
 const bitcoin = new Bitcoin(BITCOIN_RPC_HOST, BITCOIN_RPC_PORT, BITCOIN_RPC_USER, BITCOIN_RPC_PASS)
 const exchange = new Exchange(COINMARKETCAP_API_TOKEN)
-const fether = new Fetcher(bitcoin, exchange)
+const fetcher = new Fetcher(bitcoin, exchange)
 
 const telegramBot = new TelegramBot(TELEGRAM_TOKEN)
-const tel = new Telegram(telegramBot, fether)
+const tel = new Telegram(telegramBot, fetcher)
 
 telegramBot.on('error', (error) => {
   console.error(error)
@@ -57,8 +57,14 @@ app.use((req, res, next) => {
 
 // Test interface
 app.get('/test', async (req, res) => {
-  const quote = await fether.priceQuotes('BTC')
-  res.send(quote)
+  try {
+    // const quote = await fetcher.priceQuotes('BTC')
+    const stats = await fetcher.marketStats('BTC')
+    res.send(stats)
+  } catch (err) {
+    console.log(err)
+    res.send('Internal error')
+  }
 })
 
 // Set routes
