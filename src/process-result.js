@@ -68,12 +68,19 @@ class ProcessResult {
 
   static marketStats (symbol, quote, meta, rates) {
     symbol = symbol.toUpperCase()
-    const listRates = rates.rates
+    let exchangeString = ''
+    // Fill-in the exchange rates when found
+    if (rates) {
+      const listRates = rates.rates
+      const euroPrice = Misc.printCurrencyWithoutSymbol(listRates.EUR)
+      const btcPrice = Misc.printCurrencyWithoutSymbol(listRates.BTC, 7)
+      const ethPrice = Misc.printCurrencyWithoutSymbol(listRates.ETH, 5)
+      exchangeString = `Price: 1 ${symbol} = ${euroPrice} EUR
+Price: 1 ${symbol} = ${btcPrice} BTC
+Price: 1 ${symbol} = ${ethPrice} ETH`
+    }
     const name = (quote.name) ? quote.name : symbol
     const dollarPrice = Misc.printCurrencyWithoutSymbol(quote.price)
-    const euroPrice = Misc.printCurrencyWithoutSymbol(listRates.EUR)
-    const btcPrice = Misc.printCurrencyWithoutSymbol(listRates.BTC, 7)
-    const ethPrice = Misc.printCurrencyWithoutSymbol(listRates.ETH, 5)
     const circulatingSupply = (meta.circulating_supply) ? meta.circulating_supply.toLocaleString('en') : 'N/A'
     const totalSupply = (meta.total_supply) ? meta.total_supply.toLocaleString('en') : 'N/A'
     const maxSupply = (meta.max_supply) ? meta.max_supply.toLocaleString('en') : 'N/A'
@@ -102,9 +109,7 @@ Visit on: [CoinMarketCap](${meta.cmc_url})
 
 *Price* 💱
 Price: 1 ${symbol} = ${dollarPrice} USD
-Price: 1 ${symbol} = ${euroPrice} EUR
-Price: 1 ${symbol} = ${btcPrice} BTC
-Price: 1 ${symbol} = ${ethPrice} ETH
+${exchangeString}
 Last updated: ${lastUpdatedQuote}
 
 *Trading Volume* 📊

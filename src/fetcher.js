@@ -251,9 +251,17 @@ Next block hash: ${nextBlockText}`
         }
       })
       const meta = await this.jsFinance.get('/cryptos/meta/' + symbol)
-      const rates = await this.jsFinance.get('/rates/' + symbol)
-      if (quote.data && meta.data && rates.data) {
-        return ProcessResult.marketStats(symbol, quote.data, meta.data, rates.data)
+      let rates = null
+      try {
+        rates = await this.jsFinance.get('/rates/' + symbol)
+        rates = rates.data
+      } catch (err) {
+        // Continue without exchange rates
+        console.log('(internal) Could not get exchange rates (symbol: ' + symbol + ') during marketStats().')
+      }
+      if (quote.data && meta.data) {
+        // Note: rates could be an object containing the rates or null
+        return ProcessResult.marketStats(symbol, quote.data, meta.data, rates)
       } else {
         return 'Empty API response'
       }
