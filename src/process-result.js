@@ -32,6 +32,7 @@ class ProcessResult {
     const cardanoPrice = Misc.printCurrencyWithoutSymbol(ratesList.ADA)
     const polkadotPrice = Misc.printCurrencyWithoutSymbol(ratesList.DOT, 5)
     const avalanchePrice = Misc.printCurrencyWithoutSymbol(ratesList.AVAX, 5)
+    const uniswapPrice = Misc.printCurrencyWithoutSymbol(ratesList.UNI, 5)
     const chainlinkPrice = Misc.printCurrencyWithoutSymbol(ratesList.LINK, 5)
     const litecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.LTC, 5)
     const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(ratesList.BCH, 8)
@@ -58,11 +59,12 @@ class ProcessResult {
 • ${bitcoinCashPrice} [BCH](${COINMARKET_URL}/currencies/bitcoin-cash)
 • ${polkadotPrice} [DOT](${COINMARKET_URL}/currencies/polkadot-new)
 • ${avalanchePrice} [AVAX](${COINMARKET_URL}/currencies/avalanche)
+• ${uniswapPrice} [UNI](${COINMARKET_URL}/currencies/uniswap)
 • ${chainlinkPrice} [LINK](${COINMARKET_URL}/currencies/chainlink)
 • ${litecoinPrice} [LTC](${COINMARKET_URL}/currencies/litecoin)
 • ${dogecoinPrice} [DOGE](${COINMARKET_URL}/currencies/dogecoin)
 
-*Currency price of ${baseName} in stable coins valuta*
+*Current price of ${baseName} in stable coins*
 • ${usdcPrice} [USDC](${COINMARKET_URL}/currencies/usd-coin)
 • ${usdtPrice} [USDT](${COINMARKET_URL}/currencies/tether)
 • ${busdPrice} [BUSD](${COINMARKET_URL}/currencies/binance-usd)`
