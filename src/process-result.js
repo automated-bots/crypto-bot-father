@@ -52,18 +52,20 @@ class ProcessResult {
 
 *Current prices of ${baseName} in crypto valuta*
 • ${bitcoinPrice} [BTC](${COINMARKET_URL}/currencies/bitcoin)
-• ${usdcPrice} [USDC](${COINMARKET_URL}/currencies/usd-coin)
-• ${usdtPrice} [USDT](${COINMARKET_URL}/currencies/tether)
-• ${busdPrice} [BNB](${COINMARKET_URL}/currencies/binance-usd)
 • ${ethereumPrice} [ETH](${COINMARKET_URL}/currencies/ethereum)
 • ${solanaPrice} [SOL](${COINMARKET_URL}/currencies/solana)
 • ${cardanoPrice} [ADA](${COINMARKET_URL}/currencies/cardano)
+• ${bitcoinCashPrice} [BCH](${COINMARKET_URL}/currencies/bitcoin-cash)
 • ${polkadotPrice} [DOT](${COINMARKET_URL}/currencies/polkadot-new)
 • ${avalanchePrice} [AVAX](${COINMARKET_URL}/currencies/avalanche)
 • ${chainlinkPrice} [LINK](${COINMARKET_URL}/currencies/chainlink)
-• ${bitcoinCashPrice} [BCH](${COINMARKET_URL}/currencies/bitcoin-cash)
 • ${litecoinPrice} [LTC](${COINMARKET_URL}/currencies/litecoin)
-• ${dogecoinPrice} [DOGE](${COINMARKET_URL}/currencies/dogecoin)`
+• ${dogecoinPrice} [DOGE](${COINMARKET_URL}/currencies/dogecoin)
+
+*Currency price of ${baseName} in stable coins valuta*
+• ${usdcPrice} [USDC](${COINMARKET_URL}/currencies/usd-coin)
+• ${usdtPrice} [USDT](${COINMARKET_URL}/currencies/tether)
+• ${busdPrice} [BUSD](${COINMARKET_URL}/currencies/binance-usd)`
   }
 
   static marketStats (symbol, quote, meta, rates) {
