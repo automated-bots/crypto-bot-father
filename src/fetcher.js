@@ -118,7 +118,11 @@ Reachable: ${networks[i].reachable}
     const miningResultLocal = await this.bitcoin.getMiningInfo()
     const miningResult = await this.jsFinance.get('/cryptos/mining/BTC')
     const bestBlockResult = await this.bitcoin.getBlock(blockchainResult.bestblockhash)
-    return ProcessResult.bitcoinStats(blockchainResult, miningResultLocal, miningResult, bestBlockResult)
+    if (miningResult.data) {
+      return ProcessResult.bitcoinStats(blockchainResult, miningResultLocal, miningResult.data, bestBlockResult)
+    } else {
+      return 'Mining data response was empty.'
+    }
   }
 
   /**
