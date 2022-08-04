@@ -25,7 +25,8 @@ class ProcessResult {
     // Crypto
     const bitcoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.BTC, 8)
     const usdcPrice = Misc.printCurrencyWithoutSymbol(ratesList.USDC)
-    const ustPrice = Misc.printCurrencyWithoutSymbol(ratesList.UST)
+    const usdtPrice = Misc.printCurrencyWithoutSymbol(ratesList.USDT)
+    const busdPrice = Misc.printCurrencyWithoutSymbol(ratesList.BUSD, 4)
     const ethereumPrice = Misc.printCurrencyWithoutSymbol(ratesList.ETH, 6)
     const solanaPrice = Misc.printCurrencyWithoutSymbol(ratesList.SOL, 5)
     const cardanoPrice = Misc.printCurrencyWithoutSymbol(ratesList.ADA)
@@ -33,7 +34,6 @@ class ProcessResult {
     const avalanchePrice = Misc.printCurrencyWithoutSymbol(ratesList.AVAX, 5)
     const chainlinkPrice = Misc.printCurrencyWithoutSymbol(ratesList.LINK, 5)
     const litecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.LTC, 5)
-    const lunaPrice = Misc.printCurrencyWithoutSymbol(ratesList.WLUNA, 4)
     const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(ratesList.BCH, 8)
     const dogecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.DOGE)
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
@@ -53,16 +53,16 @@ class ProcessResult {
 *Current prices of ${baseName} in crypto valuta*
 • ${bitcoinPrice} [BTC](${COINMARKET_URL}/currencies/bitcoin)
 • ${usdcPrice} [USDC](${COINMARKET_URL}/currencies/usd-coin)
-• ${ustPrice} [UST](${COINMARKET_URL}/currencies/terrausd)
+• ${usdtPrice} [USDT](${COINMARKET_URL}/currencies/tether)
+• ${busdPrice} [BNB](${COINMARKET_URL}/currencies/binance-usd)
 • ${ethereumPrice} [ETH](${COINMARKET_URL}/currencies/ethereum)
 • ${solanaPrice} [SOL](${COINMARKET_URL}/currencies/solana)
 • ${cardanoPrice} [ADA](${COINMARKET_URL}/currencies/cardano)
 • ${polkadotPrice} [DOT](${COINMARKET_URL}/currencies/polkadot-new)
 • ${avalanchePrice} [AVAX](${COINMARKET_URL}/currencies/avalanche)
 • ${chainlinkPrice} [LINK](${COINMARKET_URL}/currencies/chainlink)
-• ${litecoinPrice} [LTC](${COINMARKET_URL}/currencies/litecoin)
-• ${lunaPrice} [WLUNA](${COINMARKET_URL}/currencies/terra-luna)
 • ${bitcoinCashPrice} [BCH](${COINMARKET_URL}/currencies/bitcoin-cash)
+• ${litecoinPrice} [LTC](${COINMARKET_URL}/currencies/litecoin)
 • ${dogecoinPrice} [DOGE](${COINMARKET_URL}/currencies/dogecoin)`
   }
 
