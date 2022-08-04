@@ -132,7 +132,7 @@ Last 90D: ${changeIcon90d} ${percentChanged90d}%`
   static bitcoinStats (blockchainResult, miningResultLocal, miningResult, bestBlockResult) {
     const hashrateth = (miningResultLocal.networkhashps / 1000.0 / 1000.0 / 1000.0 / 1000.0).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) // Convert to Tera
     const medianTime = Misc.printDate(new Date(blockchainResult.mediantime * 1000))
-    const marketCap = (miningResult.market_cap).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const marketCap = (miningResult.market_cap).toLocaleString('en', { maximumFractionDigits: 0 })
     const difficulty = (blockchainResult.difficulty / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
     const difficulty24h = (miningResult.difficulty24h / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
     const difficulty3d = (miningResult.difficulty3d / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
