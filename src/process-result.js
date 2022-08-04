@@ -129,39 +129,40 @@ Last 30D: ${changeIcon30d} ${percentChanged30d}%
 Last 90D: ${changeIcon90d} ${percentChanged90d}%`
   }
 
-  static bitcoinStats (blockchainResult, miningResult, exchangeResult, bestBlockResult) {
-    const hashrateth = (parseFloat(miningResult.networkhashps) / 1000.0 / 1000.0 / 1000.0 / 1000.0).toFixed(2)
+  static bitcoinStats (blockchainResult, miningResultLocal, miningResult, bestBlockResult) {
+    const hashrateth = (miningResultLocal.networkhashps / 1000.0 / 1000.0 / 1000.0 / 1000.0).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) // Convert to Tera
     const medianTime = Misc.printDate(new Date(blockchainResult.mediantime * 1000))
-    const marketCap = exchangeResult.market_cap.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    const difficulty = parseFloat(blockchainResult.difficulty).toLocaleString('en', { maximumFractionDigits: 0 })
-    const difficulty24h = parseFloat(exchangeResult.difficulty24).toLocaleString('en', { maximumFractionDigits: 0 })
-    const difficulty3d = parseFloat(exchangeResult.difficulty3).toLocaleString('en', { maximumFractionDigits: 0 })
-    const difficulty7d = parseFloat(exchangeResult.difficulty7).toLocaleString('en', { maximumFractionDigits: 0 })
-    const blockTimeMin = Math.floor(parseFloat(exchangeResult.block_time) / 60)
-    const blockTimeSec = (((parseFloat(exchangeResult.block_time) / 60) % 2) * 60).toFixed(0)
-    const exchangeRate = parseFloat(exchangeResult.exchange_rate).toFixed(2)
-    const exchangeRate24h = parseFloat(exchangeResult.exchange_rate24).toFixed(2)
-    const exchangeRate3d = parseFloat(exchangeResult.exchange_rate3).toFixed(2)
-    const exchangeRate7d = parseFloat(exchangeResult.exchange_rate7).toFixed(2)
+    const marketCap = (miningResult.market_cap).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    const difficulty = (blockchainResult.difficulty / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
+    const difficulty24h = (miningResult.difficulty24h / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
+    const difficulty3d = (miningResult.difficulty3d / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
+    const difficulty7d = (miningResult.difficulty7d / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
+    const blockTimeMin = Math.floor(miningResult.block_time_seconds / 60)
+    const blockTimeSec = (((miningResult.block_time_seconds / 60) % 2) * 60).toFixed(0)
+    const exchangeRate = (miningResult.exchange_rate).toFixed(2)
+    const exchangeRate24h = (miningResult.exchange_rate24h).toFixed(2)
+    const exchangeRate3d = (miningResult.exchange_rate3d).toFixed(2)
+    const exchangeRate7d = (miningResult.exchange_rate7d).toFixed(2)
     return `*General* 🖥
 Last block: ${medianTime}
 Median time current best block: ${blockchainResult.mediantime}
 Best block height: [${bestBlockResult.height}](${Misc.blockchainExplorerUrl()}/block/${blockchainResult.bestblockhash})
 Net Hashrate: ${hashrateth} Thash/s
-Mempool size: ${miningResult.pooledtx}
-Market capital: ${marketCap}
+Mempool size: ${miningResultLocal.pooledtx}
+Market capital: ${marketCap} USD
 
 *Difficulty* 🤯
-Difficulty: ${difficulty}
-Difficulty 24 hours avg: ${difficulty24h}
-Difficulty 3 days avg: ${difficulty3d}
-Difficulty 7 days avg: ${difficulty7d}
+Difficulty: ${difficulty}M
+Difficulty 24 hours avg: ${difficulty24h}M
+Difficulty 3 days avg: ${difficulty3d}M
+Difficulty 7 days avg: ${difficulty7d}M
 
 *Reward* 🤑
 Block time: ${blockTimeMin}m ${blockTimeSec}s
-Block reward: ${exchangeResult.block_reward} BTC
-Block reward 24H avg: ${exchangeResult.block_reward24} BTC
-Block reward 3D avg: ${exchangeResult.block_reward3} BTC
+Block reward: ${miningResult.block_reward} BTC
+Block reward 24H avg: ${miningResult.block_reward24h} BTC
+Block reward 3D avg: ${miningResult.block_reward3d} BTC
+Block reward 7D avg: ${miningResult.block_reward7d} BTC
 
 *Exchange* 💱
 Exchange rate: ${exchangeRate} BTC/USD

@@ -48,19 +48,6 @@ class Exchange {
         }
       })
   }
-
-  /**
-   * Get Exchange info from Whattomine.com
-   *
-   * @param {Number} id Whattomine crypto ID
-   * @return {Promise} Axios promise (block_time, block_reward, difficulty24, exchange_rate, exchange_rate24, market_cap)
-   */
-  getExchangeInfo (id) {
-    return axios.get(this.whattomine_api + '/' + id + '.json')
-      .then(response => {
-        return Promise.resolve(response.data)
-      })
-  }
 }
 
 module.exports = Exchange

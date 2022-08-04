@@ -115,10 +115,10 @@ Reachable: ${networks[i].reachable}
    */
   async bitcoinInfo () {
     const blockchainResult = await this.bitcoin.getBlockChainInfo()
-    const miningResult = await this.bitcoin.getMiningInfo()
-    const exchangeResult = await this.exchange.getExchangeInfo(1) // 1 = Bitcoin
+    const miningResultLocal = await this.bitcoin.getMiningInfo()
+    const miningResult = await this.jsFinance.get('/cryptos/mining/BTC')
     const bestBlockResult = await this.bitcoin.getBlock(blockchainResult.bestblockhash)
-    return ProcessResult.bitcoinStats(blockchainResult, miningResult, exchangeResult, bestBlockResult)
+    return ProcessResult.bitcoinStats(blockchainResult, miningResultLocal, miningResult, bestBlockResult)
   }
 
   /**
