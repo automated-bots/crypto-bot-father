@@ -7,8 +7,6 @@ class Exchange {
    * @param {string} coinMarketAPIToken Secret API token of coinmarketcap.com
    */
   constructor (coinMarketAPIToken) {
-    // Exchange WhatToMine
-    this.whattomine_api = 'https://whattomine.com/coins'
     // CoinMarketCap API
     this.coinmarket = axios.create({
       baseURL: 'https://pro-api.coinmarketcap.com/v1',
