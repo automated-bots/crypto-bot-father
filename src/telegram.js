@@ -106,7 +106,7 @@ More info:
         if (limit <= 0) {
           this.sendMessage(msg.chat.id, 'Error: A number above the 0 will help. Try again.')
         } else if (limit > 50) {
-          this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited by 50, top 50. Try again.')
+          this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited to 50 results. Try again.')
         } else {
           this.fetcher.marketOverview(limit)
             .then(message => this.sendMessage(msg.chat.id, message))
@@ -131,7 +131,7 @@ More info:
         if (limit <= 0) {
           this.sendMessage(msg.chat.id, 'Error: A number above the 0 will help. Try again.')
         } else if (limit > 50) {
-          this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited by 50, top 50. Try again.')
+          this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited to 50 results. Try again.')
         } else {
           this.fetcher.detailedMarketOverview(limit)
             .then(message => this.sendMessage(msg.chat.id, message))
