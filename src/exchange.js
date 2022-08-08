@@ -21,17 +21,14 @@ class Exchange {
    * Get lastest coin market overview (listing) from CoinMarketCap
    * Only listing the top coins (not tokens) by market cap.
    *
-   * @param {Number} limit the top x coins by market cap (eg. Top 20, provide: 20)
+   * @param {Number} limit the top x coins by market cap (eg. Top 20, limit value would be: 20)
    * @return {Promise} Axios promise
    */
-  getLatestMarketOverview (limit, showOnlyCoins = true) {
+  getLatestMarketOverview (limit) {
     const params = {
       limit: limit,
       aux: 'num_market_pairs,cmc_rank,date_added,tags,platform,max_supply,circulating_supply,total_supply,market_cap_by_total_supply,' +
         'volume_24h_reported,volume_7d,volume_7d_reported,volume_30d,volume_30d_reported,is_market_cap_included_in_calc'
-    }
-    if (showOnlyCoins) {
-      params.cryptocurrency_type = 'coins'
     }
     return this.coinmarket.get('/cryptocurrency/listings/latest', { params: params })
       .then(response => {
