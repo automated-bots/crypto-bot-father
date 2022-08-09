@@ -287,12 +287,13 @@ Next block hash: ${nextBlockText}`
   async marketOverview (limit = 20) {
     const removeCurrencySymbols = ['USDT', 'USDC', 'BUSD', 'DAI', 'SHIB', 'UNI', 'WBTC', 'LEO', 'FTT', 'LINK', 'CRO', 'APE', 'MANA', 'SAND', 'AXS', 'QNT', 'AAVE', 'TUSD', 'MKR', 'OKB', 'KCS', 'USDP', 'RUNE', 'BTT', 'CHZ', 'GRT', 'LDO', 'USDD', 'CRV']
     // Retrieve the limit size + the array size of the currency we filter out (eg. to be able to still have 20 items to return)
-    const listingResults = await this.jsFinance.get('/cryptos', {
+    const response = await this.jsFinance.get('/cryptos', {
       params: {
         quote_currency: 'USD',
         limit: limit + removeCurrencySymbols.length
       }
     })
+    const listingResults = response.data
     // Filter-out the crypto currencies we don't want to list (like tokens and stable coins)
     const listingResultsFiltered = listingResults.filter((value) => {
       return !(removeCurrencySymbols).includes(value.symbol)
@@ -307,12 +308,13 @@ Next block hash: ${nextBlockText}`
    * @return {Promise} message
    */
   async detailedMarketOverview (limit = 25) {
-    const listingResults = await this.jsFinance.get('/cryptos', {
+    const response = await this.jsFinance.get('/cryptos', {
       params: {
         quote_currency: 'USD',
         limit: limit
       }
     })
+    const listingResults = response.data
     return ProcessResult.detailedMarketOverview(listingResults)
   }
 }
