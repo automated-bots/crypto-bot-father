@@ -7,9 +7,8 @@ const Misc = require('./miscellaneous')
  * Fetch or calculate the data we need
  */
 class Fetcher {
-  constructor (bitcoin, exchange) {
+  constructor (bitcoin) {
     this.bitcoin = bitcoin
-    this.exchange = exchange
     this.jsFinance = axios.create({
       baseURL: 'https://finance.melroy.org/v1',
       timeout: 10000
@@ -288,7 +287,12 @@ Next block hash: ${nextBlockText}`
   async marketOverview (limit = 20) {
     const removeCurrencySymbols = ['USDT', 'USDC', 'BUSD', 'DAI', 'SHIB', 'UNI', 'WBTC', 'LEO', 'FTT', 'LINK', 'CRO', 'APE', 'MANA', 'SAND', 'AXS', 'QNT', 'AAVE', 'TUSD', 'MKR', 'OKB', 'KCS', 'USDP', 'RUNE', 'BTT', 'CHZ', 'GRT', 'LDO', 'USDD', 'CRV']
     // Retrieve the limit size + the array size of the currency we filter out (eg. to be able to still have 20 items to return)
-    const listingResults = await this.exchange.getLatestMarketOverview(limit + removeCurrencySymbols.length)
+    const listingResults = await this.jsFinance.get('/cryptos', {
+      params: {
+        quote_currency: 'USD',
+        limit: limit + removeCurrencySymbols.length
+      }
+    })
     // Filter-out the crypto currencies we don't want to list (like tokens and stable coins)
     const listingResultsFiltered = listingResults.filter((value) => {
       return !(removeCurrencySymbols).includes(value.symbol)
@@ -303,7 +307,12 @@ Next block hash: ${nextBlockText}`
    * @return {Promise} message
    */
   async detailedMarketOverview (limit = 25) {
-    const listingResults = await this.exchange.getLatestMarketOverview(limit)
+    const listingResults = await this.jsFinance.get('/cryptos', {
+      params: {
+        quote_currency: 'USD',
+        limit: limit
+      }
+    })
     return ProcessResult.detailedMarketOverview(listingResults)
   }
 }

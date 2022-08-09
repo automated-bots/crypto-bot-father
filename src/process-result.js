@@ -186,13 +186,12 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
     const tableData = []
     tableData.push(['Nr', 'Symbl', '$ Price', '%24H', '%7D', '$ Cap', '$Vol24H'])
     for (const coin of listingResults) {
-      const quote = coin.quote.USD
-      const dollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(quote.price))
-      const percentChange24h = parseFloat(quote.percent_change_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const percentChange7d = parseFloat(quote.percent_change_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(quote.market_cap))
-      const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(quote.volume_24h))
-      tableData.push([coin.cmc_rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, marketCap, volume24h])
+      const dollarPrice = Misc.printCurrencyWithoutSymbol(coin.price)
+      const percentChange24h = (coin.percentage_changed_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange7d = (coin.percentage_changed_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(coin.market_cap)
+      const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(coin.volume_24h)
+      tableData.push([coin.rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, marketCap, volume24h])
     }
     text += '```\n' + table(tableData, config) + '\n```'
     return text
@@ -217,18 +216,17 @@ Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
     const tableData = []
     tableData.push(['Nr', 'Symbol', '$ Price', '%24H', '%7D', '%30D', '90D', '$ Cap', '$Vol24H', '%Domin', 'Cir. Supp', 'Max Supp'])
     for (const coin of listingResults) {
-      const quote = coin.quote.USD
-      const dollarPrice = Misc.printCurrencyWithoutSymbol(parseFloat(quote.price))
-      const percentChange24h = parseFloat(quote.percent_change_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const percentChange7d = parseFloat(quote.percent_change_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const percentChange30d = parseFloat(quote.percent_change_30d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const percentChange90d = parseFloat(quote.percent_change_90d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(quote.market_cap))
-      const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(quote.volume_24h))
-      const marketCapDominance = parseFloat(quote.market_cap_dominance).toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
-      const circulatingSupply = Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(coin.circulating_supply))
-      const maxSupply = (coin.max_supply) ? Misc.printCurrencyNotationCompactWithoutSymbol(parseFloat(coin.max_supply)) : 'N/A'
-      tableData.push([coin.cmc_rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, percentChange30d, percentChange90d, volume24h, marketCap, marketCapDominance, circulatingSupply, maxSupply])
+      const dollarPrice = Misc.printCurrencyWithoutSymbol(coin.price)
+      const percentChange24h = (coin.percentage_changed_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange7d = (coin.percentage_changed_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange30d = (coin.percentage_changed_30d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange90d = (coin.percentage_changed_90d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(coin.market_cap)
+      const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(coin.volume_24h)
+      const marketCapDominance = (coin.market_cap_dominance).toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+      const circulatingSupply = Misc.printCurrencyNotationCompactWithoutSymbol(coin.circulating_supply)
+      const maxSupply = (coin.max_supply) ? Misc.printCurrencyNotationCompactWithoutSymbol(coin.max_supply) : 'N/A'
+      tableData.push([coin.rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, percentChange30d, percentChange90d, volume24h, marketCap, marketCapDominance, circulatingSupply, maxSupply])
     }
     text += '```\n' + table(tableData, config) + '\n```'
     return text
