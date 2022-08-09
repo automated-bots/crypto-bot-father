@@ -3,7 +3,6 @@ process.env.NTBA_FIX_319 = 1
 process.env.NTBA_FIX_350 = 1
 // constants
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
-const COINMARKETCAP_API_TOKEN = process.env.COINMARKETCAP_API_TOKEN
 const BITCOIN_RPC_HOST = process.env.BITCOIN_RPC_HOST || 'localhost'
 const BITCOIN_RPC_PORT = process.env.BITCOIN_RPC_PORT || 8332
 const BITCOIN_RPC_USER = process.env.BITCOIN_RPC_USERNAME || 'bitcoin'
@@ -17,7 +16,6 @@ const TelegramBot = require('node-telegram-bot-api')
 const express = require('express')
 const bodyParser = require('body-parser')
 const Bitcoin = require('./bitcoin')
-const Exchange = require('./exchange')
 const Fetcher = require('./fetcher')
 const Telegram = require('./telegram')
 const routes = require('./routes')
@@ -30,11 +28,10 @@ if (!TELEGRAM_TOKEN) {
 
 // Create helper objects
 const bitcoin = new Bitcoin(BITCOIN_RPC_HOST, BITCOIN_RPC_PORT, BITCOIN_RPC_USER, BITCOIN_RPC_PASS)
-const exchange = new Exchange(COINMARKETCAP_API_TOKEN)
-const fether = new Fetcher(bitcoin, exchange)
+const fetcher = new Fetcher(bitcoin)
 
 const telegramBot = new TelegramBot(TELEGRAM_TOKEN)
-const tel = new Telegram(telegramBot, fether)
+const tel = new Telegram(telegramBot, fetcher)
 
 telegramBot.on('error', (error) => {
   console.error(error)
@@ -43,12 +40,29 @@ telegramBot.on('error', (error) => {
 
 // Create the Express app
 const app = express()
-app.set('telegram_bot', telegramBot)
 // parse the updates to JSON
 app.use(bodyParser.json())
 
-// This informs the Telegram servers of the new webhook.
+// This informs the Telegram servers of the new webhook
 telegramBot.setWebHook(`${botUrl}/telegram/bot${global.TelegramSecretHash}`)
+
+// Add telegram object to request
+app.use((req, res, next) => {
+  req.telegram_bot = telegramBot
+  next()
+})
+
+// Test interface
+app.get('/test', async (req, res) => {
+  try {
+    // const quote = await fetcher.priceQuotes('BTC')
+    const stats = await fetcher.marketStats('BTC')
+    res.send(stats)
+  } catch (err) {
+    console.log(err)
+    res.send('Internal error')
+  }
+})
 
 // Set routes
 app.use('/', routes)

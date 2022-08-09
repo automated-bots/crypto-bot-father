@@ -22,7 +22,6 @@ The bot uses different public API endpoints for any cryptocurrency. As well as o
 
 Hi, it's me: Melroy van den Berg.
 
-
 ## Docker image
 
 There is a Docker image [available on DockerHub](https://hub.docker.com/repository/docker/danger89/crypto-bot-father).
@@ -31,10 +30,10 @@ There is a Docker image [available on DockerHub](https://hub.docker.com/reposito
 
 ### Requirements
 
-* [Node.js](https://nodejs.org/en/download/)
-* npm (package manager)
-* [Bitcoin Core](https://github.com/bitcoin/bitcoin)
-* Telegram bot via [@bothfather](https://telegram.me/BotFather)
+- [Node.js](https://nodejs.org/en/download/)
+- npm (package manager)
+- [Bitcoin Core](https://github.com/bitcoin/bitcoin)
+- Telegram bot via [@bothfather](https://telegram.me/BotFather)
 
 ### Running
 
@@ -52,13 +51,13 @@ TELEGRAM_BOT_URL=https://yourdomain.com
 
 Where:
 
-* `TELEGRAM_TOKEN` = Secret Bot API token
-* `COINMARKETCAP_API_TOKEN` = Secret Coinmarketcap.com API token
-* `BITCOIN_RPC_HOST` = Bitcoin core host (default: localhost), optionally.
-* `BITCOIN_RPC_PORT` = Bitcoin core RPC port (default: 8332), optionally.
-* `BITCOIN_RPC_USERNAME` = Bitcoin core daemon RPC username (default: bitcoin)
-* `BITCOIN_RPC_PASSWORD` = Bitcoin core daemon RPC password
-* `TELEGRAM_BOT_URL` = your public domain name you use to communicate against the Telegram web API server.
+- `TELEGRAM_TOKEN` = Secret Bot API token
+- `COINMARKETCAP_API_TOKEN` = Secret Coinmarketcap.com API token
+- `BITCOIN_RPC_HOST` = Bitcoin core host (default: localhost), optionally.
+- `BITCOIN_RPC_PORT` = Bitcoin core RPC port (default: 8332), optionally.
+- `BITCOIN_RPC_USERNAME` = Bitcoin core daemon RPC username (default: bitcoin)
+- `BITCOIN_RPC_PASSWORD` = Bitcoin core daemon RPC password
+- `TELEGRAM_BOT_URL` = your public domain name you use to communicate against the Telegram web API server.
 
 Finally, starting the bot server: `npm start` (or `node src/index.js`)
 
@@ -83,7 +82,7 @@ Fix lint issues: `npm run fix`
 
 ### Core setup
 
-* Place the Bitcoind file (`bitcoin.conf`) in `/etc/bitcoin` for the Bitcoin Core Daemon service, example of this file:
+- Place the Bitcoind file (`bitcoin.conf`) in `/etc/bitcoin` for the Bitcoin Core Daemon service, example of this file:
 
 ```sh
 # [core]
@@ -106,12 +105,12 @@ Next, do not forget to create a (test) wallet:
 bitcoin-cli createwallet "testwallet"
 ```
 
-* See [bitcoind.service systemd file](bitcoind.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.
-* Core data will be stored into `/var/lib/bitcoind`
-* Be-sure both `bitcoind` binary is installed into `/usr/bin` directory!
-* Create an user `bitcoin` the unix machine (`adduser -M bitcoin`)
+- See [bitcoind.service systemd file](bitcoind.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.
+- Core data will be stored into `/var/lib/bitcoind`
+- Be-sure both `bitcoind` binary is installed into `/usr/bin` directory!
+- Create an user `bitcoin` the unix machine (`adduser -M bitcoin`)
 
 ## Useful links
 
-* [Bitcoin Core Blog](https://bitcoincore.org/en/blog/)
-* [Bitcoin.org FAQ](https://bitcoin.org/en/faq)
+- [Bitcoin Core Blog](https://bitcoincore.org/en/blog/)
+- [Bitcoin.org FAQ](https://bitcoin.org/en/faq)

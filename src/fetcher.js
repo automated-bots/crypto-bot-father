@@ -1,3 +1,4 @@
+const axios = require('axios')
 const ProcessResult = require('./process-result')
 const RuntimeError = require('./errors/runtime-error')
 const Misc = require('./miscellaneous')
@@ -6,9 +7,12 @@ const Misc = require('./miscellaneous')
  * Fetch or calculate the data we need
  */
 class Fetcher {
-  constructor (bitcoin, exchange) {
+  constructor (bitcoin) {
     this.bitcoin = bitcoin
-    this.exchange = exchange
+    this.jsFinance = axios.create({
+      baseURL: 'https://finance.melroy.org/v1',
+      timeout: 10000
+    })
   }
 
   /**
@@ -99,7 +103,7 @@ Reachable: ${networks[i].reachable}
           return 'Error: Something went wrong. '
         }
       } else {
-        throw error
+        throw error // Re-throw error
       }
     }
   }
@@ -110,10 +114,14 @@ Reachable: ${networks[i].reachable}
    */
   async bitcoinInfo () {
     const blockchainResult = await this.bitcoin.getBlockChainInfo()
-    const miningResult = await this.bitcoin.getMiningInfo()
-    const exchangeResult = await this.exchange.getExchangeInfo(1) // 1 = Bitcoin
+    const miningResultLocal = await this.bitcoin.getMiningInfo()
+    const miningResult = await this.jsFinance.get('/cryptos/mining/BTC')
     const bestBlockResult = await this.bitcoin.getBlock(blockchainResult.bestblockhash)
-    return ProcessResult.bitcoinStats(blockchainResult, miningResult, exchangeResult, bestBlockResult)
+    if (miningResult.data) {
+      return ProcessResult.bitcoinStats(blockchainResult, miningResultLocal, miningResult.data, bestBlockResult)
+    } else {
+      return 'Mining data response was empty.'
+    }
   }
 
   /**
@@ -150,7 +158,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
           return 'Error: Something went wrong. '
         }
       } else {
-        throw error
+        throw error // Re-throw error
       }
     }
   }
@@ -182,7 +190,7 @@ Next block hash: ${nextBlockText}`
           return 'Error: Something went wrong. '
         }
       } else {
-        throw error
+        throw error // Re-throw error
       }
     }
   }
@@ -214,19 +222,21 @@ Next block hash: ${nextBlockText}`
     * @return {Promise} message
     */
   async priceQuotes (symbol) {
-    const symbolUpper = symbol.toUpperCase()
     try {
-      const quoteResult = await this.exchange.getLatestPrices(symbolUpper)
-      const rateResult = await this.exchange.getExchangeRates(symbolUpper)
-      return ProcessResult.priceOverview(symbolUpper, quoteResult, rateResult)
+      const rates = await this.jsFinance.get('/rates/' + symbol)
+      if (rates.data) {
+        return ProcessResult.priceOverview(symbol, rates.data)
+      } else {
+        return 'Empty API response'
+      }
     } catch (error) {
-      // The exechange returns a 400 HTTP error code
-      if (error.response && error.response.status === 400) {
-        return 'Error: Invalid currency symbol'
+      // JS-Finance returns a non 2xx error code
+      if (error.response && 'detailed_message' in error.response.data) {
+        return 'Error: ' + error.response.data.detailed_message
       } else if (error instanceof RuntimeError) {
         return 'Error: ' + error.message
       } else {
-        throw error
+        throw error // Re-throw error
       }
     }
   }
@@ -237,30 +247,60 @@ Next block hash: ${nextBlockText}`
     * @return {Promise} message
   */
   async marketStats (symbol) {
-    const symbolUpper = symbol.toUpperCase()
     try {
-      const quoteResult = await this.exchange.getLatestPrices(symbolUpper)
-      const rateResult = await this.exchange.getExchangeRates(symbolUpper)
-      return ProcessResult.marketStats(symbolUpper, quoteResult, rateResult)
+      const quote = await this.jsFinance.get('/cryptos/quote/' + symbol, {
+        params: {
+          quote_currency: 'USD'
+        }
+      })
+      const meta = await this.jsFinance.get('/cryptos/meta/' + symbol)
+      let rates = null
+      try {
+        rates = await this.jsFinance.get('/rates/' + symbol)
+        rates = rates.data
+      } catch (err) {
+        // Continue without exchange rates
+        console.log('(internal) Could not get exchange rates (symbol: ' + symbol + ') during marketStats().')
+      }
+      if (quote.data && meta.data) {
+        // Note: rates could be an object containing the rates or null
+        return ProcessResult.marketStats(symbol, quote.data, meta.data, rates)
+      } else {
+        return 'Empty API response'
+      }
     } catch (error) {
-      // The exchange returns a 400 HTTP error code
-      if (error.response && error.response.status === 400) {
-        return 'Error: Invalid currency symbol'
+      // JS-Finance returns a non 2xx error code
+      if (error.response && 'detailed_message' in error.response.data) {
+        return 'Error: ' + error.response.data.detailed_message
       } else if (error instanceof RuntimeError) {
         return 'Error: ' + error.message
       } else {
-        throw error
+        throw error // Re-throw error
       }
     }
   }
 
   /**
-   * Giving you a generic market overview of the top 20 coins (not tokens)
+   * Giving you a generic market overview of the top 20 coins. We will remove tokens/stable coins from the list.
    * @return {Promise} message
    */
   async marketOverview (limit = 20) {
-    const listingResults = await this.exchange.getLatestMarketOverview(limit)
-    return ProcessResult.marketOverview(listingResults)
+    const removeCurrencySymbols = ['USDT', 'USDC', 'BUSD', 'DAI', 'SHIB', 'UNI', 'WBTC', 'LEO', 'FTT', 'LINK', 'CRO', 'APE', 'MANA', 'SAND', 'AXS', 'QNT', 'AAVE', 'TUSD', 'MKR', 'OKB', 'KCS', 'USDP', 'RUNE', 'BTT', 'CHZ', 'GRT', 'LDO', 'USDD', 'CRV']
+    // Retrieve the limit size + the array size of the currency we filter out (eg. to be able to still have 20 items to return)
+    const response = await this.jsFinance.get('/cryptos', {
+      params: {
+        quote_currency: 'USD',
+        limit: limit + removeCurrencySymbols.length
+      }
+    })
+    const listingResults = response.data
+    // Filter-out the crypto currencies we don't want to list (like tokens and stable coins)
+    const listingResultsFiltered = listingResults.filter((value) => {
+      return !(removeCurrencySymbols).includes(value.symbol)
+    })
+    // Limit the array
+    if (listingResultsFiltered.length > limit) { listingResultsFiltered.splice(limit) }
+    return ProcessResult.marketOverview(listingResultsFiltered)
   }
 
   /**
@@ -268,7 +308,13 @@ Next block hash: ${nextBlockText}`
    * @return {Promise} message
    */
   async detailedMarketOverview (limit = 25) {
-    const listingResults = await this.exchange.getLatestMarketOverview(limit, false)
+    const response = await this.jsFinance.get('/cryptos', {
+      params: {
+        quote_currency: 'USD',
+        limit: limit
+      }
+    })
+    const listingResults = response.data
     return ProcessResult.detailedMarketOverview(listingResults)
   }
 }
