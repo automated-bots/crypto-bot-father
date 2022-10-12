@@ -52,12 +52,19 @@ app.use((req, res, next) => {
   next()
 })
 
-// Test interface
+// Test interface (HTML output)
 app.get('/test', async (req, res) => {
   try {
-    // const quote = await fetcher.priceQuotes('BTC')
+    const quote = await fetcher.priceQuotes('BTC')
     const stats = await fetcher.marketStats('BTC')
-    res.send(stats)
+    const overview = await fetcher.marketOverview()
+    const html = `<h2>Quote BTC</h2>
+    <pre><code>${quote} </code></pre>
+    <h2>Market statistics BTC</h2>
+    <pre><code>${stats} </code></pre>
+    <h2>Market Overview</h2>
+    <pre><code>${overview} </code></pre>`
+    res.send(html)
   } catch (err) {
     console.log(err)
     res.send('Internal error')
