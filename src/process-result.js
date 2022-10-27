@@ -129,8 +129,8 @@ Last 30D: ${changeIcon30d} ${percentChanged30d}%
 Last 90D: ${changeIcon90d} ${percentChanged90d}%`
   }
 
-  static bitcoinStats (blockchainResult, miningResultLocal, miningResult, bestBlockResult) {
-    const hashrateth = (miningResultLocal.networkhashps / 1000.0 / 1000.0 / 1000.0 / 1000.0).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) // Convert to Tera
+  static bitcoinCashStats (blockchainResult, quote, miningResultLocal, miningResult, bestBlockResult) {
+    const hashrateth = (miningResultLocal.networkhashps / 1000.0 / 1000.0 / 1000.0 / 1000.0 / 1000.0).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) // Convert to Tera
     const medianTime = Misc.printDate(new Date(blockchainResult.mediantime * 1000))
     const marketCap = (miningResult.market_cap).toLocaleString('en', { maximumFractionDigits: 0 })
     const difficulty = (blockchainResult.difficulty / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
@@ -139,15 +139,13 @@ Last 90D: ${changeIcon90d} ${percentChanged90d}%`
     const difficulty7d = (miningResult.difficulty7d / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
     const blockTimeMin = Math.floor(miningResult.block_time_seconds / 60)
     const blockTimeSec = (((miningResult.block_time_seconds / 60) % 2) * 60).toFixed(0)
-    const exchangeRate = (miningResult.exchange_rate).toFixed(2)
-    const exchangeRate24h = (miningResult.exchange_rate24h).toFixed(2)
-    const exchangeRate3d = (miningResult.exchange_rate3d).toFixed(2)
-    const exchangeRate7d = (miningResult.exchange_rate7d).toFixed(2)
+    const exchangeRate = (quote.price).toFixed(2)
+    const percentageChange24h = (quote.percentage_changed_24h).toFixed(2)
     return `*General* 🖥
 Last block: ${medianTime}
 Median time current best block: ${blockchainResult.mediantime}
 Best block height: [${bestBlockResult.height}](${Misc.blockchainExplorerUrl()}/block/${blockchainResult.bestblockhash})
-Net Hashrate: ${hashrateth} Thash/s
+Net Hashrate: ${hashrateth} Phash/s
 Mempool size: ${miningResultLocal.pooledtx}
 Market capital: ${marketCap} USD
 
@@ -165,10 +163,7 @@ Block reward 3D avg: ${miningResult.block_reward3d} BCH
 Block reward 7D avg: ${miningResult.block_reward7d} BCH
 
 *Exchange* 💱
-Exchange rate: ${exchangeRate} BCH/USD
-Exchange rate 24H avg: ${exchangeRate24h} BCH/USD
-Exchange rate 3D avg: ${exchangeRate3d} BCH/USD
-Exchange rate 7D avg: ${exchangeRate7d} BCH/USD`
+Exchange rate: ${exchangeRate} (${percentageChange24h}%) BCH/USD`
   }
 
   static marketOverview (listingResults) {

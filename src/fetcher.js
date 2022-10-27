@@ -111,23 +111,29 @@ Reachable: ${networks[i].reachable}
   }
 
   /**
-   * Retrieve Bitcoin information
+   * Retrieve Bitcoin Cash information
    * @returns {Promise} message
    */
   async bitcoinInfo () {
     const blockchainResult = await this.bitcoinCash.getBlockChainInfo()
+    const quote = await this.jsFinance.get('/cryptos/quote/BCH',
+      {
+        params: {
+          quote_currency: 'USD'
+        }
+      })
     const miningResultLocal = await this.bitcoinCash.getMiningInfo()
     const miningResult = await this.jsFinance.get('/cryptos/mining/BCH')
     const bestBlockResult = await this.bitcoinCash.getBlock(blockchainResult.bestblockhash)
     if (miningResult.data) {
-      return ProcessResult.bitcoinStats(blockchainResult, miningResultLocal, miningResult.data, bestBlockResult)
+      return ProcessResult.bitcoinCashStats(blockchainResult, quote.data, miningResultLocal, miningResult.data, bestBlockResult)
     } else {
       return 'Mining data response was empty.'
     }
   }
 
   /**
-   * Estimate the Bitcoin fee
+   * Estimate the Bitcoin Cash fee
    */
   async bitcoinEstimateFee () {
     const estimateFee = await this.bitcoinCash.estimateFees()

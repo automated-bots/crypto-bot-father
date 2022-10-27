@@ -7,7 +7,7 @@ class Misc {
    * @returns URL
    */
   static blockchainExplorerUrl () {
-    return 'https://blockstream.info'
+    return 'https://explorer.bitcoinunlimited.info'
   }
 
   /**
