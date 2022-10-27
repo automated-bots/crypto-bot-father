@@ -159,16 +159,16 @@ Difficulty 7 days avg: ${difficulty7d}M
 
 *Reward* 🤑
 Block time: ${blockTimeMin}m ${blockTimeSec}s
-Block reward: ${miningResult.block_reward} BTC
-Block reward 24H avg: ${miningResult.block_reward24h} BTC
-Block reward 3D avg: ${miningResult.block_reward3d} BTC
-Block reward 7D avg: ${miningResult.block_reward7d} BTC
+Block reward: ${miningResult.block_reward} BCH
+Block reward 24H avg: ${miningResult.block_reward24h} BCH
+Block reward 3D avg: ${miningResult.block_reward3d} BCH
+Block reward 7D avg: ${miningResult.block_reward7d} BCH
 
 *Exchange* 💱
-Exchange rate: ${exchangeRate} BTC/USD
-Exchange rate 24H avg: ${exchangeRate24h} BTC/USD
-Exchange rate 3D avg: ${exchangeRate3d} BTC/USD
-Exchange rate 7D avg: ${exchangeRate7d} BTC/USD`
+Exchange rate: ${exchangeRate} BCH/USD
+Exchange rate 24H avg: ${exchangeRate24h} BCH/USD
+Exchange rate 3D avg: ${exchangeRate3d} BCH/USD
+Exchange rate 7D avg: ${exchangeRate7d} BCH/USD`
   }
 
   static marketOverview (listingResults) {
