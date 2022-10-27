@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-class Bitcoin {
+class BitcoinCash {
   /**
    * Constructor
    * @param {string} bitcoindHost
@@ -9,7 +9,7 @@ class Bitcoin {
    * @param {string} bitcoindRPCPass
    */
   constructor (bitcoindHost, bitcoindPort, bitcoindRPCUser, bitcoindRPCPass) {
-    // Local Bitcoin core deamon API
+    // Local Bitcoin Cash node API
     this.bitcoind = axios.create({
       baseURL: 'http://' + bitcoindHost + ':' + bitcoindPort,
       timeout: 100000,
@@ -22,11 +22,11 @@ class Bitcoin {
   }
 
   /*******************************
-   * Bitcoin Core Daemon methods *
+   * Bitcoin Cash Node methods *
    *******************************/
 
   /**
-   * Get peer node info from Bitcoin core
+   * Get peer node info from Bitcoin cash node (BCHN)
    *
    * @return {Promise} Axios promise
    */
@@ -74,7 +74,7 @@ class Bitcoin {
   }
 
   /**
-   * Get mining info from the core itself
+   * Get mining info from the BCHN itself
    *
    * @return {Promise} Axios promise (blocks, difficulty, networkhashps)
    */
@@ -91,17 +91,14 @@ class Bitcoin {
   }
 
   /**
-   * Estimate fee
-   * @param {String} mode Estimate mode (default: CONSERVATIVE, options: 'ECONOMICAL' or 'CONSERVATIVE' or 'UNSET')
-   * @param {Number} blocks Number of blocks found in estimation (default: 6)
-   * @return {Promise} Axios promise
+   * Estimate BCH fee
+   * @return {Promise} Axios promise (fee)
    */
-  estimateFees (mode = 'CONSERVATIVE', blocks = 6) {
+  estimateFees () {
     return this.bitcoind.post('/', {
       jsonrpc: '1.0',
       id: this.rpcId,
-      method: 'estimatesmartfee',
-      params: [blocks, mode]
+      method: 'estimatefee'
     })
       .then(response => {
         return Promise.resolve(response.data.result)

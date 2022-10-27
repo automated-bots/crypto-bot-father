@@ -7,8 +7,8 @@ const Misc = require('./miscellaneous')
  * Fetch or calculate the data we need
  */
 class Fetcher {
-  constructor (bitcoin) {
-    this.bitcoin = bitcoin
+  constructor (bitcoinCash) {
+    this.bitcoinCashCash = bitcoinCash
     this.jsFinance = axios.create({
       baseURL: 'https://finance.melroy.org/v1',
       timeout: 10000
@@ -22,7 +22,9 @@ class Fetcher {
    */
   bitcoinAge () {
     const age = Misc.timestampToDate(Date.now() - 1231002905000) // timestamp ms since creation on the genesis block
-    return `Bitcoin age: ${age.year} years, ${age.month} months, ${age.day} days, ${age.hour}h ${age.minute}m ${age.second}s, since the first mined block.`
+    return `Bitcoin age: ${age.year} years, ${age.month} months, ${age.day} days, since the first mined block.\n\n
+Bitcoin Cash was a result of developers not agreeing with Satoshi's plan, hard fork was created in Augustus 2017.\n
+A large portion of the Bitcoin community, including developers, investors, users, and businesses, still believed in the original vision of Bitcoin -- a low fee, peer to peer electronic cash system that could be used by all the people of the world. Which is now called Bitcoin Cash.`
   }
 
   /**
@@ -32,9 +34,9 @@ class Fetcher {
   async bitcoinStatus () {
     let text = ''
     try {
-      const networkResult = await this.bitcoin.getNetworkInfo()
+      const networkResult = await this.bitcoinCash.getNetworkInfo()
       text += `
-Bitcoin Core version: ${networkResult.subversion}
+Bitcoin Cash node version: ${networkResult.subversion}
 Protocol version: ${networkResult.protocolversion}
 \n*Peer info*
 Peers connected: ${networkResult.connections}`
@@ -44,7 +46,7 @@ Peers connected: ${networkResult.connections}`
     }
 
     try {
-      const peerResult = await this.bitcoin.getPeerInfo()
+      const peerResult = await this.bitcoinCash.getPeerInfo()
       text += '\nFirst three peers:'
       if (peerResult.length > 0) {
         let i
@@ -74,15 +76,15 @@ Last receive: ${recieveTime}
    */
   async bitcoinNetworkInfo () {
     try {
-      const result = await this.bitcoin.getNetworkInfo()
+      const result = await this.bitcoinCash.getNetworkInfo()
       let text = `
 *Bitcoin Network Info*
-Bitcoin server version: ${result.version}
+Bitcoin cash node version: ${result.version}
 Protocol version: ${result.protocolversion}
 Connections: ${result.connections}
 P2P active: ${result.networkactive}
-Minimum relay fee:  ${result.relayfee} BTC/kB
-Minimum incremental fee: ${result.incrementalfee} BTC/kB
+Minimum relay fee:  ${result.relayfee} BCH/kB
+Minimum incremental fee: ${result.incrementalfee} BCH/kB
 Networks:`
       const networks = result.networks
       for (let i = 0; i < networks.length; i++) {
@@ -94,7 +96,7 @@ Reachable: ${networks[i].reachable}
       }
       return text
     } catch (error) {
-      // The Bitcoin core returns a 500 HTTP error code
+      // The Bitcoin cash node returns a 500 HTTP error code
       if (error.response && error.response.status === 500) {
         if ('error' in error.response.data) {
           return 'Error: ' + error.response.data.error.message
@@ -113,10 +115,10 @@ Reachable: ${networks[i].reachable}
    * @returns {Promise} message
    */
   async bitcoinInfo () {
-    const blockchainResult = await this.bitcoin.getBlockChainInfo()
-    const miningResultLocal = await this.bitcoin.getMiningInfo()
-    const miningResult = await this.jsFinance.get('/cryptos/mining/BTC')
-    const bestBlockResult = await this.bitcoin.getBlock(blockchainResult.bestblockhash)
+    const blockchainResult = await this.bitcoinCash.getBlockChainInfo()
+    const miningResultLocal = await this.bitcoinCash.getMiningInfo()
+    const miningResult = await this.jsFinance.get('/cryptos/mining/BCH')
+    const bestBlockResult = await this.bitcoinCash.getBlock(blockchainResult.bestblockhash)
     if (miningResult.data) {
       return ProcessResult.bitcoinStats(blockchainResult, miningResultLocal, miningResult.data, bestBlockResult)
     } else {
@@ -128,8 +130,8 @@ Reachable: ${networks[i].reachable}
    * Estimate the Bitcoin fee
    */
   async bitcoinEstimateFee () {
-    const estimateFee = await this.bitcoin.estimateFees()
-    return `Estimated fee for confirmation in 6 blocks: ${estimateFee.feerate} BTC/kB`
+    const estimateFee = await this.bitcoinCash.estimateFees()
+    return `Estimated fee: ${estimateFee.feerate} BCH/kB`
   }
 
   /**
@@ -140,8 +142,8 @@ Reachable: ${networks[i].reachable}
   async bitcoinTransaction (hash) {
     try {
       // TODO: Retrieve inputs and outputs to determine fee & amounts
-      const rawTransaction = await this.bitcoin.getRawTransaction(hash)
-      const blockInfo = await this.bitcoin.getBlock(rawTransaction.blockhash)
+      const rawTransaction = await this.bitcoinCash.getRawTransaction(hash)
+      const blockInfo = await this.bitcoinCash.getBlock(rawTransaction.blockhash)
       const transactionDate = Misc.printDate(new Date(rawTransaction.time * 1000))
       const text = `**Transaction details for [${hash}](${Misc.blockchainExplorerUrl()}/tx/${hash})**
 Confirmations: ${rawTransaction.confirmations}
@@ -149,7 +151,7 @@ Date:  ${transactionDate}
 In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${rawTransaction.blockhash}) with ${blockInfo.nTx} transactions`
       return text
     } catch (error) {
-      // The Bitcoin core returns a 500 HTTP error code
+      // The Bitcoin cash node returns a 500 HTTP error code
       if (error.response && error.response.status === 500) {
         if ('error' in error.response.data) {
           return 'Error: ' + error.response.data.error.message
@@ -169,7 +171,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
    */
   async bitcoinBlock (hash) {
     try {
-      const blockInfo = await this.bitcoin.getBlock(hash)
+      const blockInfo = await this.bitcoinCash.getBlock(hash)
       const blockDate = Misc.printDate(new Date(blockInfo.time * 1000))
       const nextBlockText = (blockInfo.nextblockhash) ? `[${blockInfo.nextblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.nextblockhash})` : 'N/A'
       return `**Block details for: [${hash}](${Misc.blockchainExplorerUrl()}/block/${hash})**
@@ -181,7 +183,7 @@ Difficulty: ${blockInfo.difficulty}
 Preview block hash: [${blockInfo.previousblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.previousblockhash})
 Next block hash: ${nextBlockText}`
     } catch (error) {
-      // The Bitcoin core returns a 500 HTTP error code
+      // The Bitcoin cash node returns a 500 HTTP error code
       if (error.response && error.response.status === 500) {
         if ('error' in error.response.data) {
           return 'Error: ' + error.response.data.error.message
@@ -201,7 +203,7 @@ Next block hash: ${nextBlockText}`
    * @return {Promise} message
    */
   async bitcoinAddress (address) {
-    // const addressResult = await this.bitcoin.getAddressInfo(address)
+    // const addressResult = await this.bitcoinCash.getAddressInfo(address)
     // TODO: https://stackoverflow.com/questions/67124777/bitcoin-rpc-get-balance-of-address-outside-wallet
     return 'not yet implemented'
   }

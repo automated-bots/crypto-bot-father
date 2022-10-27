@@ -1,8 +1,5 @@
 const Misc = require('./miscellaneous')
 
-// Constants
-const FAQ_URL = 'https://bitcoin.melroy.org/en/faq'
-
 class Telegram {
   /**
    * Constructor
@@ -33,35 +30,34 @@ class Telegram {
       const text = `
 General:
   /help - Show help output
-  /price <symbol> - Get latest crypto price overview (default BTC)
-  /stats <symbol> - Get latest market statistics (default BTC)
+  /price <symbol> - Get latest crypto price overview (default BCH)
+  /stats <symbol> - Get latest market statistics (default BCH)
   /overview [<limit>] - General crypto market overview, limit is optional
   /detailedoverview [<limit>] - Detailed crypto market overview, limit is optional
 
-Bitcoin:
-  /btcstatus - Retrieve Bitcoin Core Deamon info
-  /btcnetwork - Get Bitcoin Network info
-  /btcinfo - Get Bitcoin blockchain, mining and exchange stats
-  /btcfee - Get fee estimation for 6 target blocks
-  /btclastblocks - Get the last 10 blocks on Bitcoin
-  /btctransaction <hash> - Get Bitcoin transaction details
-  /btcaddress <address> - Get Bitcoin address details
-  /btctransactions <address> - Get last 10 Bitcoin transactions from an address
-  /btcblock <hash> - Get Bitcoin block details
+Bitcoin Cash:
+  /bchstatus - Retrieve Bitcoin Cash Node info
+  /bchnetwork - Get Bitcoin Cash Network info
+  /bchinfo - Get Bitcoin Cash blockchain, mining and exchange stats
+  /bchfee - Get fee estimation for 6 target blocks
+  /bchlastblocks - Get the last 10 blocks on Bitcoin Cash network
+  /bchtransaction <hash> - Get Bitcoin Cash transaction details
+  /bchaddress <address> - Get Bitcoin Cash address details
+  /bchtransactions <address> - Get last 10 Bitcoin Cash transactions from an address
+  /bchblock <hash> - Get Bitcoin Cash block details
 
 More info:
   /why - Why Bitcoin?
   /what - What is Bitcoin?
   /how - How does Bitcoin work?
-  /age - How long does Bitcoin exists?
-  /faq - Frequality Asked Questions`
+  /age - How long does Bitcoin exists?`
       this.sendMessage(msg.chat.id, text)
     })
 
-    // price command (/price): default Bitcoin
+    // price command (/price): default Bitcoin Cash
     this.bot.onText(/^[/|!]price\S*$/, msg => {
-      // Fall-back to Bitcoin (symbol: BTC)
-      this.fetcher.priceQuotes('BTC')
+      // Fall-back to Bitcoin Cash (symbol: BCH)
+      this.fetcher.priceQuotes('BCH')
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
@@ -74,10 +70,10 @@ More info:
         .catch(error => console.error(error))
     })
 
-    // stats command (/stats): default Bitcoin
+    // stats command (/stats): default Bitcoin Cash
     this.bot.onText(/^[/|!]stats\S*$/, msg => {
-      // Fall-back to Bitcoin (symbol: BTC)
-      this.fetcher.marketStats('BTC')
+      // Fall-back to Bitcoin Cash (symbol: BCH)
+      this.fetcher.marketStats('BCH')
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
@@ -140,50 +136,50 @@ More info:
       }
     })
 
-    // Bitcoin core status command (/btcstatus)
-    this.bot.onText(/[/|!]btcstatus/, msg => {
+    // Bitcoin cash node status command (/bchstatus)
+    this.bot.onText(/[/|!]bchstatus/, msg => {
       this.fetcher.bitcoinStatus()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
-    // Bitcoin network command (/btcnetwork)
-    this.bot.onText(/[/|!]btcnetwork/, msg => {
+    // Bitcoin network command (/bchnetwork)
+    this.bot.onText(/[/|!]bchnetwork/, msg => {
       this.fetcher.bitcoinNetworkInfo()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => {
           console.error(error)
-          this.sendMessage(msg.chat.id, 'Error: Could not fetch network info, still verifying blocks... Or can\'t connect to the Bitcoin Core Daemon API.')
+          this.sendMessage(msg.chat.id, 'Error: Could not fetch network info, still verifying blocks... Or can\'t connect to the Bitcoin Cash Node (BCHN) API.')
         })
     })
 
-    // Bitcoin information command (/btcinfo)
-    this.bot.onText(/[/|!]btcinfo/, msg => {
+    // Bitcoin information command (/bchinfo)
+    this.bot.onText(/[/|!]bchinfo/, msg => {
       this.fetcher.bitcoinInfo()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
-    // Bitcoin estimate fee command (/btcfee)
-    this.bot.onText(/[/|!]btcfee/, msg => {
+    // Bitcoin estimate fee command (/bchfee)
+    this.bot.onText(/[/|!]bchfee/, msg => {
       this.fetcher.bitcoinEstimateFee()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
-    // address command (/btcaddress <address>)
-    this.bot.onText(/[/|!]btcaddress@?\S* (.+)/, (msg, match) => {
+    // address command (/bchaddress <address>)
+    this.bot.onText(/[/|!]bchaddress@?\S* (.+)/, (msg, match) => {
       const address = match[1].trim()
       this.fetcher.bitcoinAddress(address)
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
-    this.bot.onText(/^[/|!]btctransaction\S*$/, msg => {
-      this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin transaction hash as argument: /btctransaction <hash>')
+    this.bot.onText(/^[/|!]bchtransaction\S*$/, msg => {
+      this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin transaction hash as argument: /bchtransaction <hash>')
     })
 
-    this.bot.onText(/[/|!]btctransaction@?\S* (.+)/, (msg, match) => {
+    this.bot.onText(/[/|!]bchtransaction@?\S* (.+)/, (msg, match) => {
       const hash = match[1].trim()
       // TODO: Improve details like fee & total transaction amounts
       this.fetcher.bitcoinTransaction(hash)
@@ -191,8 +187,8 @@ More info:
         .catch(error => console.error(error))
     })
 
-    // transactions command (/btctransactions <address>)
-    this.bot.onText(/[/|!]btctransactions@?\S* (.+)/, (msg, match) => {
+    // transactions command (/bchtransactions <address>)
+    this.bot.onText(/[/|!]bchtransactions@?\S* (.+)/, (msg, match) => {
       const address = match[1].trim()
       // TODO: Fully missing
       this.fetcher.bitcoinTransactions(address)
@@ -200,12 +196,12 @@ More info:
         .catch(error => console.error(error))
     })
 
-    this.bot.onText(/^[/|!]btcblock\S*$/, msg => {
-      this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin block hash as argument: /btcblock <hash>')
+    this.bot.onText(/^[/|!]bchblock\S*$/, msg => {
+      this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin block hash as argument: /bchblock <hash>')
     })
 
-    // Bitcoin block command (/btcblock <hash>)
-    this.bot.onText(/[/|!]btcblock@?\S* (.+)/, (msg, match) => {
+    // Bitcoin block command (/bchblock <hash>)
+    this.bot.onText(/[/|!]bchblock@?\S* (.+)/, (msg, match) => {
       const hash = match[1].trim()
       if (Misc.isSha256(hash)) {
         // Retrieved block by hash (sha256)
@@ -218,34 +214,36 @@ More info:
       }
     })
 
-    // lastblocks command (/btclastblocks)
+    // lastblocks command (/bchlastblocks)
     // TODO: Implemented getLastBlocks
-    this.bot.onText(/[/|!]btclastblocks/, msg => {
+    this.bot.onText(/[/|!]bchlastblocks/, msg => {
       this.sendMessage(msg.chat.id, '**Not yet implemented**')
     })
 
-    // top10 command (/btctop10)
+    // top10 command (/bchtop10)
     // TODO: implement getTop10BiggestTransactions
-    this.bot.onText(/[/|!]btctop10/, msg => {
+    this.bot.onText(/[/|!]bchtop10/, msg => {
       this.sendMessage(msg.chat.id, 'Not yet implemented')
     })
 
     // Why is Bitcoin created?
     this.bot.onText(/^[/|!]why\S*$/, msg => {
       this.sendMessage(msg.chat.id, `
-Bitcoin is P2P electronic cash that is valuable over legacy systems because of the monetary autonomy it brings to its users. 
+Bitcoin Cash is P2P electronic cash that is valuable over legacy systems because of the monetary autonomy it brings to its users. 
 
 Bitcoin seeks to address the root problem with conventional currency: all the trust that's required to make it work --
 Not that justified trust is a bad thing, but trust makes systems brittle, opaque, and costly to operate. 
 
 Trust failures result in systemic collapses, trust curation creates inequality and monopoly lock-in, 
 and naturally arising trust choke-points can be abused to deny access to due process. 
-Through the use of cryptographic proof, decentralized networks and open source software Bitcoin minimizes and replaces these trust costs.`)
+Through the use of cryptographic proof, decentralized networks and open-source software Bitcoin Cash minimizes and replaces these trust costs.
+
+[Read more about why Bitcoin Cash](https://bitcoincash.org/#why)`)
     })
 
     // What is Bitcoin?
     this.bot.onText(/^[/|!]what\S*$/, msg => {
-      this.sendMessage(msg.chat.id, 'Bitcoin is a peer-to-peer currency. Peer-to-peer means that no central authority issues new money or tracks transactions. These tasks are managed collectively by the network.')
+      this.sendMessage(msg.chat.id, 'Bitcoin Cash (BCH) is a peer-to-peer currency. Peer-to-peer means that no central authority issues new money or tracks transactions. These tasks are managed collectively by the network.')
     })
 
     // How does Bitcoin work?
@@ -266,9 +264,9 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
     })
 
     // Give FAQ Link
-    this.bot.onText(/^[/|!]faq\S*$/, msg => {
+    /* this.bot.onText(/^[/|!]faq\S*$/, msg => {
       this.sendMessage(msg.chat.id, '[Read FAQ](' + FAQ_URL + ')')
-    })
+    }) */
 
     // Other stuff
     this.bot.on('message', msg => {

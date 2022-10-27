@@ -15,7 +15,7 @@ global.TelegramSecretHash = crypto.randomBytes(20).toString('hex')
 const TelegramBot = require('node-telegram-bot-api')
 const express = require('express')
 const bodyParser = require('body-parser')
-const Bitcoin = require('./bitcoin')
+const BitcoinCash = require('./bitcoin')
 const Fetcher = require('./fetcher')
 const Telegram = require('./telegram')
 const routes = require('./routes')
@@ -27,8 +27,8 @@ if (!TELEGRAM_TOKEN) {
 }
 
 // Create helper objects
-const bitcoin = new Bitcoin(BITCOIN_RPC_HOST, BITCOIN_RPC_PORT, BITCOIN_RPC_USER, BITCOIN_RPC_PASS)
-const fetcher = new Fetcher(bitcoin)
+const bitcoinCash = new BitcoinCash(BITCOIN_RPC_HOST, BITCOIN_RPC_PORT, BITCOIN_RPC_USER, BITCOIN_RPC_PASS)
+const fetcher = new Fetcher(bitcoinCash)
 
 const telegramBot = new TelegramBot(TELEGRAM_TOKEN)
 const tel = new Telegram(telegramBot, fetcher)
@@ -55,12 +55,15 @@ app.use((req, res, next) => {
 // Test interface (HTML output)
 app.get('/test', async (req, res) => {
   try {
-    const quote = await fetcher.priceQuotes('BTC')
-    const stats = await fetcher.marketStats('BTC')
+    const quote = await fetcher.priceQuotes('BCH')
+    const quote2 = await fetcher.priceQuotes('BTC')
+    const stats = await fetcher.marketStats('BCH')
     const overview = await fetcher.marketOverview()
-    const html = `<h2>Quote BTC</h2>
+    const html = `<h2>Quote BCH</h2>
     <pre><code>${quote} </code></pre>
-    <h2>Market statistics BTC</h2>
+    <h2>Quote BTC</h2>
+    <pre><code>${quote2} </code></pre>
+    <h2>Market statistics BCH</h2>
     <pre><code>${stats} </code></pre>
     <h2>Market Overview</h2>
     <pre><code>${overview} </code></pre>`
