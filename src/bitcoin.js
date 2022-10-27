@@ -150,4 +150,4 @@ class BitcoinCash {
   }
 }
 
-module.exports = Bitcoin
+module.exports = BitcoinCash
