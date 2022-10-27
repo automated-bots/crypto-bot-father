@@ -83,11 +83,12 @@ Last receive: ${recieveTime}
       let text = `
 *Bitcoin Network Info*
 Bitcoin cash node version: ${result.version}
+User-agent string: ${result.subversion}
 Protocol version: ${result.protocolversion}
 Connections: ${result.connections}
 P2P active: ${result.networkactive}
 Minimum relay fee:  ${result.relayfee} BCH/kB
-Minimum incremental fee: ${result.incrementalfee} BCH/kB
+Minimum charge: ${result.excessutxocharge} BCH
 Networks:`
       const networks = result.networks
       for (let i = 0; i < networks.length; i++) {
