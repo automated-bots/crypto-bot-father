@@ -22,7 +22,7 @@ class Fetcher {
    */
   bitcoinAge () {
     const age = Misc.timestampToDate(Date.now() - 1231002905000) // timestamp ms since creation on the genesis block
-    return `Bitcoin age: ${age.year} years, ${age.month} months, ${age.day} days, since the first mined block.\n\n
+    return `Bitcoin age: ${age.year} years, ${age.month} months, ${age.day} days, since the first mined block.\n
 Bitcoin Cash was a result of developers not agreeing with Satoshi's plan, hard fork was created in Augustus 2017.\n
 A large portion of the Bitcoin community, including developers, investors, users, and businesses, still believed in the original vision of Bitcoin -- a low fee, peer to peer electronic cash system that could be used by all the people of the world. Which is now called Bitcoin Cash.`
   }
@@ -137,7 +137,7 @@ Reachable: ${networks[i].reachable}
    */
   async bitcoinEstimateFee () {
     const estimateFee = await this.bitcoinCash.estimateFees()
-    return `Estimated fee: ${estimateFee.feerate} BCH/kB`
+    return `Estimated fee: ${estimateFee} BCH/kB`
   }
 
   /**

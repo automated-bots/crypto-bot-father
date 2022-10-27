@@ -39,7 +39,7 @@ Bitcoin Cash:
   /bchstatus - Retrieve Bitcoin Cash Node info
   /bchnetwork - Get Bitcoin Cash Network info
   /bchinfo - Get Bitcoin Cash blockchain, mining and exchange stats
-  /bchfee - Get fee estimation for 6 target blocks
+  /bchfee - Get fee estimation
   /bchlastblocks - Get the last 10 blocks on Bitcoin Cash network
   /bchtransaction <hash> - Get Bitcoin Cash transaction details
   /bchaddress <address> - Get Bitcoin Cash address details
@@ -165,6 +165,10 @@ More info:
       this.fetcher.bitcoinEstimateFee()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
+    })
+
+    this.bot.onText(/^[/|!]bchaddress\S*$/, msg => {
+      this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin address as argument: /bchaddress <bitcoincash:address>')
     })
 
     // address command (/bchaddress <address>)
