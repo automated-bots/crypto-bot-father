@@ -8,7 +8,7 @@ const Misc = require('./miscellaneous')
  */
 class Fetcher {
   constructor (bitcoinCash) {
-    this.bitcoinCashCash = bitcoinCash
+    this.bitcoinCash = bitcoinCash
     this.jsFinance = axios.create({
       baseURL: 'https://finance.melroy.org/v1',
       timeout: 10000
