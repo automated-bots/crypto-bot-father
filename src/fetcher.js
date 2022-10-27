@@ -17,13 +17,16 @@ class Fetcher {
 
   /**
    * How long does bitcoin exists (since first genesis block)
-   * Source: https://www.blockchain.com/btc/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
+   * Source: https://explorer.bitcoinunlimited.info/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
+   * Source: https://explorer.bitcoinunlimited.info/block/000000000000000000651ef99cb9fcbe0dadde1d424bd9f15ff20136191a5eec
    * @returns message string
    */
   bitcoinAge () {
-    const age = Misc.timestampToDate(Date.now() - 1231002905000) // timestamp ms since creation on the genesis block
-    return `Bitcoin age: ${age.year} years, ${age.month} months, ${age.day} days, since the first mined block.\n
-Bitcoin Cash was a result of developers not agreeing with Satoshi's plan, hard fork was created in Augustus 2017.\n
+    const ageGenesis = Misc.timestampToDate(Date.now() - 1231002905000) // timestamp ms since creation of the genesis block
+    const ageFork = Misc.timestampToDate(Date.now() - 1501603961000) // timestamp ms since creation of the Bitcoin cash fork
+    return `Bitcoin age: ${ageGenesis.year} years, ${ageGenesis.month} months, ${ageGenesis.day} days, since the first mined block.\n
+Bitcoin Cash was a result of developers not agreeing with Satoshi's plan in 2017.\n
+Bitcoin Cash age: ${ageFork.year} years, ${ageFork.month} months, ${ageFork.day} days, since the hard fork.\n
 A large portion of the Bitcoin community, including developers, investors, users, and businesses, still believed in the original vision of Bitcoin -- a low fee, peer to peer electronic cash system that could be used by all the people of the world. Which is now called Bitcoin Cash.`
   }
 
