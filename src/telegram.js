@@ -168,7 +168,7 @@ More info:
     })
 
     this.bot.onText(/^[/|!]bchaddress\S*$/, msg => {
-      this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin address as argument: /bchaddress <bitcoincash:address>')
+      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin address as argument: /bchaddress <bitcoincash:address>')
     })
 
     // address command (/bchaddress <address>)
@@ -180,7 +180,7 @@ More info:
     })
 
     this.bot.onText(/^[/|!]bchtransaction\S*$/, msg => {
-      this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin transaction hash as argument: /bchtransaction <hash>')
+      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin transaction hash as argument: /bchtransaction <hash>')
     })
 
     this.bot.onText(/[/|!]bchtransaction@?\S* (.+)/, (msg, match) => {
@@ -201,7 +201,7 @@ More info:
     })
 
     this.bot.onText(/^[/|!]bchblock\S*$/, msg => {
-      this.sendMessage(msg.chat.id, 'Error: Provide atleast the Bitcoin block hash as argument: /bchblock <hash>')
+      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin block hash as argument: /bchblock <hash>')
     })
 
     // Bitcoin block command (/bchblock <hash>)

@@ -22,7 +22,7 @@ const routes = require('./routes')
 global.ErrorState = false
 
 if (!TELEGRAM_TOKEN) {
-  console.error('\x1b[31mERROR: Provide your Telegram token, by setting the TELEGRAM_TOKEN enviroment variable first! See README.md.\nExit.\x1b[0m')
+  console.error('\x1b[31mERROR: Provide your Telegram token, by setting the TELEGRAM_TOKEN environment variable first! See README.md.\nExit.\x1b[0m')
   process.exit(1)
 }
 
