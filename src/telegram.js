@@ -31,6 +31,7 @@ class Telegram {
 General:
   /help - Show help output
   /price <symbol> - Get latest crypto price overview (default BCH)
+  /detailedprice <symbol> - Get latest detailed price overview (default BCH)
   /stats <symbol> - Get latest market statistics (default BCH)
   /overview [<limit>] - General crypto market overview, limit is optional
   /detailedoverview [<limit>] - Detailed crypto market overview, limit is optional
