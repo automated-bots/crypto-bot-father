@@ -2,7 +2,7 @@ const { table, getBorderCharacters } = require('table')
 const Misc = require('./miscellaneous')
 
 // Constants
-const COINMARKET_URL = 'https://coinmarketcap.com'
+const COINGECKO_URL = 'https://www.coingecko.com/en/coins'
 
 /**
  * Static methods to help processing the result data.
@@ -21,18 +21,19 @@ class ProcessResult {
 
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
+    const urlBaseName = baseName.toLowerCase().replaceAll(' ', '-')
 
     let cryptoPrices = ''
     if (symbol === 'BCH') {
-      cryptoPrices = `• ${bitcoinPrice} [BTC](${COINMARKET_URL}/currencies/bitcoin)`
+      cryptoPrices = `• ${bitcoinPrice} [BTC](${COINGECKO_URL}/bitcoin)`
     } else if (symbol === 'BTC') {
-      cryptoPrices = `• ${bitcoinCashPrice} [BCH](${COINMARKET_URL}/currencies/bitcoin-cash)`
+      cryptoPrices = `• ${bitcoinCashPrice} [BCH](${COINGECKO_URL}/bitcoin-cash)`
     } else {
-      cryptoPrices = `• ${bitcoinPrice} [BTC](${COINMARKET_URL}/currencies/bitcoin)
-• ${bitcoinCashPrice} [BCH](${COINMARKET_URL}/currencies/bitcoin-cash)`
+      cryptoPrices = `• ${bitcoinPrice} [BTC](${COINGECKO_URL}/bitcoin)
+• ${bitcoinCashPrice} [BCH](${COINGECKO_URL}/bitcoin-cash)`
     }
 
-    return `*Current prices of ${baseName} (${baseCurrency}) in fiat and crypto*
+    return `*Current prices of ${baseName} ([${baseCurrency}](${COINGECKO_URL}/${urlBaseName})) in fiat and crypto*
 • ${dollarPrice} USD
 • ${euroPrice} EUR
 ${cryptoPrices}
@@ -69,8 +70,9 @@ ${cryptoPrices}
     const dogecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.DOGE)
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
+    const urlBaseName = baseName.toLowerCase().replaceAll(' ', '-')
 
-    return `*Current prices of ${baseName} (${baseCurrency}) in fiat*
+    return `*Current prices of ${baseName} ([${baseCurrency}](${COINGECKO_URL}/${urlBaseName})) in fiat*
 • ${dollarPrice} USD
 • ${euroPrice} EUR
 • ${poundSterlingPrice} GBP
@@ -82,22 +84,22 @@ ${cryptoPrices}
 • ${hongKongDollarPrice} HKD
 
 *Current prices of ${baseName} in crypto valuta*
-• ${bitcoinPrice} [BTC](${COINMARKET_URL}/currencies/bitcoin)
-• ${ethereumPrice} [ETH](${COINMARKET_URL}/currencies/ethereum)
-• ${solanaPrice} [SOL](${COINMARKET_URL}/currencies/solana)
-• ${cardanoPrice} [ADA](${COINMARKET_URL}/currencies/cardano)
-• ${bitcoinCashPrice} [BCH](${COINMARKET_URL}/currencies/bitcoin-cash)
-• ${polkadotPrice} [DOT](${COINMARKET_URL}/currencies/polkadot-new)
-• ${avalanchePrice} [AVAX](${COINMARKET_URL}/currencies/avalanche)
-• ${uniswapPrice} [UNI](${COINMARKET_URL}/currencies/uniswap)
-• ${chainlinkPrice} [LINK](${COINMARKET_URL}/currencies/chainlink)
-• ${litecoinPrice} [LTC](${COINMARKET_URL}/currencies/litecoin)
-• ${dogecoinPrice} [DOGE](${COINMARKET_URL}/currencies/dogecoin)
+• ${bitcoinPrice} [BTC](${COINGECKO_URL}/bitcoin)
+• ${ethereumPrice} [ETH](${COINGECKO_URL}/ethereum)
+• ${solanaPrice} [SOL](${COINGECKO_URL}/solana)
+• ${cardanoPrice} [ADA](${COINGECKO_URL}/cardano)
+• ${bitcoinCashPrice} [BCH](${COINGECKO_URL}/bitcoin-cash)
+• ${polkadotPrice} [DOT](${COINGECKO_URL}/polkadot)
+• ${avalanchePrice} [AVAX](${COINGECKO_URL}/avalanche)
+• ${uniswapPrice} [UNI](${COINGECKO_URL}/uniswap)
+• ${chainlinkPrice} [LINK](${COINGECKO_URL}/chainlink)
+• ${litecoinPrice} [LTC](${COINGECKO_URL}/litecoin)
+• ${dogecoinPrice} [DOGE](${COINGECKO_URL}/dogecoin)
 
 *Current price of ${baseName} in stable coins*
-• ${usdcPrice} [USDC](${COINMARKET_URL}/currencies/usd-coin)
-• ${usdtPrice} [USDT](${COINMARKET_URL}/currencies/tether)
-• ${busdPrice} [BUSD](${COINMARKET_URL}/currencies/binance-usd)`
+• ${usdcPrice} [USDC](${COINGECKO_URL}/usd-coin)
+• ${usdtPrice} [USDT](${COINGECKO_URL}/tether)
+• ${busdPrice} [BUSD](${COINGECKO_URL}/binance-usd)`
   }
 
   static marketStats (symbol, quote, meta, rates) {
