@@ -254,6 +254,31 @@ Next block hash: ${nextBlockText}`
   }
 
   /**
+    * Retrieve latest detailed quote information and exchange rates (fiat + crypto).
+    * @param {String} symbol Crypto symbol
+    * @return {Promise} message
+    */
+  async detailedPriceQuotes (symbol) {
+    try {
+      const rates = await this.jsFinance.get('/rates/' + symbol)
+      if (rates.data) {
+        return ProcessResult.detailedPriceOverview(symbol, rates.data)
+      } else {
+        return 'Empty API response'
+      }
+    } catch (error) {
+      // JS-Finance returns a non 2xx error code
+      if (error.response && 'detailed_message' in error.response.data) {
+        return 'Error: ' + error.response.data.detailed_message
+      } else if (error instanceof RuntimeError) {
+        return 'Error: ' + error.message
+      } else {
+        throw error // Re-throw error
+      }
+    }
+  }
+
+  /**
     * Retrieve latest market statistics
     * @param {String} symbol Crypto symbol
     * @return {Promise} message

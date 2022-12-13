@@ -56,12 +56,12 @@ app.use((req, res, next) => {
 app.get('/test', async (req, res) => {
   try {
     const quote = await fetcher.priceQuotes('BCH')
-    const quote2 = await fetcher.priceQuotes('BTC')
+    const quote2 = await fetcher.detailedPriceQuotes('BTC')
     const stats = await fetcher.marketStats('BCH')
     const overview = await fetcher.marketOverview()
     const html = `<h2>Quote BCH</h2>
     <pre><code>${quote} </code></pre>
-    <h2>Quote BTC</h2>
+    <h2>Detailed quote BTC</h2>
     <pre><code>${quote2} </code></pre>
     <h2>Market statistics BCH</h2>
     <pre><code>${stats} </code></pre>

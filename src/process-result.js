@@ -15,6 +15,36 @@ class ProcessResult {
     // Fiat
     const dollarPrice = Misc.printCurrencyWithoutSymbol(ratesList.USD)
     const euroPrice = Misc.printCurrencyWithoutSymbol(ratesList.EUR)
+    // Crypto
+    const bitcoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.BTC, 8)
+    const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(ratesList.BCH, 8)
+
+    const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
+    const baseName = (rates.base_name) ? rates.base_name : symbol
+
+    let cryptoPrices = ''
+    if (symbol === 'BCH') {
+      cryptoPrices = `• ${bitcoinPrice} [BTC](${COINMARKET_URL}/currencies/bitcoin)`
+    } else if (symbol === 'BTC') {
+      cryptoPrices = `• ${bitcoinCashPrice} [BCH](${COINMARKET_URL}/currencies/bitcoin-cash)`
+    } else {
+      cryptoPrices = `• ${bitcoinPrice} [BTC](${COINMARKET_URL}/currencies/bitcoin)
+• ${bitcoinCashPrice} [BCH](${COINMARKET_URL}/currencies/bitcoin-cash)`
+    }
+
+    return `*Current prices of ${baseName} (${baseCurrency}) in fiat and crypto*
+• ${dollarPrice} USD
+• ${euroPrice} EUR
+${cryptoPrices}
+`
+  }
+
+  static detailedPriceOverview (symbol, rates) {
+    symbol = symbol.toUpperCase()
+    const ratesList = rates.rates
+    // Fiat
+    const dollarPrice = Misc.printCurrencyWithoutSymbol(ratesList.USD)
+    const euroPrice = Misc.printCurrencyWithoutSymbol(ratesList.EUR)
     const poundSterlingPrice = Misc.printCurrencyWithoutSymbol(ratesList.GBP)
     const japaneseYenPrice = Misc.printCurrencyWithoutSymbol(ratesList.JPY)
     const swissFrancPrice = Misc.printCurrencyWithoutSymbol(ratesList.CHF)
@@ -41,15 +71,15 @@ class ProcessResult {
     const baseName = (rates.base_name) ? rates.base_name : symbol
 
     return `*Current prices of ${baseName} (${baseCurrency}) in fiat*
- • ${dollarPrice} USD
- • ${euroPrice} EUR
- • ${poundSterlingPrice} GBP
- • ${japaneseYenPrice} JPY
- • ${swissFrancPrice} CHF
- • ${australianDollarPrice} AUD
- • ${canadianDollarPrice} CAD
- • ${chineseRenminbiPrice} CNH
- • ${hongKongDollarPrice} HKD
+• ${dollarPrice} USD
+• ${euroPrice} EUR
+• ${poundSterlingPrice} GBP
+• ${japaneseYenPrice} JPY
+• ${swissFrancPrice} CHF
+• ${australianDollarPrice} AUD
+• ${canadianDollarPrice} CAD
+• ${chineseRenminbiPrice} CNH
+• ${hongKongDollarPrice} HKD
 
 *Current prices of ${baseName} in crypto valuta*
 • ${bitcoinPrice} [BTC](${COINMARKET_URL}/currencies/bitcoin)

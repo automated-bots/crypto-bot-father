@@ -70,6 +70,22 @@ More info:
         .catch(error => console.error(error))
     })
 
+    // detailedprice command (/detailedprice): default Bitcoin Cash
+    this.bot.onText(/^[/|!]detailedprice\S*$/, msg => {
+      // Fall-back to Bitcoin Cash (symbol: BCH)
+      this.fetcher.detailedPriceQuotes('BCH')
+        .then(message => this.sendMessage(msg.chat.id, message))
+        .catch(error => console.error(error))
+    })
+
+    // detailedprice command (/detailedprice <symbol>) - provide your own symbol
+    this.bot.onText(/[/|!]detailedprice@?\S* (.+)/, (msg, match) => {
+      const symbol = match[1].trim()
+      this.fetcher.detailedPriceQuotes(symbol)
+        .then(message => this.sendMessage(msg.chat.id, message))
+        .catch(error => console.error(error))
+    })
+
     // stats command (/stats): default Bitcoin Cash
     this.bot.onText(/^[/|!]stats\S*$/, msg => {
       // Fall-back to Bitcoin Cash (symbol: BCH)
