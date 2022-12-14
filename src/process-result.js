@@ -21,7 +21,7 @@ class ProcessResult {
 
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
-    const urlBaseName = baseName.toLowerCase().replaceAll(' ', '-')
+    const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
 
     let cryptoPrices = ''
     if (symbol === 'BCH') {
@@ -33,7 +33,7 @@ class ProcessResult {
 • ${bitcoinCashPrice} [BCH](${COINGECKO_URL}/bitcoin-cash)`
     }
 
-    return `*Current prices of ${baseName} - [${baseCurrency}](${COINGECKO_URL}/${urlBaseName}) in fiat and crypto*
+    return `*Current prices of ${baseName} ([${baseCurrency}](${COINGECKO_URL}/${urlBaseName})) in fiat and crypto*
 • ${dollarPrice} USD
 • ${euroPrice} EUR
 ${cryptoPrices}
@@ -70,9 +70,9 @@ ${cryptoPrices}
     const dogecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.DOGE)
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
-    const urlBaseName = baseName.toLowerCase().replaceAll(' ', '-')
+    const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
 
-    return `*Current prices of ${baseName} - [${baseCurrency}](${COINGECKO_URL}/${urlBaseName}) in fiat*
+    return `*Current prices of ${baseName} ([${baseCurrency}](${COINGECKO_URL}/${urlBaseName})) in fiat*
 • ${dollarPrice} USD
 • ${euroPrice} EUR
 • ${poundSterlingPrice} GBP
@@ -135,7 +135,7 @@ Price: 1 ${symbol} = ${ethPrice} ETH`
     const changeIcon7d = (Math.sign(quote.percentage_changed_7d) === 1) ? '🔼' : '🔽'
     const changeIcon30d = (Math.sign(quote.percentage_changed_30d) === 1) ? '🔼' : '🔽'
     const changeIcon90d = (Math.sign(quote.percentage_changed_90d) === 1) ? '🔼' : '🔽'
-    return `*General coin data for ${name} - [${symbol}](${meta.cmc_url})*
+    return `*General coin data for ${name} ([${symbol}](${meta.cmc_url}))*
 Rank: #${meta.rank}
 Circulating supply: ${circulatingSupply} ${symbol}s
 Total supply: ${totalSupply} ${symbol}s
