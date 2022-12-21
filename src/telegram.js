@@ -70,8 +70,6 @@ More info:
       let quoteSymbol = null
       if (typeof match[2] !== 'undefined') {
         quoteSymbol = match[2].trim()
-      } else {
-        console.log('Ya its empty..')
       }
       this.fetcher.priceQuotes(symbol, quoteSymbol)
         .then(message => this.sendMessage(msg.chat.id, message))

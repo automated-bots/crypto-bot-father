@@ -11,13 +11,13 @@ const COINGECKO_URL = 'https://www.coingecko.com/en/coins'
 class ProcessResult {
   static priceOverview (symbol, rates, quoteSymbol = null) {
     symbol = symbol.toUpperCase()
-    quoteSymbol = quoteSymbol.toUpperCase()
     const ratesList = rates.rates
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
     const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
 
     if (quoteSymbol) {
+      quoteSymbol = quoteSymbol.toUpperCase()
       if (Object.keys(ratesList).includes(quoteSymbol)) {
         const quotePrice = Misc.printCurrencyWithoutSymbol(ratesList[quoteSymbol], 8)
         return `Current price of ${baseName} ([${baseCurrency}](${COINGECKO_URL}/${urlBaseName})) is ${quotePrice} ${quoteSymbol}`
