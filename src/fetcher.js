@@ -231,13 +231,14 @@ Next block hash: ${nextBlockText}`
   /**
     * Retrieve latest quote information and exchange rates (fiat + crypto).
     * @param {String} symbol Crypto symbol
+    * @param {String} quoteSymbol (Optionally) Quote symbol (eg. USD, EUR, BTC, ADA)
     * @return {Promise} message
     */
-  async priceQuotes (symbol) {
+  async priceQuotes (symbol, quoteSymbol = null) {
     try {
       const rates = await this.jsFinance.get('/rates/' + symbol)
       if (rates.data) {
-        return ProcessResult.priceOverview(symbol, rates.data)
+        return ProcessResult.priceOverview(symbol, rates.data, quoteSymbol)
       } else {
         return 'Empty API response'
       }

@@ -30,7 +30,7 @@ class Telegram {
       const text = `
 General:
   /help - Show help output
-  /price <symbol> - Get latest crypto price overview (default BCH)
+  /price <symbol> [<quote_symbol>] - Get latest crypto price (default BCH)
   /detailedprice <symbol> - Get latest detailed price overview (default BCH)
   /stats <symbol> - Get latest market statistics (default BCH)
   /overview [<limit>] - General crypto market overview, limit is optional
@@ -63,10 +63,14 @@ More info:
         .catch(error => console.error(error))
     })
 
-    // price command (/price <symbol>) - provide your own symbol
-    this.bot.onText(/[/|!]price@?\S* (.+)/, (msg, match) => {
+    // price command (/price <symbol> [<quote_symbol>]) - provide your own base symbol, and optionally a second parameter as the quote symbol
+    this.bot.onText(/[/|!]price@?\S* (\w+) ?(\w+)?/, (msg, match) => {
       const symbol = match[1].trim()
-      this.fetcher.priceQuotes(symbol)
+      let quoteSymbol = null
+      if (match.length >= 3) {
+        quoteSymbol = match[2].trim()
+      }
+      this.fetcher.priceQuotes(symbol, quoteSymbol)
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
@@ -79,8 +83,8 @@ More info:
         .catch(error => console.error(error))
     })
 
-    // detailedprice command (/detailedprice <symbol>) - provide your own symbol
-    this.bot.onText(/[/|!]detailedprice@?\S* (.+)/, (msg, match) => {
+    // detailedprice command (/detailedprice <symbol>) - provide your own base symbol
+    this.bot.onText(/[/|!]detailedprice@?\S* (\w+)/, (msg, match) => {
       const symbol = match[1].trim()
       this.fetcher.detailedPriceQuotes(symbol)
         .then(message => this.sendMessage(msg.chat.id, message))
@@ -96,7 +100,7 @@ More info:
     })
 
     // stats command (/stats <symbol>) - provide your own symbol
-    this.bot.onText(/[/|!]stats@?\S* (.+)/, (msg, match) => {
+    this.bot.onText(/[/|!]stats@?\S* (\w+)/, (msg, match) => {
       const symbol = match[1].trim()
       this.fetcher.marketStats(symbol)
         .then(message => this.sendMessage(msg.chat.id, message))
@@ -111,7 +115,7 @@ More info:
     })
 
     // Market overview command (/overview) - in-/decrease limit to coins
-    this.bot.onText(/[/|!]overview@?\S* (.+)/, (msg, match) => {
+    this.bot.onText(/[/|!]overview@?\S* (\d+)/, (msg, match) => {
       const limit = parseInt(match[1].trim())
       if (isNaN(limit)) {
         this.sendMessage(msg.chat.id, 'Error: Provide a number as argument.')
@@ -136,7 +140,7 @@ More info:
     })
 
     // Detailed market overview command (/detailedoverview) - in-/decrease limit to coins
-    this.bot.onText(/[/|!]detailedoverview@?\S* (.+)/, (msg, match) => {
+    this.bot.onText(/[/|!]detailedoverview@?\S* (\d+)/, (msg, match) => {
       const limit = parseInt(match[1].trim())
       if (isNaN(limit)) {
         this.sendMessage(msg.chat.id, 'Error: Provide a number as argument.')
@@ -200,7 +204,7 @@ More info:
       this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin transaction hash as argument: /bchtransaction <hash>')
     })
 
-    this.bot.onText(/[/|!]bchtransaction@?\S* (.+)/, (msg, match) => {
+    this.bot.onText(/[/|!]bchtransaction@?\S* (\w+)/, (msg, match) => {
       const hash = match[1].trim()
       // TODO: Improve details like fee & total transaction amounts
       this.fetcher.bitcoinTransaction(hash)
@@ -209,7 +213,7 @@ More info:
     })
 
     // transactions command (/bchtransactions <address>)
-    this.bot.onText(/[/|!]bchtransactions@?\S* (.+)/, (msg, match) => {
+    this.bot.onText(/[/|!]bchtransactions@?\S* (\w+)/, (msg, match) => {
       const address = match[1].trim()
       // TODO: Fully missing
       this.fetcher.bitcoinTransactions(address)
@@ -222,7 +226,7 @@ More info:
     })
 
     // Bitcoin block command (/bchblock <hash>)
-    this.bot.onText(/[/|!]bchblock@?\S* (.+)/, (msg, match) => {
+    this.bot.onText(/[/|!]bchblock@?\S* (\w+)/, (msg, match) => {
       const hash = match[1].trim()
       if (Misc.isSha256(hash)) {
         // Retrieved block by hash (sha256)

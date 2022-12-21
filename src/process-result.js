@@ -9,19 +9,26 @@ const COINGECKO_URL = 'https://www.coingecko.com/en/coins'
  * Especially useful for big message that also requires pre-processing.
  */
 class ProcessResult {
-  static priceOverview (symbol, rates) {
+  static priceOverview (symbol, rates, quoteSymbol = null) {
     symbol = symbol.toUpperCase()
     const ratesList = rates.rates
+    const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
+    const baseName = (rates.base_name) ? rates.base_name : symbol
+    const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
+
+    if (quoteSymbol) {
+      if (Object.keys(ratesList).includes(quoteSymbol)) {
+        const quotePrice = Misc.printCurrencyWithoutSymbol(ratesList[quoteSymbol], 8)
+        return `Current price of ${baseName} ([${baseCurrency}](${COINGECKO_URL}/${urlBaseName})) is ${quotePrice} ${quoteSymbol}`
+      }
+    }
+
     // Fiat
     const dollarPrice = Misc.printCurrencyWithoutSymbol(ratesList.USD)
     const euroPrice = Misc.printCurrencyWithoutSymbol(ratesList.EUR)
     // Crypto
     const bitcoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.BTC, 8)
     const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(ratesList.BCH, 8)
-
-    const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
-    const baseName = (rates.base_name) ? rates.base_name : symbol
-    const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
 
     let cryptoPrices = ''
     if (symbol === 'BCH') {
@@ -36,8 +43,7 @@ class ProcessResult {
     return `*Current prices of ${baseName} (*[${baseCurrency}](${COINGECKO_URL}/${urlBaseName})*) in fiat and crypto*
 • ${dollarPrice} USD
 • ${euroPrice} EUR
-${cryptoPrices}
-`
+${cryptoPrices}`
   }
 
   static detailedPriceOverview (symbol, rates) {
