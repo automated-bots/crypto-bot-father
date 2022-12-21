@@ -65,7 +65,6 @@ More info:
 
     // price command (/price <symbol> [<quote_symbol>]) - provide your own base symbol, and optionally a second parameter as the quote symbol
     this.bot.onText(/[/|!]price@?\S* (\w+) ?(\w+)?/, (msg, match) => {
-      console.log(JSON.stringify(match))
       const symbol = match[1].trim()
       let quoteSymbol = null
       if (typeof match[2] !== 'undefined') {
