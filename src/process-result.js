@@ -11,6 +11,7 @@ const COINGECKO_URL = 'https://www.coingecko.com/en/coins'
 class ProcessResult {
   static priceOverview (symbol, rates, quoteSymbol = null) {
     symbol = symbol.toUpperCase()
+    quoteSymbol = quoteSymbol.toUpperCase()
     const ratesList = rates.rates
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
