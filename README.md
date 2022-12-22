@@ -112,5 +112,4 @@ bitcoin-cli createwallet "testwallet"
 
 ## Useful links
 
-- [Bitcoin Core Blog](https://bitcoincore.org/en/blog/)
-- [Bitcoin.org FAQ](https://bitcoin.org/en/faq)
+- [BCHN Docs](https://docs.bitcoincashnode.org/)
