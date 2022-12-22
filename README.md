@@ -32,7 +32,7 @@ There is a Docker image [available on DockerHub](https://hub.docker.com/reposito
 
 - [Node.js](https://nodejs.org/en/download/)
 - npm (package manager)
-- [Bitcoin Core](https://github.com/bitcoin/bitcoin)
+- [Bitcoin Cash Node](https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node)
 - Telegram bot via [@bothfather](https://telegram.me/BotFather)
 
 ### Running
