@@ -7,8 +7,9 @@ const Misc = require('./miscellaneous')
  * Fetch or calculate the data we need
  */
 class Fetcher {
-  constructor (bitcoinCash) {
+  constructor (bitcoinCash, fulcrum) {
     this.bitcoinCash = bitcoinCash
+    this.fulcrum = fulcrum
     this.jsFinance = axios.create({
       baseURL: 'https://finance.melroy.org/v1',
       timeout: 10000
@@ -213,9 +214,10 @@ Next block hash: ${nextBlockText}`
    * @return {Promise} message
    */
   async bitcoinAddress (address) {
-    // const addressResult = await this.bitcoinCash.getAddressInfo(address)
-    // TODO: https://stackoverflow.com/questions/67124777/bitcoin-rpc-get-balance-of-address-outside-wallet
-    return 'not yet implemented'
+    const result = await this.fulcrum.getBalance(address)
+    const json = JSON.stringify(result)
+    console.log(json)
+    return json
   }
 
   /**

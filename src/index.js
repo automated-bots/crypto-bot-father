@@ -7,6 +7,8 @@ const BITCOIN_RPC_HOST = process.env.BITCOIN_RPC_HOST || 'localhost'
 const BITCOIN_RPC_PORT = process.env.BITCOIN_RPC_PORT || 8332
 const BITCOIN_RPC_USER = process.env.BITCOIN_RPC_USERNAME || 'bitcoin'
 const BITCOIN_RPC_PASS = process.env.BITCOIN_RPC_PASSWORD || 'xyz'
+const FULCRUM_RPC_HOST = process.env.BITCOIN_RPC_HOST || 'localhost'
+const FULCRUM_RPC_PORT = process.env.BITCOIN_RPC_PORT || 50001
 const botUrl = process.env.TELEGRAM_BOT_URL || 'https://cryptofather.melroy.org'
 const port = process.env.PORT || 3007
 
@@ -16,6 +18,7 @@ const TelegramBot = require('node-telegram-bot-api')
 const express = require('express')
 const bodyParser = require('body-parser')
 const BitcoinCash = require('./bitcoin')
+const Fulcrum = require('./fulcrum')
 const Fetcher = require('./fetcher')
 const Telegram = require('./telegram')
 const routes = require('./routes')
@@ -28,7 +31,8 @@ if (!TELEGRAM_TOKEN) {
 
 // Create helper objects
 const bitcoinCash = new BitcoinCash(BITCOIN_RPC_HOST, BITCOIN_RPC_PORT, BITCOIN_RPC_USER, BITCOIN_RPC_PASS)
-const fetcher = new Fetcher(bitcoinCash)
+const fulcrum = new Fulcrum(FULCRUM_RPC_HOST, FULCRUM_RPC_PORT)
+const fetcher = new Fetcher(bitcoinCash, fulcrum)
 
 const telegramBot = new TelegramBot(TELEGRAM_TOKEN)
 const tel = new Telegram(telegramBot, fetcher)

@@ -105,16 +105,6 @@ class BitcoinCash {
       })
   }
 
-  /*
-   * Get address details
-   * @return {Promise} Axios promise (id & balance)
-   */
-  getAddressInfo (address) {
-    // https://bitcoin.stackexchange.com/questions/10090/how-to-get-an-addresss-balance-with-the-bitcoin-client
-    // https://bitcoin.org/en/developer-reference#getreceivedbyaddress
-    // TODO:
-  }
-
   /**
    * Get raw transaction details (already decoded)
    * @param {String} hash Transaction hash
