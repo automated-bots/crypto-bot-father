@@ -37,15 +37,15 @@ General:
   /detailedoverview [<limit>] - Detailed crypto market overview, limit is optional
 
 Bitcoin Cash:
-  /bchstatus - Retrieve Bitcoin Cash Node info
-  /bchnetwork - Get Bitcoin Cash Network info
-  /bchinfo - Get Bitcoin Cash blockchain, mining and exchange stats
-  /bchfee - Get fee estimation
-  /bchlastblocks - Get the last 10 blocks on Bitcoin Cash network
-  /bchtransaction <hash> - Get Bitcoin Cash transaction details
-  /bchaddress <address> - Get Bitcoin Cash address details
-  /bchtransactions <address> - Get last 10 Bitcoin Cash transactions from an address
-  /bchblock <hash> - Get Bitcoin Cash block details
+  /balance <address> - Get wallet balance from a BCH address
+  /transaction <hash> - Get transaction details from a BCH transaction
+  /block <hash> - Get block details from the BCH blockchain
+  /info - Get blockchain, mining and exchange stats from the BCH network
+  /nodestatus - Retrieve Bitcoin Cash Node info
+  /network - Get Bitcoin Cash Network info
+  /fee - Get estimated fee for BCH
+  /lastblocks - Get the last 10 blocks on BCH network (TODO)
+  /transactions <address> - Get latest 10 BCH transactions from an address (TODO)
 
 More info:
   /why - Why Bitcoin?
@@ -157,15 +157,15 @@ More info:
       }
     })
 
-    // Bitcoin cash node status command (/bchstatus)
-    this.bot.onText(/[/|!]bchstatus/, msg => {
+    // Bitcoin cash node status command (/nodestatus)
+    this.bot.onText(/[/|!]nodestatus/, msg => {
       this.fetcher.bitcoinStatus()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
-    // Bitcoin network command (/bchnetwork)
-    this.bot.onText(/[/|!]bchnetwork/, msg => {
+    // Bitcoin network command (/network)
+    this.bot.onText(/[/|!]network/, msg => {
       this.fetcher.bitcoinNetworkInfo()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => {
@@ -174,37 +174,38 @@ More info:
         })
     })
 
-    // Bitcoin information command (/bchinfo)
-    this.bot.onText(/[/|!]bchinfo/, msg => {
+    // Bitcoin Cash information command (/info)
+    this.bot.onText(/[/|!]info/, msg => {
       this.fetcher.bitcoinInfo()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
-    // Bitcoin estimate fee command (/bchfee)
-    this.bot.onText(/[/|!]bchfee/, msg => {
+    // Bitcoin Cash estimated fee command (/fee)
+    this.bot.onText(/[/|!]fee/, msg => {
       this.fetcher.bitcoinEstimateFee()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
-    this.bot.onText(/^[/|!]bchaddress\S*$/, msg => {
-      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash address as argument: /bchaddress <bitcoincash:address>')
+    this.bot.onText(/^[/|!]balance\S*$/, msg => {
+      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash address as argument: /balance <bitcoincash:address>')
     })
 
-    // address command (/bchaddress <address>)
-    this.bot.onText(/[/|!]bchaddress@?\S* (.+)/, (msg, match) => {
+    // address command (/balance <address>)
+    this.bot.onText(/[/|!]balance@?\S* (.+)/, (msg, match) => {
       const address = match[1].trim()
-      this.fetcher.bitcoinAddress(address)
+      this.fetcher.bitcoinAddressBalance(address)
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
-    this.bot.onText(/^[/|!]bchtransaction\S*$/, msg => {
-      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash transaction hash as argument: /bchtransaction <hash>')
+    this.bot.onText(/^[/|!]transaction\S*$/, msg => {
+      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash transaction hash as argument: /transaction <hash>')
     })
 
-    this.bot.onText(/[/|!]bchtransaction@?\S* (\w+)/, (msg, match) => {
+    // transaction details (/transaction <hash>)
+    this.bot.onText(/[/|!]transaction@?\S* (\w+)/, (msg, match) => {
       const hash = match[1].trim()
       // TODO: Improve details like fee & total transaction amounts
       this.fetcher.bitcoinTransaction(hash)
@@ -212,8 +213,8 @@ More info:
         .catch(error => console.error(error))
     })
 
-    // transactions command (/bchtransactions <address>)
-    this.bot.onText(/[/|!]bchtransactions@?\S* (\w+)/, (msg, match) => {
+    // transactions command (/transactions <address>)
+    this.bot.onText(/[/|!]transactions@?\S* (\w+)/, (msg, match) => {
       const address = match[1].trim()
       // TODO: Fully missing
       this.fetcher.bitcoinTransactions(address)
@@ -221,12 +222,12 @@ More info:
         .catch(error => console.error(error))
     })
 
-    this.bot.onText(/^[/|!]bchblock\S*$/, msg => {
-      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash block hash as argument: /bchblock <hash>')
+    this.bot.onText(/^[/|!]block\S*$/, msg => {
+      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash block hash as argument: /block <hash>')
     })
 
-    // Bitcoin block command (/bchblock <hash>)
-    this.bot.onText(/[/|!]bchblock@?\S* (\w+)/, (msg, match) => {
+    // Bitcoin Cash block command (/block <hash>)
+    this.bot.onText(/[/|!]block@?\S* (\w+)/, (msg, match) => {
       const hash = match[1].trim()
       if (Misc.isSha256(hash)) {
         // Retrieved block by hash (sha256)
@@ -239,15 +240,15 @@ More info:
       }
     })
 
-    // lastblocks command (/bchlastblocks)
+    // lastblocks command (/lastblocks)
     // TODO: Implemented getLastBlocks
-    this.bot.onText(/[/|!]bchlastblocks/, msg => {
+    this.bot.onText(/[/|!]lastblocks/, msg => {
       this.sendMessage(msg.chat.id, '**Not yet implemented**')
     })
 
-    // top10 command (/bchtop10)
+    // top10 command (/top10)
     // TODO: implement getTop10BiggestTransactions
-    this.bot.onText(/[/|!]bchtop10/, msg => {
+    this.bot.onText(/[/|!]top10/, msg => {
       this.sendMessage(msg.chat.id, 'Not yet implemented')
     })
 

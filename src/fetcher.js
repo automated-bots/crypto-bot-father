@@ -141,7 +141,7 @@ Reachable: ${networks[i].reachable}
    * Estimate the Bitcoin Cash fee
    */
   async bitcoinEstimateFee () {
-    const estimateFee = await this.bitcoinCash.estimateFees()
+    const estimateFee = await this.bitcoinCash.estimateFee()
     return `Estimated fee: ${estimateFee} BCH/kB`
   }
 
@@ -209,15 +209,21 @@ Next block hash: ${nextBlockText}`
   }
 
   /**
-   * Retrieve Bitcoin address details
-   * @param {String} hash Bitcoin address
+   * Retrieve Bitcoin Cash address balance
+   * @param {String} address Bitcoin Cash address
    * @return {Promise} message
    */
-  async bitcoinAddress (address) {
+  async bitcoinAddressBalance (address) {
     const result = await this.fulcrum.getBalance(address)
-    const json = JSON.stringify(result)
-    console.log(json)
-    return json
+    if (result && 'confirmed' in result) {
+      const confirmedBch = Misc.printCurrencyWithoutSymbol(result.confirmed / 100000000.0, 8)
+      const unconfirmedBch = Misc.printCurrencyWithoutSymbol(result.unconfirmed / 100000000.0, 8)
+      return `*Balance:* [${confirmedBch} BCH](${Misc.blockchainExplorerUrl()}/address/${address}) (unconfirmed: ${unconfirmedBch} BCH)`
+    } else if (result && 'message' in result) {
+      return `Error while retrieving the balance: ${result.message}.`
+    } else {
+      return 'Something went wrong getting the balance. Please, try again.'
+    }
   }
 
   /**

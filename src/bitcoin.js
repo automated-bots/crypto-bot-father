@@ -94,7 +94,7 @@ class BitcoinCash {
    * Estimate BCH fee
    * @return {Promise} Axios promise (fee)
    */
-  estimateFees () {
+  estimateFee () {
     return this.bitcoind.post('/', {
       jsonrpc: '1.0',
       id: this.rpcId,

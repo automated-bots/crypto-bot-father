@@ -7,7 +7,7 @@ class Misc {
    * @returns URL
    */
   static blockchainExplorerUrl () {
-    return 'https://explorer.bitcoinunlimited.info'
+    return 'https://explorer.melroy.org'
   }
 
   /**

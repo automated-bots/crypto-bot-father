@@ -9,8 +9,8 @@ class Fulcrum {
   constructor (fulcrumPort, fulcrumHost = '127.0.0.1') {
     this.port = fulcrumPort
     this.host = fulcrumHost
-    this.rpcId = 'Crypto Bot'
-    this.received = ''
+    this.received = {}
+    this.receivedError = {}
     this.connected = false
     this.connect()
   }
@@ -22,12 +22,23 @@ class Fulcrum {
     this.fulcrum.setKeepAlive(true, 0)
     this.fulcrum.setNoDelay(true)
     this.fulcrum.on('error', (error) => {
-      console.error(error)
+      console.error(`Fulcrum error:\n ${error}`)
       // TODO: when connection can't be made (which error?), set this.connected = false
     })
     this.fulcrum.on('data', data => {
-      this.received = data
-      console.log(JSON.stringify(this.received))
+      try {
+        const json = JSON.parse(data)
+        if ('id' in json && 'result' in json) {
+          this.received[json.id] = json
+        } else if ('error' in json && 'id' in json && 'message' in json.error) {
+          this.receivedError[json.id] = json.error
+        } else {
+          console.error('Missing JSON data in received object')
+          console.error(`Received data: ${data}`)
+        }
+      } catch (err) {
+        console.error(err)
+      }
     })
     this.fulcrum.on('close', e => {
       this.connected = false
@@ -53,19 +64,35 @@ class Fulcrum {
    * @param {String} address Bitcoin Cash address
    * @erturn {Promise} Axios promise
    */
-  getBalance (address) {
+  async getBalance (address) {
     if (!this.connected) {
       this.connect() // Try 1x a reconnect for now
     }
     const content = JSON.stringify({
       jsonrpc: '2.0',
-      id: this.rpcId,
+      id: 'getbalance',
       method: 'blockchain.address.get_balance',
       params: [address]
     })
     this.fulcrum.write(content + '\n')
-    // TODO: Wait for data? And return the received data
-    return 'Will be implemented soonish'
+    // Now try to retrieve the data
+    let retries = 0
+    while (!('getbalance' in this.received)) {
+      await new Promise(resolve => setTimeout(resolve, 10))
+      retries++
+      if (retries === 1000) break
+    }
+    if ('getbalance' in this.received) {
+      const result = this.received.getbalance.result
+      delete this.received.getbalance
+      return result
+    } else if ('getbalance' in this.receivedError) {
+      const result = this.receivedError.getbalance
+      delete this.receivedError.getbalance
+      return result
+    } else {
+      return null
+    }
   }
 }
 

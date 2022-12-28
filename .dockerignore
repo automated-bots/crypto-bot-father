@@ -1,0 +1,13 @@
+secrets.env
+
+node_modules/
+scripts/
+images/
+docs/
+
+.git/
+.vscode/
+.gitlab-ci.yml
+nginx_example.conf
+bitcoind.service
+docker-compose.yml
