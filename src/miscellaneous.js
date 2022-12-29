@@ -94,6 +94,20 @@ class Misc {
   }
 
   /**
+   * Format a number or a string to a specific min/max fraction digits (digits behind the comma)
+   * @param {Number|String} value Value of a string or number
+   * @param {Number} minFractionDigits minimum fraction digits (default: 0)
+   * @param {Number} maxFractionDigits maximum fraction digits (default: 2)
+   * @returns string formatted number
+   */
+  static printNumber (value, minFractionDigits = 0, maxFractionDigits = 2) {
+    return new Intl.NumberFormat('en-IN', {
+      minimumFractionDigits: minFractionDigits,
+      maximumFractionDigits: maxFractionDigits
+    }).format(value)
+  }
+
+  /**
    * Validate if hash is SHA256
    * @param {string} - hash string
    * @return {Boolean} True if SHA256 otherwise false

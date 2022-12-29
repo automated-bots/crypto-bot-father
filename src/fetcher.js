@@ -216,7 +216,7 @@ Next block hash: ${nextBlockText}`
    * Retrieve latest Bitcoin Cash blocks
    * @return {Promise} message
    */
-  async bitcoinBlocks () {
+  async bitcoinLatestBlocks () {
     const blocks = await this.explorer.get('/blocks')
     if (blocks.data && Array.isArray(blocks.data) && blocks.data.length >= 8) {
       let returnData = '*Latest 8 blocks:*\n'
@@ -229,6 +229,27 @@ Next block hash: ${nextBlockText}`
       return returnData
     } else {
       return 'Something went wrong trying to receive the latest Bitcoin Cash blocks'
+    }
+  }
+
+  /**
+   * Retrieve latest Bitcoin Cash trnasactions
+   * @return {Promise} message
+   */
+  async bitcoinLatestTransactions () {
+    const txs = await this.explorer.get('/mempool/recent')
+    if (txs.data && Array.isArray(txs.data) && txs.data.length >= 8) {
+      let returnData = '*Latest 8 TXs:*\n'
+      for (let i = 0; i < 8; i++) {
+        const tx = txs.data[i]
+        const txSmall = tx.txid.substring(0, 3) + '...' + tx.txid.substr(tx.txid.length - 3)
+        const amount = Misc.printCurrencyWithoutSymbol(tx.value / 100000000.0, 5)
+        const fee = Misc.printNumber(tx.fee / tx.size, 0, 2)
+        returnData += `• TXID: [${txSmall}](${Misc.blockchainExplorerUrl()}/tx/${tx.txid}), Amount: ${amount} BCH, Fee: ${fee} sat/B\n`
+      }
+      return returnData
+    } else {
+      return 'Something went wrong trying to receive the latest Bitcoin Cash transactions'
     }
   }
 

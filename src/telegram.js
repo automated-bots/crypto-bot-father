@@ -26,7 +26,7 @@ class Telegram {
    */
   setCommands () {
     // help command - show available commands
-    this.bot.onText(/[/|!]help/, msg => {
+    this.bot.onText(/^[/|!]help/, msg => {
       const text = `
 General:
   /help - Show help output
@@ -35,12 +35,15 @@ General:
   /stats <symbol> - Get latest market statistics (default BCH)
   /overview [<limit>] - General crypto market overview, limit is optional
   /detailedoverview [<limit>] - Detailed crypto market overview, limit is optional
+  /faq - Frequently Asked Questions
 
 Bitcoin Cash:
   /balance <address> - Get wallet balance from a BCH address
   /transaction <hash> - Get transaction details from a BCH transaction
   /block <hash> - Get block details from the BCH blockchain
-  /latestblocks - Get the latest 8 blocks on BCH network
+  /latestblocks - Get the 8 latest blocks on BCH network
+  /latesttransactions - Get the 8 latest transactions on BCH network
+  /latesttx - Get the 8 latest transactions on BCH network
   /info - Get blockchain, mining and exchange stats from the BCH network
   /nodestatus - Retrieve Bitcoin Cash Node info
   /network - Get Bitcoin Cash Network info
@@ -64,7 +67,7 @@ More info:
     })
 
     // price command (/price <symbol> [<quote_symbol>]) - provide your own base symbol, and optionally a second parameter as the quote symbol
-    this.bot.onText(/[/|!]price@?\S* (\w+) ?(\w+)?/, (msg, match) => {
+    this.bot.onText(/^[/|!]price@?\S* (\w+) ?(\w+)?/, (msg, match) => {
       const symbol = match[1].trim()
       let quoteSymbol = null
       if (typeof match[2] !== 'undefined') {
@@ -84,7 +87,7 @@ More info:
     })
 
     // detailedprice command (/detailedprice <symbol>) - provide your own base symbol
-    this.bot.onText(/[/|!]detailedprice@?\S* (\w+)/, (msg, match) => {
+    this.bot.onText(/^[/|!]detailedprice@?\S* (\w+)/, (msg, match) => {
       const symbol = match[1].trim()
       this.fetcher.detailedPriceQuotes(symbol)
         .then(message => this.sendMessage(msg.chat.id, message))
@@ -100,7 +103,7 @@ More info:
     })
 
     // stats command (/stats <symbol>) - provide your own symbol
-    this.bot.onText(/[/|!]stats@?\S* (\w+)/, (msg, match) => {
+    this.bot.onText(/^[/|!]stats@?\S* (\w+)/, (msg, match) => {
       const symbol = match[1].trim()
       this.fetcher.marketStats(symbol)
         .then(message => this.sendMessage(msg.chat.id, message))
@@ -115,7 +118,7 @@ More info:
     })
 
     // Market overview command (/overview) - in-/decrease limit to coins
-    this.bot.onText(/[/|!]overview@?\S* (\d+)/, (msg, match) => {
+    this.bot.onText(/^[/|!]overview@?\S* (\d+)/, (msg, match) => {
       const limit = parseInt(match[1].trim())
       if (isNaN(limit)) {
         this.sendMessage(msg.chat.id, 'Error: Provide a number as argument.')
@@ -140,7 +143,7 @@ More info:
     })
 
     // Detailed market overview command (/detailedoverview) - in-/decrease limit to coins
-    this.bot.onText(/[/|!]detailedoverview@?\S* (\d+)/, (msg, match) => {
+    this.bot.onText(/^[/|!]detailedoverview@?\S* (\d+)/, (msg, match) => {
       const limit = parseInt(match[1].trim())
       if (isNaN(limit)) {
         this.sendMessage(msg.chat.id, 'Error: Provide a number as argument.')
@@ -158,14 +161,14 @@ More info:
     })
 
     // Bitcoin cash node status command (/nodestatus)
-    this.bot.onText(/[/|!]nodestatus/, msg => {
+    this.bot.onText(/^[/|!]nodestatus/, msg => {
       this.fetcher.bitcoinStatus()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
     // Bitcoin network command (/network)
-    this.bot.onText(/[/|!]network/, msg => {
+    this.bot.onText(/^[/|!]network/, msg => {
       this.fetcher.bitcoinNetworkInfo()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => {
@@ -175,14 +178,14 @@ More info:
     })
 
     // Bitcoin Cash information command (/info)
-    this.bot.onText(/[/|!]info/, msg => {
+    this.bot.onText(/^[/|!]info/, msg => {
       this.fetcher.bitcoinInfo()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
     // Bitcoin Cash estimated fee command (/fee)
-    this.bot.onText(/[/|!]fee/, msg => {
+    this.bot.onText(/^[/|!]fee/, msg => {
       this.fetcher.bitcoinEstimateFee()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
@@ -193,7 +196,7 @@ More info:
     })
 
     // address command (/balance <address>)
-    this.bot.onText(/[/|!]balance@?\S* (.+)/, (msg, match) => {
+    this.bot.onText(/^[/|!]balance@?\S* (.+)/, (msg, match) => {
       const address = match[1].trim()
       this.fetcher.bitcoinAddressBalance(address)
         .then(message => this.sendMessage(msg.chat.id, message))
@@ -205,7 +208,7 @@ More info:
     })
 
     // transaction details (/transaction <hash>)
-    this.bot.onText(/[/|!]transaction@?\S* (\w+)/, (msg, match) => {
+    this.bot.onText(/^[/|!]transaction@?\S* (\w+)/, (msg, match) => {
       const hash = match[1].trim()
       // TODO: Improve details like fee & total transaction amounts
       this.fetcher.bitcoinTransaction(hash)
@@ -214,7 +217,7 @@ More info:
     })
 
     // transactions command (/transactions <address>)
-    this.bot.onText(/[/|!]transactions@?\S* (\w+)/, (msg, match) => {
+    this.bot.onText(/^[/|!]transactions@?\S* (\w+)/, (msg, match) => {
       const address = match[1].trim()
       // TODO: Fully missing
       this.fetcher.bitcoinTransactions(address)
@@ -227,7 +230,7 @@ More info:
     })
 
     // Bitcoin Cash block command (/block <hash>)
-    this.bot.onText(/[/|!]block@?\S* (\w+)/, (msg, match) => {
+    this.bot.onText(/^[/|!]block@?\S* (\w+)/, (msg, match) => {
       const hash = match[1].trim()
       if (Misc.isSha256(hash)) {
         // Retrieved block by hash (sha256)
@@ -241,15 +244,22 @@ More info:
     })
 
     // latestblocks command (/latestblocks), returns latest 8 blocks
-    this.bot.onText(/[/|!]latestblocks/, msg => {
-      this.fetcher.bitcoinBlocks()
+    this.bot.onText(/^[/|!]latestblocks/, msg => {
+      this.fetcher.bitcoinLatestBlocks()
+        .then(message => this.sendMessage(msg.chat.id, message))
+        .catch(error => console.error(error))
+    })
+
+    // latesttransactions command (/latesttransactions or /latesttx), returns latest 8 TXs
+    this.bot.onText(/^[/|!](latesttransactions|latesttx)/, msg => {
+      this.fetcher.bitcoinLatestTransactions()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
     // top10 command (/top10)
     // TODO: implement getTop10BiggestTransactions
-    this.bot.onText(/[/|!]top10/, msg => {
+    this.bot.onText(/^[/|!]top10/, msg => {
       this.sendMessage(msg.chat.id, 'Not yet implemented')
     })
 
@@ -291,9 +301,9 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
     })
 
     // Give FAQ Link
-    /* this.bot.onText(/^[/|!]faq\S*$/, msg => {
-      this.sendMessage(msg.chat.id, '[Read FAQ](' + FAQ_URL + ')')
-    }) */
+    this.bot.onText(/^[/|!]faq\S*$/, msg => {
+      this.sendMessage(msg.chat.id, '[Read FAQ](https://bitcoincashpodcast.com/faqs)')
+    })
 
     // Other stuff
     this.bot.on('message', msg => {
@@ -302,7 +312,9 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
         if (msg.text.toString() === '!' || msg.text.toString() === '/') {
           this.sendMessage(msg.chat.id, 'Info: Please use /help or !help to get more info.')
         } else if (msg.text.toString().toLowerCase().startsWith('hello') || msg.text.toString().toLowerCase().startsWith('hi')) {
-          this.sendMessage(msg.chat.id, 'Welcome ' + name + ' 🤟!')
+          this.sendMessage(msg.chat.id, 'Hi ' + name + ' 🤟!')
+        } else if (msg.text.toString() === 'easteregg' || msg.text.toString() === 'easter egg') {
+          this.sendMessage(msg.chat.id, 'You found an easter egg! Answer to the ultimate question of life, the universe, and everything is 42.')
         } else if (msg.text.toString().toLowerCase().startsWith('bye')) {
           this.sendMessage(msg.chat.id, 'Hope to see you around again, 👋 *Bye ' + name + '* 👋!')
         }
