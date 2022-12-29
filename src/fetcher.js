@@ -14,6 +14,10 @@ class Fetcher {
       baseURL: 'https://finance.melroy.org/v1',
       timeout: 10000
     })
+    this.explorer = axios.create({
+      baseURL: 'https://explorer.melroy.org/api/v1',
+      timeout: 10000
+    })
   }
 
   /**
@@ -205,6 +209,26 @@ Next block hash: ${nextBlockText}`
       } else {
         throw error // Re-throw error
       }
+    }
+  }
+
+  /**
+   * Retrieve latest Bitcoin Cash blocks
+   * @return {Promise} message
+   */
+  async bitcoinBlocks () {
+    const blocks = await this.explorer.get('/blocks')
+    if (blocks.data && Array.isArray(blocks.data) && blocks.data.length >= 8) {
+      let returnData = '*Latest 8 blocks:*\n'
+      for (let i = 0; i < 8; i++) {
+        const block = blocks.data[i]
+        const sizeKb = block.size / 1000.0
+        const poolName = ('extras' in block && 'pool' in block.extras && 'name' in block.extras.pool) ? block.extras.pool.name : 'Unknown'
+        returnData += `• Height: [${block.height}](${Misc.blockchainExplorerUrl()}/block/${block.id}), Pool: ${poolName}, TXs: ${block.tx_count}, Size: ${sizeKb} kB\n`
+      }
+      return returnData
+    } else {
+      return 'Something went wrong trying to receive the latest Bitcoin Cash blocks'
     }
   }
 

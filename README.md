@@ -14,13 +14,15 @@ This information could be anything like market price quotes, network stats, bloc
 
 ## How?
 
-This bot is written in javascript using [Node.js](https://nodejs.org/en/download/).
+This bot is written in JavaScript using [Node.js](https://nodejs.org/en/download/).
 
-The bot uses different public API endpoints for any cryptocurrency. As well as on-chain data from the [Bitcoin Core](https://github.com/bitcoin/bitcoin) in order to retrieve information from the Bitcoin network.
+The bot is using [JS Finance](finance.melroy.org/docs) to retrieve general cryptocurrency data like the latest prices. On-chain data is retrieved from the [Bitcoin Cash Node](https://bitcoincashnode.org) (BCHN) in order to retrieve information from the Bitcoin Cash network.
+
+Crypto Bot Father will also leverage the [BCH Explorer REST API](https://explorer.melroy.org) as well as [Fulcrum](https://github.com/cculianu/Fulcrum) to retrieve additional data, which is otherwise too complicated to retrieve from BCHN directly.
 
 ## Who?
 
-Hi, it's me: Melroy van den Berg.
+Hi, it's me: [Melroy van den Berg](https://melroy.org).
 
 ## Docker image
 

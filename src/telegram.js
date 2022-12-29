@@ -40,11 +40,11 @@ Bitcoin Cash:
   /balance <address> - Get wallet balance from a BCH address
   /transaction <hash> - Get transaction details from a BCH transaction
   /block <hash> - Get block details from the BCH blockchain
+  /latestblocks - Get the latest 8 blocks on BCH network
   /info - Get blockchain, mining and exchange stats from the BCH network
   /nodestatus - Retrieve Bitcoin Cash Node info
   /network - Get Bitcoin Cash Network info
   /fee - Get estimated fee for BCH
-  /lastblocks - Get the last 10 blocks on BCH network (TODO)
   /transactions <address> - Get latest 10 BCH transactions from an address (TODO)
 
 More info:
@@ -240,10 +240,11 @@ More info:
       }
     })
 
-    // lastblocks command (/lastblocks)
-    // TODO: Implemented getLastBlocks
-    this.bot.onText(/[/|!]lastblocks/, msg => {
-      this.sendMessage(msg.chat.id, '**Not yet implemented**')
+    // latestblocks command (/latestblocks), returns latest 8 blocks
+    this.bot.onText(/[/|!]latestblocks/, msg => {
+      this.fetcher.bitcoinBlocks()
+        .then(message => this.sendMessage(msg.chat.id, message))
+        .catch(error => console.error(error))
     })
 
     // top10 command (/top10)

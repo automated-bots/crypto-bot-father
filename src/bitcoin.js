@@ -22,7 +22,7 @@ class BitcoinCash {
   }
 
   /*******************************
-   * Bitcoin Cash Node methods *
+   * Bitcoin Cash Node methods   *
    *******************************/
 
   /**

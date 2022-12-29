@@ -57,7 +57,7 @@ class Fulcrum {
   }
 
   /*******************************
-   * Fulcrum methods *
+   * Fulcrum methods             *
    *******************************/
   /**
    * Return the confirmed and unconfirmed balances of a Bitcoin Cash address.
