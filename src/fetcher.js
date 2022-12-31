@@ -3,8 +3,10 @@ const ProcessResult = require('./process-result')
 const RuntimeError = require('./errors/runtime-error')
 const Misc = require('./miscellaneous')
 
+const CHART_IMAGE_API_KEY = process.env.CHART_IMAGE_API_KEY || ''
+
 /**
- * Fetch or calculate the data we need
+ * Fetches or calculates the data we need from all kind of sources
  */
 class Fetcher {
   constructor (bitcoinCash, fulcrum) {
@@ -16,6 +18,14 @@ class Fetcher {
     })
     this.explorer = axios.create({
       baseURL: 'https://explorer.melroy.org/api/v1',
+      timeout: 10000
+    })
+    this.chart = axios.create({
+      baseURL: 'https://api.chart-img.com/v1',
+      headers: {
+        Authorization: 'Bearer ' + CHART_IMAGE_API_KEY
+      },
+      responseType: 'stream',
       timeout: 10000
     })
   }
@@ -37,7 +47,7 @@ A large portion of the Bitcoin community, including developers, investors, users
 
   /**
    * Retrieve Bitcoin status
-   * @returns {Promise} message
+   * @returns message
    */
   async bitcoinStatus () {
     let text = ''
@@ -80,7 +90,7 @@ Last receive: ${recieveTime}
 
   /**
    * Retrieve Bitcoin network details
-   * @return {Promise} message
+   * @return message
    */
   async bitcoinNetworkInfo () {
     try {
@@ -121,7 +131,7 @@ Reachable: ${networks[i].reachable}
 
   /**
    * Retrieve Bitcoin Cash information
-   * @returns {Promise} message
+   * @returns message
    */
   async bitcoinInfo () {
     const blockchainResult = await this.bitcoinCash.getBlockChainInfo()
@@ -152,7 +162,7 @@ Reachable: ${networks[i].reachable}
   /**
    * Retrieve Bitcoin trannsaction details
    * @param {String} hash Bitcoin transaction hash
-   * @returns {Promise} message
+   * @returns message
    */
   async bitcoinTransaction (hash) {
     try {
@@ -214,7 +224,7 @@ Next block hash: ${nextBlockText}`
 
   /**
    * Retrieve latest Bitcoin Cash blocks
-   * @return {Promise} message
+   * @return message
    */
   async bitcoinLatestBlocks () {
     const blocks = await this.explorer.get('/blocks')
@@ -234,7 +244,7 @@ Next block hash: ${nextBlockText}`
 
   /**
    * Retrieve latest Bitcoin Cash trnasactions
-   * @return {Promise} message
+   * @return message
    */
   async bitcoinLatestTransactions () {
     const txs = await this.explorer.get('/mempool/recent')
@@ -256,7 +266,7 @@ Next block hash: ${nextBlockText}`
   /**
    * Retrieve Bitcoin Cash address balance
    * @param {String} address Bitcoin Cash address
-   * @return {Promise} message
+   * @return message
    */
   async bitcoinAddressBalance (address) {
     const result = await this.fulcrum.getBalance(address)
@@ -274,7 +284,7 @@ Next block hash: ${nextBlockText}`
   /**
    * Show latest transactions on address
    * @param {String} hash Bitcoin address
-   * @return {Promise} message
+   * @return message
    */
   async bitcoinTransactions (address) {
     // TODO ..
@@ -285,7 +295,7 @@ Next block hash: ${nextBlockText}`
     * Retrieve latest quote information and exchange rates (fiat + crypto).
     * @param {String} symbol Crypto symbol
     * @param {String} quoteSymbol (Optionally) Quote symbol (eg. USD, EUR, BTC, ADA)
-    * @return {Promise} message
+    * @return message
     */
   async priceQuotes (symbol, quoteSymbol = null) {
     try {
@@ -310,7 +320,7 @@ Next block hash: ${nextBlockText}`
   /**
     * Retrieve latest detailed quote information and exchange rates (fiat + crypto).
     * @param {String} symbol Crypto symbol
-    * @return {Promise} message
+    * @return message
     */
   async detailedPriceQuotes (symbol) {
     try {
@@ -335,7 +345,7 @@ Next block hash: ${nextBlockText}`
   /**
     * Retrieve latest market statistics
     * @param {String} symbol Crypto symbol
-    * @return {Promise} message
+    * @return message
   */
   async marketStats (symbol) {
     try {
@@ -373,7 +383,7 @@ Next block hash: ${nextBlockText}`
 
   /**
    * Giving you a generic market overview of the top 20 coins. We will remove tokens/stable coins from the list.
-   * @return {Promise} message
+   * @return message
    */
   async marketOverview (limit = 20) {
     const removeCurrencySymbols = ['USDT', 'USDC', 'BUSD', 'DAI', 'SHIB', 'UNI', 'WBTC', 'LEO', 'FTT', 'LINK', 'CRO', 'APE', 'MANA', 'SAND', 'AXS', 'QNT', 'AAVE', 'TUSD', 'MKR', 'OKB', 'KCS', 'USDP', 'RUNE', 'BTT', 'CHZ', 'GRT', 'LDO', 'USDD', 'CRV']
@@ -396,7 +406,7 @@ Next block hash: ${nextBlockText}`
 
   /**
    * Giving you a detailed market overview of the top 25 tokens & coins
-   * @return {Promise} message
+   * @return message
    */
   async detailedMarketOverview (limit = 25) {
     const response = await this.jsFinance.get('/cryptos', {
@@ -407,6 +417,43 @@ Next block hash: ${nextBlockText}`
     })
     const listingResults = response.data
     return ProcessResult.detailedMarketOverview(listingResults)
+  }
+
+  /**
+    * Retrieve TradingView chart
+    * @param {String} symbol Crypto symbol
+    * @param {String} quoteSymbol (Optionally) Quote symbol (eg. USD)
+    * @return {Stream} Image stream data
+    */
+  async chartImage (symbol, quoteSymbol = 'USD') {
+    try {
+      const image = await this.chart.get('/tradingview/advanced-chart', {
+        params: {
+          symbol: symbol + quoteSymbol,
+          interval: '4h',
+          studies: ['RSI', 'MACD']
+        },
+        paramsSerializer: {
+          indexes: null
+        }
+      })
+      if (image.data) {
+        return image.data
+      } else {
+        return 'Error: Could not find chart data in response'
+      }
+    } catch (error) {
+      // Chart-img.com returns a non 2xx error code
+      if (error.response && 'error' in error.response.data) {
+        return 'Error: ' + error.response.data.error
+      } else if (error.response && 'message' in error.response.data) {
+        return 'Error: ' + error.response.data.message
+      } else if (error instanceof RuntimeError) {
+        return 'Error: ' + error.message
+      } else {
+        throw error // Re-throw error
+      }
+    }
   }
 }
 

@@ -34,7 +34,9 @@ const bitcoinCash = new BitcoinCash(BITCOIN_RPC_HOST, BITCOIN_RPC_PORT, BITCOIN_
 const fulcrum = new Fulcrum(FULCRUM_RPC_PORT, FULCRUM_RPC_HOST)
 const fetcher = new Fetcher(bitcoinCash, fulcrum)
 
-const telegramBot = new TelegramBot(TELEGRAM_TOKEN)
+const telegramBot = new TelegramBot(TELEGRAM_TOKEN, {
+  filepath: false
+})
 const tel = new Telegram(telegramBot, fetcher)
 
 telegramBot.on('error', (error) => {

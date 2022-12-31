@@ -12,13 +12,22 @@ class Telegram {
   }
 
   /**
-   * Send message to Telegram bot
+   * Send message to Telegram chat
    * @param {Number} chatId Telegram chat ID
    * @param {String} message Message string
    * @param {Object} options Telegram chat options (optional)
    */
   sendMessage (chatId, message, options = { parse_mode: 'Markdown', disable_web_page_preview: true }) {
     this.bot.sendMessage(chatId, message, options)
+  }
+
+  /**
+   * Send image to Telegram chat
+   * @param {Number} chartId Telegram chat ID
+   * @param {Stream} image Stream/buffer image
+   */
+  sendImage (chartId, image) {
+    this.bot.sendPhoto(chartId, image)
   }
 
   /**
@@ -35,6 +44,7 @@ General:
   /stats <symbol> - Get latest market statistics (default BCH)
   /overview [<limit>] - General crypto market overview, limit is optional
   /detailedoverview [<limit>] - Detailed crypto market overview, limit is optional
+  /chart <symbol> - Retrieve a chart from Tradingview (default BCH)
   /faq - Frequently Asked Questions
 
 Bitcoin Cash:
@@ -158,6 +168,26 @@ More info:
             .catch(error => console.error(error))
         }
       }
+    })
+
+    // chart command (/chart): default Bitcoin Cash
+    this.bot.onText(/^[/|!]chart\S*$/, msg => {
+      // Fall-back to Bitcoin Cash (symbol: BCH)
+      this.fetcher.chartImage('BCH')
+        .then(image => this.sendImage(msg.chat.id, image))
+        .catch(error => console.error(error))
+    })
+
+    // chart command (/chart <symbol> [<quote_symbol>]) - provide your own base symbol, and optionally a second parameter as the quote symbol
+    this.bot.onText(/^[/|!]chart@?\S* (\w+) ?(\w+)?/, (msg, match) => {
+      const symbol = match[1].trim()
+      let quoteSymbol = 'USD' // Default
+      if (typeof match[2] !== 'undefined') {
+        quoteSymbol = match[2].trim()
+      }
+      this.fetcher.chartImage(symbol, quoteSymbol)
+        .then(image => this.sendImage(msg.chat.id, image))
+        .catch(error => console.error(error))
     })
 
     // Bitcoin cash node status command (/nodestatus)
