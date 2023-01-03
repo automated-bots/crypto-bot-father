@@ -1,5 +1,4 @@
-
-// Create our number formatter.
+const { DateTime } = require('luxon')
 
 class Misc {
   /**
@@ -117,23 +116,15 @@ class Misc {
   }
 
   /**
-   * Convert timestamp to date (approximately)
-   * @param {Date} timestamp
-   * @turn {Dict} structure of year, month, day, hour, minute, second
+   * Calculate the exact time difference between the ISO string and now (we can't use timestamps in ms, convertion that to a date is not accurate enough)
+   * @param {String} ISODateTime ISO date time string (ISO 8601)
+   * @ret {Object} Duration object (includes years, months, weeks, days, hours, minutes, seconds and milliseconds)
    */
-  static timestampToDate (timestamp) {
-    let seconds = Math.floor(timestamp / 1000)
-    let minutes = Math.floor(seconds / 60)
-    seconds = seconds % 60
-    let hours = Math.floor(minutes / 60)
-    minutes = minutes % 60
-    let days = Math.floor(hours / 24)
-    hours = hours % 24
-    let months = Math.floor(days / 30)
-    days = days % 30
-    const years = Math.floor(months / 12)
-    months = months % 12
-    return { year: years, month: months, day: days, hour: hours, minute: minutes, second: seconds }
+  static timeDifference (ISODateTime) {
+    const start = DateTime.fromISO(ISODateTime)
+    const end = DateTime.now()
+    const diff = end.diff(start, ['years', 'months', 'days', 'hours', 'minutes', 'seconds', 'milliseconds'])
+    return diff.toObject()
   }
 }
 

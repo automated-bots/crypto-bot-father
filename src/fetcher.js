@@ -31,18 +31,20 @@ class Fetcher {
   }
 
   /**
-   * How long does bitcoin exists (since first genesis block)
-   * Source: https://explorer.bitcoinunlimited.info/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
-   * Source: https://explorer.bitcoinunlimited.info/block/000000000000000000651ef99cb9fcbe0dadde1d424bd9f15ff20136191a5eec
+   * How long does Bitcoin (Cash) exists (since first genesis block) and some other facts.
+   * Sources:
+   *  - https://explorer.bitcoinunlimited.info/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
+   *  - https://explorer.bitcoinunlimited.info/block/000000000000000000651ef99cb9fcbe0dadde1d424bd9f15ff20136191a5eec
+   *  - https://explorer.bitcoinunlimited.info/block/00000000000000000169a496bfafa84ad8d3ef8039fc9e391a8eada67996b9c8
    * @returns message string
    */
   bitcoinAge () {
-    const ageGenesis = Misc.timestampToDate(Date.now() - 1231002905000) // timestamp ms since creation of the genesis block
-    const ageFork = Misc.timestampToDate(Date.now() - 1501603961000) // timestamp ms since creation of the Bitcoin cash fork
-    return `Bitcoin (Cash) age: ${ageGenesis.year} years, ${ageGenesis.month} months, ${ageGenesis.day} days, since the [first mined block](https://explorer.melroy.org/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f).\n
-Bitcoin Cash was a result of developers not agreeing with Satoshi's plan in 2017.\n
-Bitcoin Cash fork: ${ageFork.year} years, ${ageFork.month} months, ${ageFork.day} days, ago since the [first block after the hard fork](https://explorer.melroy.org/block/000000000000000000651ef99cb9fcbe0dadde1d424bd9f15ff20136191a5eec).\n
-A large portion of the Bitcoin community, including developers, investors, users, and businesses, still believed in the original vision of Bitcoin -- a low fee, peer to peer electronic cash system that could be used by all the people of the world. Which is now called Bitcoin Cash.`
+    const ageGenesis = Misc.timeDifference('2009-01-03T18:15:05.000Z') // Since creation of the genesis block
+    const ageFork = Misc.timeDifference('2017-08-01T18:12:41.000Z') // Since creation of the Bitcoin cash fork
+    const ageSubsidyBlock = Misc.timeDifference('2020-04-08T12:19:24.000Z') // Since first block of subsidy era #4 (6.25 BCH)
+    return `Bitcoin (Cash) age: ${ageGenesis.years} years, ${ageGenesis.months} months, ${ageGenesis.days} days, since the [first mined block](https://explorer.melroy.org/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f).\n
+Bitcoin Cash fork: ${ageFork.years} years, ${ageFork.months} months, ${ageFork.days} days, ago since the [first block after the hard fork](https://explorer.melroy.org/block/000000000000000000651ef99cb9fcbe0dadde1d424bd9f15ff20136191a5eec).\n
+First block of subsidy era #4: ${ageSubsidyBlock.years} years, ${ageFork.months} months, ${ageFork.days} days, since the [first block of 6.25 BCH coinbase payout](https://explorer.melroy.org/block/00000000000000000169a496bfafa84ad8d3ef8039fc9e391a8eada67996b9c8).`
   }
 
   /**

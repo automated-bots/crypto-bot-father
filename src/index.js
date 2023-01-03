@@ -66,16 +66,19 @@ app.get('/test', async (req, res) => {
     const quote3 = await fetcher.detailedPriceQuotes('BTC')
     const stats = await fetcher.marketStats('BCH')
     const overview = await fetcher.marketOverview()
+    const age = await fetcher.bitcoinAge()
     const html = `<h2>Quote BCH</h2>
-    <pre><code>${quote} </code></pre>
+    <pre><code>${quote}</code></pre>
     <h2>Quote BCH for BTC only</h2>
     <pre><code>${quote2} </code></pre>
     <h2>Detailed quote BTC</h2>
-    <pre><code>${quote3} </code></pre>
+    <pre><code>${quote3}</code></pre>
     <h2>Market statistics BCH</h2>
-    <pre><code>${stats} </code></pre>
+    <pre><code>${stats}</code></pre>
     <h2>Market Overview</h2>
-    <pre><code>${overview} </code></pre>`
+    <pre><code>${overview}</code></pre>
+    <h2>Ages</h2>
+    <pre><code>${age}</code></pre>`
     res.send(html)
   } catch (err) {
     console.log(err)
