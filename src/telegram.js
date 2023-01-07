@@ -41,7 +41,7 @@ class Telegram {
    */
   setCommands () {
     // help command - show available commands
-    this.bot.onText(/^[/|!]help/, msg => {
+    this.bot.onText(/^[/|!]help/, (msg) => {
       const text = `
 General:
   /help - Show help output
@@ -75,7 +75,7 @@ More info:
     })
 
     // price command (/price): default Bitcoin Cash
-    this.bot.onText(/^[/|!]price\S*$/, msg => {
+    this.bot.onText(/^[/|!]price\S*$/, (msg) => {
       // Fall-back to Bitcoin Cash (symbol: BCH)
       this.fetcher.priceQuotes('BCH')
         .then(message => this.sendMessage(msg.chat.id, message))
@@ -95,7 +95,7 @@ More info:
     })
 
     // detailedprice command (/detailedprice): default Bitcoin Cash
-    this.bot.onText(/^[/|!]detailedprice\S*$/, msg => {
+    this.bot.onText(/^[/|!]detailedprice\S*$/, (msg) => {
       // Fall-back to Bitcoin Cash (symbol: BCH)
       this.fetcher.detailedPriceQuotes('BCH')
         .then(message => this.sendMessage(msg.chat.id, message))
@@ -111,7 +111,7 @@ More info:
     })
 
     // stats command (/stats): default Bitcoin Cash
-    this.bot.onText(/^[/|!]stats\S*$/, msg => {
+    this.bot.onText(/^[/|!]stats\S*$/, (msg) => {
       // Fall-back to Bitcoin Cash (symbol: BCH)
       this.fetcher.marketStats('BCH')
         .then(message => this.sendMessage(msg.chat.id, message))
@@ -127,7 +127,7 @@ More info:
     })
 
     // Market overview command (/overview)
-    this.bot.onText(/^[/|!]overview\S*$/, msg => {
+    this.bot.onText(/^[/|!]overview\S*$/, (msg) => {
       this.fetcher.marketOverview()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
@@ -152,7 +152,7 @@ More info:
     })
 
     // Detailed market overview command (/detailedoverview)
-    this.bot.onText(/^[/|!]detailedoverview\S*$/, msg => {
+    this.bot.onText(/^[/|!]detailedoverview\S*$/, (msg) => {
       this.fetcher.detailedMarketOverview()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
@@ -177,7 +177,7 @@ More info:
     })
 
     // chart command (/chart): default Bitcoin Cash
-    this.bot.onText(/^[/|!]chart\S*$/, msg => {
+    this.bot.onText(/^[/|!]chart\S*$/, (msg) => {
       // Fall-back to Bitcoin Cash (symbol: BCH)
       this.fetcher.chartImage('BCH')
         .then(image => this.sendImage(msg.chat.id, image))
@@ -197,14 +197,14 @@ More info:
     })
 
     // Bitcoin cash node status command (/nodestatus)
-    this.bot.onText(/^[/|!]nodestatus/, msg => {
+    this.bot.onText(/^[/|!]nodestatus/, (msg) => {
       this.fetcher.bitcoinStatus()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
     // Bitcoin network command (/network)
-    this.bot.onText(/^[/|!]network/, msg => {
+    this.bot.onText(/^[/|!]network/, (msg) => {
       this.fetcher.bitcoinNetworkInfo()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => {
@@ -214,20 +214,20 @@ More info:
     })
 
     // Bitcoin Cash information command (/info)
-    this.bot.onText(/^[/|!]info/, msg => {
+    this.bot.onText(/^[/|!]info/, (msg) => {
       this.fetcher.bitcoinInfo()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
     // Bitcoin Cash estimated fee command (/fee)
-    this.bot.onText(/^[/|!]fee/, msg => {
+    this.bot.onText(/^[/|!]fee/, (msg) => {
       this.fetcher.bitcoinEstimateFee()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
-    this.bot.onText(/^[/|!]balance\S*$/, msg => {
+    this.bot.onText(/^[/|!]balance\S*$/, (msg) => {
       this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash address as argument: /balance <bitcoincash:address>')
     })
 
@@ -239,7 +239,7 @@ More info:
         .catch(error => console.error(error))
     })
 
-    this.bot.onText(/^[/|!]transaction\S*$/, msg => {
+    this.bot.onText(/^[/|!]transaction\S*$/, (msg) => {
       this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash transaction hash as argument: /transaction <hash>')
     })
 
@@ -261,7 +261,7 @@ More info:
         .catch(error => console.error(error))
     })
 
-    this.bot.onText(/^[/|!]block\S*$/, msg => {
+    this.bot.onText(/^[/|!]block\S*$/, (msg) => {
       this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash block hash as argument: /block <hash>')
     })
 
@@ -280,14 +280,14 @@ More info:
     })
 
     // latestblocks command (/latestblocks), returns latest 8 blocks
-    this.bot.onText(/^[/|!]latestblocks/, msg => {
+    this.bot.onText(/^[/|!]latestblocks/, (msg) => {
       this.fetcher.bitcoinLatestBlocks()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
     })
 
     // latesttransactions command (/latesttransactions or /latesttx), returns latest 8 TXs
-    this.bot.onText(/^[/|!](latesttransactions|latesttx)/, msg => {
+    this.bot.onText(/^[/|!](latesttransactions|latesttx)/, (msg) => {
       this.fetcher.bitcoinLatestTransactions()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => console.error(error))
@@ -295,12 +295,12 @@ More info:
 
     // top10 command (/top10)
     // TODO: implement getTop10BiggestTransactions
-    this.bot.onText(/^[/|!]top10/, msg => {
+    this.bot.onText(/^[/|!]top10/, (msg) => {
       this.sendMessage(msg.chat.id, 'Not yet implemented')
     })
 
     // Why is Bitcoin created?
-    this.bot.onText(/^[/|!]why\S*$/, msg => {
+    this.bot.onText(/^[/|!]why\S*$/, (msg) => {
       this.sendMessage(msg.chat.id, `
 Bitcoin Cash is P2P electronic cash that is valuable over legacy systems because of the monetary autonomy it brings to its users. 
 
@@ -315,12 +315,12 @@ Through the use of cryptographic proof, decentralized networks and open-source s
     })
 
     // What is Bitcoin?
-    this.bot.onText(/^[/|!]what\S*$/, msg => {
+    this.bot.onText(/^[/|!]what\S*$/, (msg) => {
       this.sendMessage(msg.chat.id, 'Bitcoin Cash (BCH) is a peer-to-peer currency. Peer-to-peer means that no central authority issues new money or tracks transactions. These tasks are managed collectively by the network.')
     })
 
     // How does Bitcoin work?
-    this.bot.onText(/^[/|!]how\S*$/, msg => {
+    this.bot.onText(/^[/|!]how\S*$/, (msg) => {
       this.sendMessage(msg.chat.id, `
 Bitcoin uses public-key cryptography, peer-to-peer networking, and proof-of-work to process and verify payments.
 
@@ -331,18 +331,18 @@ After an hour or two, each transaction is locked in time by the massive amount o
 Using these techniques, Bitcoin provides a fast and extremely reliable payment network that anyone can use.`)
     })
 
-    this.bot.onText(/^[/|!]age\S*$/, msg => {
+    this.bot.onText(/^[/|!]age\S*$/, (msg) => {
       const message = this.fetcher.bitcoinAge()
       this.sendMessage(msg.chat.id, message)
     })
 
     // Give FAQ Link
-    this.bot.onText(/^[/|!]faq\S*$/, msg => {
+    this.bot.onText(/^[/|!]faq\S*$/, (msg) => {
       this.sendMessage(msg.chat.id, '[Read FAQ](https://bitcoincashpodcast.com/faqs)')
     })
 
     // Other stuff
-    this.bot.on('message', msg => {
+    this.bot.on('message', (msg) => {
       if (msg.text) {
         const name = msg.from.first_name
         if (msg.text.toString() === '!' || msg.text.toString() === '/') {
