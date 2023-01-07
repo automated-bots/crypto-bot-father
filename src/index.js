@@ -50,7 +50,12 @@ const app = express()
 app.use(bodyParser.json())
 
 // This informs the Telegram servers of the new webhook
-telegramBot.setWebHook(`${botUrl}/telegram/bot${global.TelegramSecretHash}`)
+try {
+  telegramBot.setWebHook(`${botUrl}/telegram/bot${global.TelegramSecretHash}`)
+} catch (error) {
+  console.error(error)
+  global.ErrorState = true
+}
 
 // Add telegram object to request
 app.use((req, res, next) => {
