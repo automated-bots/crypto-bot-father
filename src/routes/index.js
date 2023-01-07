@@ -10,11 +10,9 @@ router.get('/', (req, res) => {
   .use('/telegram', telegramRoute)
 
 router.get('/health', (req, res) => {
-  if (global.ErrorState) {
-    res.status(500).json({ result: 'NOK' })
-  } else {
-    res.status(200).json({ result: 'OK' })
-  }
+  const errorCode = (global.ErrorState) ? 500 : 200
+  const result = (global.ErrorState) ? 'NOK' : 'OK'
+  res.status(errorCode).json({ result: result })
 })
 
 module.exports = router

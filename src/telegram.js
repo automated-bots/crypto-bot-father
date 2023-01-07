@@ -18,12 +18,10 @@ class Telegram {
    * @param {Object} options Telegram chat options (optional)
    */
   sendMessage (chatId, message, options = { parse_mode: 'Markdown', disable_web_page_preview: true }) {
-    try {
-      this.bot.sendMessage(chatId, message, options)
-    } catch (error) {
+    this.bot.sendMessage(chatId, message, options).catch((error) => {
       console.error(error)
       global.ErrorState = true
-    }
+    })
   }
 
   /**
@@ -32,12 +30,10 @@ class Telegram {
    * @param {Stream} image Stream/buffer image
    */
   sendImage (chartId, image) {
-    try {
-      this.bot.sendPhoto(chartId, image)
-    } catch (error) {
+    this.bot.sendPhoto(chartId, image).catch((error) => {
       console.error(error)
       global.ErrorState = true
-    }
+    })
   }
 
   /**
