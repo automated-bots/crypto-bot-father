@@ -54,10 +54,12 @@ CHART_IMAGE_API_KEY=aaaabbbbcccc
 Where:
 
 - `TELEGRAM_TOKEN` = Secret Bot API token
-- `BITCOIN_RPC_HOST` = Bitcoin core host (default: localhost), optionally.
-- `BITCOIN_RPC_PORT` = Bitcoin core RPC port (default: 8332), optionally.
-- `BITCOIN_RPC_USERNAME` = Bitcoin core daemon RPC username (default: bitcoin)
-- `BITCOIN_RPC_PASSWORD` = Bitcoin core daemon RPC password
+- `BITCOIN_RPC_HOST` = Bitcoin core host (default: `localhost`), optionally.
+- `BITCOIN_RPC_PORT` = Bitcoin core RPC port (default: `8332`), optionally.
+- `BITCOIN_RPC_USERNAME` = Bitcoin core daemon RPC username (default: `bitcoin`)
+- `BITCOIN_RPC_PASSWORD` = Bitcoin core daemon RPC password (default empty)
+- `FULCRUM_RPC_HOST` = Fulcrum RPC host (default: `localhost`), optionally.
+- `FULCRUM_RPC_PORT` = Fulcrum RPC port (default: `50001`), optionally.
 - `TELEGRAM_BOT_URL` = your public domain name you use to communicate against the Telegram web API server.
 - `CHART_IMAGE_API_KEY` = API key for retrieving TradingView images from [Chart-img](https://chart-img.com/).
 
