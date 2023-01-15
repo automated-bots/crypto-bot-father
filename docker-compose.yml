@@ -5,7 +5,11 @@ services:
     container_name: crypto-bot-father
     restart: always
     volumes:
-      - /home/username/folder/to/secrets.env:/app/secrets.env
-    #ports:
-    #  - "3007:3007"
-    network_mode: "host"
+      - /home/username/folder/to/secrets.env:/app/secrets.env:ro
+    ports:
+      - "3007:3007"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  crypto_bot_father_external_network:

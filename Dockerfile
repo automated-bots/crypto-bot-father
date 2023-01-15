@@ -10,6 +10,8 @@ RUN npm install --omit=dev
 
 COPY . .
 
+USER node
+
 EXPOSE 3007
 
 HEALTHCHECK --interval=10s --timeout=12s --start-period=6s \

@@ -10,34 +10,35 @@
 # config file.
 
 [Unit]
-Description=Bitcoin daemon
-Documentation=https://github.com/bitcoin/bitcoin/blob/master/doc/init.md
+Description=Bitcoin Cash daemon
+Documentation=https://docs.bitcoincashnode.org/
 
+# https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/
 After=network-online.target
 Wants=network-online.target
 
-
 [Service]
-# Depends on where your bitcoind is located (could also be: /usr/bin/bitcoind)
-# Be sure '/media/your_data_mount/bitcoin' folder below has the correct chmod rights (bitcoin:bitcoin)
-ExecStart=/usr/local/bin/bitcoind -daemon -txindex \
+Environment="MALLOC_CONF=tcache:false"
+ExecStart=/usr/bin/bitcoind -daemon -txindex \
                             -pid=/run/bitcoind/bitcoind.pid \
                             -conf=/etc/bitcoin/bitcoin.conf \
-                            -datadir=/media/your_data_mount/bitcoin
+                            -datadir=/media/Data_extra/bitcoin
 
 # Make sure the config directory is readable by the service user
 PermissionsStartOnly=true
 ExecStartPre=/bin/chgrp bitcoin /etc/bitcoin
-ExecStartPre=/bin/chgrp bitcoin /run/bitcoind
-# Create your own folder/path with correct settings
-#ExecStartPre=/bin/chgrp bitcoin /var/lib/bitcoind
+
+# Logging output
+StandardOutput=journal+console
+StandardError=journal+console
 
 # Process management
 ####################
 
 Type=forking
-PIDFile=/run/bitcoin/bitcoind.pid
+PIDFile=/run/bitcoind/bitcoind.pid
 Restart=on-failure
+TimeoutStopSec=600
 
 # Directory creation and permissions
 ####################################
@@ -53,10 +54,6 @@ RuntimeDirectoryMode=0710
 # /etc/bitcoin
 ConfigurationDirectory=bitcoin
 ConfigurationDirectoryMode=0710
-
-# /var/lib/bitcoind (has not enough storage, see -datadir)
-#StateDirectory=bitcoind
-#StateDirectoryMode=0710
 
 # Hardening measures
 ####################

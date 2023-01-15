@@ -67,15 +67,12 @@ Finally, starting the bot server: `npm start` (or `node src/index.js`)
 
 **Note 1:** Reverse proxy (eg. Nginx) is required to put between the bot and the world-wide-web. Expose the webserver on port 443 (with SSL). See [nginx_example.conf](nginx_example.conf).
 
-**Note 2:** Assuming you are running the bitcoind deamon (see requirements), with JSON RPC enabled and txindex enabled. Example of `~/.bitcoin/bitcoin.conf`:
+**Note 2:** Assuming you are running the bitcoind deamon (see requirements), with JSON RPC enabled and txindex enabled. Example of the local client `~/.bitcoin/bitcoin.conf` config:
 
 ```sh
-# Default username/password: bitcoin/xyz
-rpcauth=bitcoin:b69449980fba89a8459c0461389e78e6$87b68368b06ae8325fd5499637a9511b16763db17c877f00c50e23294fc3652b
-daemon=1
-datadir=/media/Data_disk/bitcoin/
-server=1
-txindex=1
+# Change RPC login credentials
+rpcuser=your_username
+rpcpassword=your_password
 ```
 
 ### Linting
@@ -84,34 +81,25 @@ Run lint: `npm run lint`
 
 Fix lint issues: `npm run fix`
 
-### Core setup
+### Bitcoin Cash Node setup
 
-- Place the Bitcoind file (`bitcoin.conf`) in `/etc/bitcoin` for the Bitcoin Core Daemon service, example of this file:
+- Create or edit the Bitcoin Daemon (BCHN) configuration file: `/etc/bitcoin/bitcoin.conf`, used by the Bitcoin Cash Node Daemon service. Example of the content of this file:
 
 ```sh
-# [core]
-# You can generate this value with the ./share/rpcauth/rpcauth.py script in the Bitcoin Core repository.
-rpcauth=bitcoin:hashedpassword
-# Run in the background as a daemon and accept commands.
-daemon=1
-# Specify a non-default location to store blockchain and other data.
-datadir=/your_custom/path/
-# [rpc]
-# Accept command line and JSON-RPC commands.
-server=1
-# Maintain a full transaction index, used by the getrawtransaction rpc call.
+maxconnections=80
+maxuploadtarget=2500
+
+# Transaction index (full index)
 txindex=1
-```
 
-Next, do not forget to create a (test) wallet:
+server=1
 
-```sh
-bitcoin-cli createwallet "testwallet"
+rpcthreads=7
 ```
 
 - See [bitcoind.service systemd file](bitcoind.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.
 - Core data will be stored into `/var/lib/bitcoind`
-- Be-sure both `bitcoind` binary is installed into `/usr/bin` directory!
+- Be-sure the `bitcoind` binary is installed into `/usr/bin` directory
 - Create an user `bitcoin` the unix machine (`adduser -M bitcoin`)
 
 ## Useful links
