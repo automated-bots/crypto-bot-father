@@ -7,7 +7,7 @@ services:
     volumes:
       - /home/username/folder/to/.env:/app/.env:ro
     ports:
-      - "3007:3007"
+      - "127.0.0.1:3007:3007"
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
