@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "export $(cat secrets.env | xargs) && node .",
+    "start": "node .",
     "lint": "eslint src --ext .js",
     "fix": "eslint src --ext .js --fix"
   },
@@ -30,6 +30,7 @@
   "dependencies": {
     "axios": "^1.1.2",
     "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "luxon": "^3.2.0",
     "node-telegram-bot-api": "^0.59.0",

@@ -32,8 +32,7 @@ There is a Docker image [available on DockerHub](https://hub.docker.com/reposito
 
 ### Requirements
 
-- [Node.js](https://nodejs.org/en/download/)
-- npm (package manager)
+- Docker Engine + Docker Compose
 - [Bitcoin Cash Node](https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node)
 - Telegram bot via [@bothfather](https://telegram.me/BotFather)
 

@@ -5,7 +5,7 @@ services:
     container_name: crypto-bot-father
     restart: always
     volumes:
-      - /home/username/folder/to/secrets.env:/app/secrets.env:ro
+      - /home/username/folder/to/.env:/app/.env:ro
     ports:
       - "3007:3007"
     extra_hosts:
