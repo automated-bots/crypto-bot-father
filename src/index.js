@@ -13,6 +13,7 @@ const FULCRUM_RPC_PORT = process.env.FULCRUM_RPC_PORT || 50001
 const botUrl = process.env.TELEGRAM_BOT_URL || 'https://cryptofather.melroy.org'
 const port = process.env.PORT || 3007
 
+const createError = require('http-errors')
 const crypto = require('crypto')
 global.TelegramSecretHash = crypto.randomBytes(20).toString('hex')
 const TelegramBot = require('node-telegram-bot-api')
@@ -92,6 +93,21 @@ app.get('/test', async (req, res) => {
 
 // Set routes
 app.use('/', routes)
+
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+  next(createError(404))
+})
+
+// Error handler
+app.use((error, req, res, next) => {
+  // Only print errors in development
+  if (req.app.get('env') === 'development') {
+    console.error(error)
+  }
+  // Render the error page
+  res.status(error.status || 500).json()
+})
 
 // Set Telegram commands
 tel.setCommands()
