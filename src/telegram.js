@@ -347,12 +347,8 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
         const name = msg.from.first_name
         if (msg.text.toString() === '!' || msg.text.toString() === '/') {
           this.sendMessage(msg.chat.id, 'Info: Please use /help or !help to get more info.')
-        } else if (msg.text.toString().toLowerCase().startsWith('hello') || msg.text.toString().toLowerCase().startsWith('hi')) {
-          this.sendMessage(msg.chat.id, 'Hi ' + name + ' 🤟!')
-        } else if (msg.text.toString() === 'easteregg' || msg.text.toString() === 'easter egg') {
-          this.sendMessage(msg.chat.id, 'You found an easter egg! Answer to the ultimate question of life, the universe, and everything is 42.')
-        } else if (msg.text.toString().toLowerCase().startsWith('bye')) {
-          this.sendMessage(msg.chat.id, 'Hope to see you around again, 👋 *Bye ' + name + '* 👋!')
+        } else if (msg.text.toString() === '/easteregg' || msg.text.toString() === 'easteregg' || msg.text.toString() === 'easter egg') {
+          this.sendMessage(msg.chat.id, `${name} found an easter egg! Answer to the ultimate question of life, the universe, and everything is 42.`)
         }
       }
     })
