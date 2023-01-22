@@ -48,6 +48,8 @@ telegramBot.on('error', (error) => {
 
 // Create the Express app
 const app = express()
+// Disable powered by by header
+app.disable('x-powered-by')
 // parse the updates to JSON
 app.use(bodyParser.json())
 
