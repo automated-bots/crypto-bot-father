@@ -6,7 +6,8 @@ WORKDIR /app
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 
-RUN npm install --omit=dev
+RUN npm install --omit=dev && \
+  chown -R node:node node_modules
 
 COPY . .
 
