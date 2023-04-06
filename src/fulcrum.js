@@ -23,7 +23,8 @@ class Fulcrum {
     this.fulcrum.setNoDelay(true)
     this.fulcrum.on('error', (error) => {
       console.error(`Fulcrum error:\n ${error}`)
-      // TODO: when connection can't be made (which error?), set this.connected = false
+      // Set our health to NOK
+      global.ErrorState = true
     })
     this.fulcrum.on('data', data => {
       try {
