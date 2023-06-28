@@ -260,7 +260,7 @@ Exchange rate: ${exchangeRate} (${percentageChange24h}%) BCH/USD`
       const marketCapDominance = (coin.market_cap_dominance).toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
       const circulatingSupply = Misc.printCurrencyNotationCompactWithoutSymbol(coin.circulating_supply)
       const maxSupply = (coin.max_supply) ? Misc.printCurrencyNotationCompactWithoutSymbol(coin.max_supply) : 'N/A'
-      tableData.push([coin.rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, percentChange30d, percentChange90d, volume24h, marketCap, marketCapDominance, circulatingSupply, maxSupply])
+      tableData.push([coin.rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, percentChange30d, percentChange90d, marketCap, volume24h, marketCapDominance, circulatingSupply, maxSupply])
     }
     text += '```\n' + table(tableData, config) + '\n```'
     return text
