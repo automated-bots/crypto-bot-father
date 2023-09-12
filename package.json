@@ -33,7 +33,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "luxon": "^3.3.0",
-    "node-telegram-bot-api": "^0.61.0",
+    "node-telegram-bot-api": "^0.63.0",
     "table": "^6.8.1"
   },
   "devDependencies": {

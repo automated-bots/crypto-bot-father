@@ -109,6 +109,13 @@ ${cryptoPrices}`
 • ${busdPrice} [BUSD](${COINGECKO_URL}/binance-usd)`
   }
 
+  static dominance (symbol, quote) {
+    symbol = symbol.toUpperCase()
+    const name = (quote.name) ? quote.name : symbol
+    const marketCapDominance = quote.market_cap_dominance.toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+    return `Current dominance of ${name} (${symbol}) is ${marketCapDominance}%.`
+  }
+
   static marketStats (symbol, quote, meta, rates) {
     symbol = symbol.toUpperCase()
     let exchangeString = ''
@@ -128,6 +135,7 @@ Price: 1 ${symbol} = ${ethPrice} ETH`
     const totalSupply = (meta.total_supply) ? meta.total_supply.toLocaleString('en') : 'N/A'
     const maxSupply = (meta.max_supply) ? meta.max_supply.toLocaleString('en') : 'N/A'
     const marketCap = quote.market_cap.toLocaleString('en', { maximumFractionDigits: 0 })
+    const marketCapDominance = quote.market_cap_dominance.toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
     const volume24h = quote.volume_24h.toLocaleString('en', { maximumFractionDigits: 0 })
     const volume7d = quote.volume_7d.toLocaleString('en', { maximumFractionDigits: 0 })
     const volume30d = quote.volume_30d.toLocaleString('en', { maximumFractionDigits: 0 })
@@ -148,6 +156,7 @@ Circulating supply: ${circulatingSupply} ${symbol}s
 Total supply: ${totalSupply} ${symbol}s
 Max. supply: ${maxSupply} ${symbol}s
 Market Cap: $${marketCap}
+Market Dominance: ${marketCapDominance}%
 Visit on: [CoinMarketCap](${meta.cmc_url})
 
 *Price* 💱

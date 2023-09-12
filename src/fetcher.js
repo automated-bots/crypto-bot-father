@@ -345,6 +345,31 @@ Next block hash: ${nextBlockText}`
   }
 
   /**
+    * Retrieve dominance (%) data for crypto symbol.
+    * @param {String} symbol Crypto symbol
+    * @return message
+    */
+  async dominance (symbol) {
+    try {
+      const quote = await this.jsFinance.get('/cryptos/quote/' + symbol)
+      if (quote.data) {
+        return ProcessResult.dominance(symbol, quote.data)
+      } else {
+        return 'Empty API response'
+      }
+    } catch (error) {
+      // JS-Finance returns a non 2xx error code
+      if (error.response && 'detailed_message' in error.response.data) {
+        return 'Error: ' + error.response.data.detailed_message
+      } else if (error instanceof RuntimeError) {
+        return 'Error: ' + error.message
+      } else {
+        throw error // Re-throw error
+      }
+    }
+  }
+
+  /**
     * Retrieve latest market statistics
     * @param {String} symbol Crypto symbol
     * @return message

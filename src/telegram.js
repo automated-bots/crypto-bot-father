@@ -110,6 +110,21 @@ More info:
         .catch(error => console.error(error))
     })
 
+    // dominance command (/dominance): default Bitcoin Cash
+    this.bot.onText(/^[/|!]dominance\S*$/, (msg) => {
+      this.fetcher.dominance('BCH')
+        .then(message => this.sendMessage(msg.chat.id, message))
+        .catch(error => console.error(error))
+    })
+
+    // dominance command (/dominance <symbol>) - provide your own base symbol
+    this.bot.onText(/^[/|!]dominance@?\S* (\w+)/, (msg, match) => {
+      const symbol = match[1].trim()
+      this.fetcher.dominance(symbol)
+        .then(message => this.sendMessage(msg.chat.id, message))
+        .catch(error => console.error(error))
+    })
+
     // stats command (/stats): default Bitcoin Cash
     this.bot.onText(/^[/|!]stats\S*$/, (msg) => {
       // Fall-back to Bitcoin Cash (symbol: BCH)
