@@ -47,6 +47,7 @@ General:
   /help - Show help output
   /price <symbol> [<quote_symbol>] - Get latest crypto price (default BCH)
   /detailedprice <symbol> - Get latest detailed price overview (default BCH)
+  /dominance <symbol> - Get crypto dominance (default BCH)
   /stats <symbol> - Get latest market statistics (default BCH)
   /overview [<limit>] - General crypto market overview, limit is optional
   /detailedoverview [<limit>] - Detailed crypto market overview, limit is optional
