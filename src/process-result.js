@@ -189,6 +189,10 @@ Last 90D: ${changeIcon90d} ${percentChanged90d}%`
     const blockTimeSec = (((miningResult.block_time_seconds / 60) % 2) * 60).toFixed(0).replace('.', '\\.')
     const exchangeRate = (quote.price).toFixed(2).replace('.', '\\.')
     const percentageChange24h = (quote.percentage_changed_24h).toFixed(2).replace('.', '\\.').replace('-', '\\-')
+    const blockReward = miningResult.block_reward.toString().replace('.', '\\.')
+    const blockReward24h = miningResult.block_reward24h.toString().replace('.', '\\.')
+    const blockReward3d = miningResult.block_reward3d.toString().replace('.', '\\.')
+    const blockReward7d = miningResult.block_reward7d.toString().replace('.', '\\.')
     return `*General* 🖥
 Last block: ${medianTime}
 Median time current best block: ${blockchainResult.mediantime}
@@ -205,10 +209,10 @@ Difficulty 7 days avg: ${difficulty7d}M
 
 *Reward* 🤑
 Block time: ${blockTimeMin}m ${blockTimeSec}s
-Block reward: ${miningResult.block_reward} BCH
-Block reward 24H avg: ${miningResult.block_reward24h} BCH
-Block reward 3D avg: ${miningResult.block_reward3d} BCH
-Block reward 7D avg: ${miningResult.block_reward7d} BCH
+Block reward: ${blockReward} BCH
+Block reward 24H avg: ${blockReward24h} BCH
+Block reward 3D avg: ${blockReward3d} BCH
+Block reward 7D avg: ${blockReward7d} BCH
 
 *Exchange* 💱
 Exchange rate: ${exchangeRate} \\(${percentageChange24h}%\\) BCH/USD`
