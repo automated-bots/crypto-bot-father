@@ -55,8 +55,8 @@ First block of subsidy era \\#4: ${ageSubsidyBlock.years} years, ${ageFork.month
     let text = ''
     try {
       const networkResult = await this.bitcoinCash.getNetworkInfo()
-      const nodeVersion = networkResult.subversion.replace('.', '\\.')
-      const protocalVersion = networkResult.protocolversion.replace('.', '\\.')
+      const nodeVersion = (networkResult.subversion).replace('.', '\\.')
+      const protocalVersion = (networkResult.protocolversion).replace('.', '\\.')
       text += `
 Bitcoin Cash node version: ${nodeVersion}
 Protocol version: ${protocalVersion}
@@ -99,10 +99,10 @@ Last receive: ${recieveTime}
   async bitcoinNetworkInfo () {
     try {
       const result = await this.bitcoinCash.getNetworkInfo()
-      const nodeVersion = result.version.replace('.', '\\.')
-      const subVersion = result.subversion.replace('.', '\\.')
-      const protocolVersion = result.protocolversion.replace('.', '\\.')
-      const relayFee = result.relayfee.replace('.', '\\.')
+      const nodeVersion = (result.version).replace('.', '\\.')
+      const subVersion = (result.subversion).replace('.', '\\.')
+      const protocolVersion = (result.protocolversion).replace('.', '\\.')
+      const relayFee = (result.relayfee).replace('.', '\\.')
       let text = `
 *Bitcoin Network Info*
 Bitcoin cash node version: ${nodeVersion}
@@ -163,7 +163,7 @@ Reachable: ${networks[i].reachable}
    * Estimate the Bitcoin Cash fee
    */
   async bitcoinEstimateFee () {
-    const estimateFee = await this.bitcoinCash.estimateFee().replace('.', '\\.')
+    const estimateFee = (await this.bitcoinCash.estimateFee()).replace('.', '\\.')
     return `Estimated fee: ${estimateFee} BCH/kB`
   }
 
@@ -207,7 +207,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
       const blockInfo = await this.bitcoinCash.getBlock(hash)
       const blockDate = Misc.printDate(new Date(blockInfo.time * 1000))
       const nextBlockText = (blockInfo.nextblockhash) ? `[${blockInfo.nextblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.nextblockhash})` : 'N/A'
-      const blockDifficulty = blockInfo.difficulty.replace('.', '\\.')
+      const blockDifficulty = (blockInfo.difficulty).replace('.', '\\.')
       return `**Block details for: [${hash}](${Misc.blockchainExplorerUrl()}/block/${hash})**
 Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${hash})
 Confirmations: ${blockInfo.confirmations}
