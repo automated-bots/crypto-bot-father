@@ -17,7 +17,7 @@ class Telegram {
    * @param {String} message Message string
    * @param {Object} options Telegram chat options (optional)
    */
-  sendMessage (chatId, message, options = { parse_mode: 'Markdown', disable_web_page_preview: true }) {
+  sendMessage (chatId, message, options = { parse_mode: 'MarkdownV2', disable_web_page_preview: true }) {
     this.bot.sendMessage(chatId, message, options).catch((error) => {
       console.error(error)
       global.ErrorState = true
