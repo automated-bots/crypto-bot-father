@@ -20,8 +20,7 @@ class Telegram {
   sendMessage (chatId, message, options = { parse_mode: 'MarkdownV2', disable_web_page_preview: true }) {
     this.bot.sendMessage(chatId, message, options).catch((error) => {
       console.log(`WARN: Message attempted to send (to chatID: ${chatId}): ${message}`)
-      console.error('Error:\n')
-      console.error(error)
+      console.error('Error: Could not send message due to: ' + error.message)
       global.ErrorState = true
     })
   }
