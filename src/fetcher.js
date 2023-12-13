@@ -208,7 +208,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
       const blockInfo = await this.bitcoinCash.getBlock(hash)
       const blockDate = Misc.printDate(new Date(blockInfo.time * 1000))
       const nextBlockText = (blockInfo.nextblockhash) ? `[${blockInfo.nextblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.nextblockhash})` : 'N/A'
-      const blockDifficulty = (blockInfo.difficulty).replace('.', '\\.')
+      const blockDifficulty = (blockInfo.difficulty).toString().replace('.', '\\.')
       return `**Block details for: [${hash}](${Misc.blockchainExplorerUrl()}/block/${hash})**
 Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${hash})
 Confirmations: ${blockInfo.confirmations}
