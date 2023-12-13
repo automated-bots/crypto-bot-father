@@ -19,6 +19,8 @@ class Telegram {
    */
   sendMessage (chatId, message, options = { parse_mode: 'MarkdownV2', disable_web_page_preview: true }) {
     this.bot.sendMessage(chatId, message, options).catch((error) => {
+      console.log(`WARN: Message attempted to send (to chatID: ${chatId}): ${message}`)
+      console.error('Error:\n')
       console.error(error)
       global.ErrorState = true
     })
@@ -44,34 +46,34 @@ class Telegram {
     this.bot.onText(/^[/|!]help/, (msg) => {
       const text = `
 General:
-  /help - Show help output
-  /price <symbol> [<quote_symbol>] - Get latest crypto price (default BCH)
-  /detailedprice <symbol> - Get latest detailed price overview (default BCH)
-  /dominance <symbol> - Get crypto dominance (default BCH)
-  /stats <symbol> - Get latest market statistics (default BCH)
-  /overview [<limit>] - General crypto market overview, limit is optional
-  /detailedoverview [<limit>] - Detailed crypto market overview, limit is optional
-  /chart <symbol> - Retrieve a chart from Tradingview (default BCH)
-  /faq - Frequently Asked Questions
+  /help \\- Show help output
+  /price \\<symbol\\> \\[\\<quote\\-symbol\\>\\] \\- Get latest crypto price \\(default BCH\\)
+  /detailedprice \\<symbol\\> \\- Get latest detailed price overview \\(default BCH\\)
+  /dominance \\<symbol\\> \\- Get crypto dominance \\(default BCH\\)
+  /stats \\<symbol\\> \\- Get latest market statistics \\(default BCH\\)
+  /overview \\[\\<limit\\>\\] \\- General crypto market overview, limit is optional
+  /detailedoverview \\[\\<limit\\>\\] \\- Detailed crypto market overview, limit is optional
+  /chart \\<symbol\\> \\- Retrieve a chart from Tradingview \\(default BCH\\)
+  /faq \\- Frequently Asked Questions
 
 Bitcoin Cash:
-  /balance <address> - Get wallet balance from a BCH address
-  /transaction <hash> - Get transaction details from a BCH transaction
-  /block <hash> - Get block details from the BCH blockchain
-  /latestblocks - Get the 8 latest blocks on BCH network
-  /latesttransactions - Get the 8 latest transactions on BCH network
-  /latesttx - Get the 8 latest transactions on BCH network
-  /info - Get blockchain, mining and exchange stats from the BCH network
-  /nodestatus - Retrieve Bitcoin Cash Node info
-  /network - Get Bitcoin Cash Network info
-  /fee - Get estimated fee for BCH
-  /transactions <address> - Get latest 10 BCH transactions from an address (TODO)
+  /balance \\<address\\> \\- Get wallet balance from a BCH address
+  /transaction \\<hash\\> \\- Get transaction details from a BCH transaction
+  /block \\<hash\\> \\- Get block details from the BCH blockchain
+  /latestblocks \\- Get the 8 latest blocks on BCH network
+  /latesttransactions \\- Get the 8 latest transactions on BCH network
+  /latesttx \\- Get the 8 latest transactions on BCH network
+  /info \\- Get blockchain, mining and exchange stats from the BCH network
+  /nodestatus \\- Retrieve Bitcoin Cash Node info
+  /network \\- Get Bitcoin Cash Network info
+  /fee \\- Get estimated fee for BCH
+  /transactions \\<address\\> \\- Get latest 10 BCH transactions from an address \\(TODO\\)
 
 More info:
-  /why - Why Bitcoin?
-  /what - What is Bitcoin?
-  /how - How does Bitcoin work?
-  /age - How long does Bitcoin exists?`
+  /why \\- Why Bitcoin?
+  /what \\- What is Bitcoin?
+  /how \\- How does Bitcoin work?
+  /age \\- How long does Bitcoin exists?`
       this.sendMessage(msg.chat.id, text)
     })
 
@@ -153,12 +155,12 @@ More info:
     this.bot.onText(/^[/|!]overview@?\S* (\d+)/, (msg, match) => {
       const limit = parseInt(match[1].trim())
       if (isNaN(limit)) {
-        this.sendMessage(msg.chat.id, 'Error: Provide a number as argument.')
+        this.sendMessage(msg.chat.id, 'Error: Provide a number as argument\\.')
       } else {
         if (limit <= 0) {
-          this.sendMessage(msg.chat.id, 'Error: A number above the 0 will help. Try again.')
+          this.sendMessage(msg.chat.id, 'Error: A number above the 0 will help\\. Try again\\.')
         } else if (limit > 50) {
-          this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited to 50 results. Try again.')
+          this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited to 50 results\\. Try again\\.')
         } else {
           this.fetcher.marketOverview(limit)
             .then(message => this.sendMessage(msg.chat.id, message))
@@ -178,12 +180,12 @@ More info:
     this.bot.onText(/^[/|!]detailedoverview@?\S* (\d+)/, (msg, match) => {
       const limit = parseInt(match[1].trim())
       if (isNaN(limit)) {
-        this.sendMessage(msg.chat.id, 'Error: Provide a number as argument.')
+        this.sendMessage(msg.chat.id, 'Error: Provide a number as argument\\.')
       } else {
         if (limit <= 0) {
-          this.sendMessage(msg.chat.id, 'Error: A number above the 0 will help. Try again.')
+          this.sendMessage(msg.chat.id, 'Error: A number above the 0 will help\\. Try again\\.')
         } else if (limit > 50) {
-          this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited to 50 results. Try again.')
+          this.sendMessage(msg.chat.id, 'Error: Let\'s keep the overview limited to 50 results\\. Try again\\.')
         } else {
           this.fetcher.detailedMarketOverview(limit)
             .then(message => this.sendMessage(msg.chat.id, message))
@@ -225,7 +227,7 @@ More info:
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => {
           console.error(error)
-          this.sendMessage(msg.chat.id, 'Error: Could not fetch network info, still verifying blocks... Or can\'t connect to the Bitcoin Cash Node (BCHN) API.')
+          this.sendMessage(msg.chat.id, 'Error: Could not fetch network info, still verifying blocks\\.\\.\\. Or can\'t connect to the Bitcoin Cash Node \\(BCHN\\) API\\.')
         })
     })
 
@@ -244,7 +246,7 @@ More info:
     })
 
     this.bot.onText(/^[/|!]balance\S*$/, (msg) => {
-      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash address as argument: /balance <bitcoincash:address>')
+      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash address as argument: /balance \\<bitcoincash:address\\>')
     })
 
     // address command (/balance <address>)
@@ -256,7 +258,7 @@ More info:
     })
 
     this.bot.onText(/^[/|!]transaction\S*$/, (msg) => {
-      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash transaction hash as argument: /transaction <hash>')
+      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash transaction hash as argument: /transaction \\<hash\\>')
     })
 
     // transaction details (/transaction <hash>)
@@ -278,7 +280,7 @@ More info:
     })
 
     this.bot.onText(/^[/|!]block\S*$/, (msg) => {
-      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash block hash as argument: /block <hash>')
+      this.sendMessage(msg.chat.id, 'Error: Provide at least the Bitcoin Cash block hash as argument: /block \\<hash\\>')
     })
 
     // Bitcoin Cash block command (/block <hash>)
@@ -291,7 +293,7 @@ More info:
           .catch(error => console.error(error))
       } else {
         // TODO: Retrieve by block hash
-        this.sendMessage(msg.chat.id, 'Info: Please provide a block hash, other parameters are not yet supported.')
+        this.sendMessage(msg.chat.id, 'Info: Please provide a block hash, other parameters are not yet supported\\.')
       }
     })
 
@@ -318,33 +320,33 @@ More info:
     // Why is Bitcoin created?
     this.bot.onText(/^[/|!]why\S*$/, (msg) => {
       this.sendMessage(msg.chat.id, `
-Bitcoin Cash is P2P electronic cash that is valuable over legacy systems because of the monetary autonomy it brings to its users. 
+Bitcoin Cash is P2P electronic cash that is valuable over legacy systems because of the monetary autonomy it brings to its users\\. 
 
-Bitcoin seeks to address the root problem with conventional currency: all the trust that's required to make it work --
-Not that justified trust is a bad thing, but trust makes systems brittle, opaque, and costly to operate. 
+Bitcoin seeks to address the root problem with conventional currency: all the trust that's required to make it work \\-\\-
+Not that justified trust is a bad thing, but trust makes systems brittle, opaque, and costly to operate\\. 
 
-Trust failures result in systemic collapses, trust curation creates inequality and monopoly lock-in, 
-and naturally arising trust choke-points can be abused to deny access to due process. 
-Through the use of cryptographic proof, decentralized networks and open-source software Bitcoin Cash minimizes and replaces these trust costs.
+Trust failures result in systemic collapses, trust curation creates inequality and monopoly lock\\-in, 
+and naturally arising trust choke\\-points can be abused to deny access to due process\\. 
+Through the use of cryptographic proof, decentralized networks and open\\-source software Bitcoin Cash minimizes and replaces these trust costs\\.
 
 [Read more about why Bitcoin Cash](https://bitcoincash.org/#why)`)
     })
 
     // What is Bitcoin?
     this.bot.onText(/^[/|!]what\S*$/, (msg) => {
-      this.sendMessage(msg.chat.id, 'Bitcoin Cash (BCH) is a peer-to-peer currency. Peer-to-peer means that no central authority issues new money or tracks transactions. These tasks are managed collectively by the network.')
+      this.sendMessage(msg.chat.id, 'Bitcoin Cash \\(BCH\\) is a peer\\-to\\-peer currency\\. Peer\\-to\\-peer means that no central authority issues new money or tracks transactions\\. These tasks are managed collectively by the network\\.')
     })
 
     // How does Bitcoin work?
     this.bot.onText(/^[/|!]how\S*$/, (msg) => {
       this.sendMessage(msg.chat.id, `
-Bitcoin uses public-key cryptography, peer-to-peer networking, and proof-of-work to process and verify payments.
+Bitcoin uses public\\-key cryptography, peer\\-to\\-peer networking, and proof\\-of\\-work to process and verify payments\\.
 
-Bitcoins are sent (or signed over) from one address to another with each user potentially having many, many addresses. 
-Each payment transaction is broadcast to the network and included in the blockchain so that the included bitcoins cannot be spent twice. 
-After an hour or two, each transaction is locked in time by the massive amount of processing power that continues to extend the blockchain.
+Bitcoins are sent \\(or signed over\\) from one address to another with each user potentially having many, many addresses\\. 
+Each payment transaction is broadcast to the network and included in the blockchain so that the included bitcoins cannot be spent twice\\. 
+After an hour or two, each transaction is locked in time by the massive amount of processing power that continues to extend the blockchain\\.
 
-Using these techniques, Bitcoin provides a fast and extremely reliable payment network that anyone can use.`)
+Using these techniques, Bitcoin provides a fast and extremely reliable payment network that anyone can use\\.`)
     })
 
     this.bot.onText(/^[/|!]age\S*$/, (msg) => {
@@ -362,9 +364,9 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
       if (msg.text) {
         const name = msg.from.first_name
         if (msg.text.toString() === '!' || msg.text.toString() === '/') {
-          this.sendMessage(msg.chat.id, 'Info: Please use /help or !help to get more info.')
+          this.sendMessage(msg.chat.id, 'Info: Please use /help or \\!help to get more info\\.')
         } else if (msg.text.toString() === '/easteregg' || msg.text.toString() === 'easteregg' || msg.text.toString() === 'easter egg') {
-          this.sendMessage(msg.chat.id, `${name} found an easter egg! Answer to the ultimate question of life, the universe, and everything is 42.`)
+          this.sendMessage(msg.chat.id, `${name} found an easter egg\\! Answer to the ultimate question of life, the universe, and everything is 42\\.`)
         }
       }
     })

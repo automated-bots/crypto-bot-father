@@ -42,9 +42,9 @@ class Fetcher {
     const ageGenesis = Misc.timeDifference('2009-01-03T18:15:05.000Z') // Since creation of the genesis block
     const ageFork = Misc.timeDifference('2017-08-01T18:12:41.000Z') // Since creation of the Bitcoin cash fork
     const ageSubsidyBlock = Misc.timeDifference('2020-04-08T12:19:24.000Z') // Since first block of subsidy era #4 (6.25 BCH)
-    return `Bitcoin (Cash) age: ${ageGenesis.years} years, ${ageGenesis.months} months, ${ageGenesis.days} days, since the [first mined block](https://explorer.melroy.org/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f).\n
-Bitcoin Cash fork: ${ageFork.years} years, ${ageFork.months} months, ${ageFork.days} days, ago since the [first block after the hard fork](https://explorer.melroy.org/block/000000000000000000651ef99cb9fcbe0dadde1d424bd9f15ff20136191a5eec).\n
-First block of subsidy era #4: ${ageSubsidyBlock.years} years, ${ageFork.months} months, ${ageFork.days} days, since the [first block of 6.25 BCH coinbase payout](https://explorer.melroy.org/block/00000000000000000169a496bfafa84ad8d3ef8039fc9e391a8eada67996b9c8).`
+    return `Bitcoin \\(Cash\\) age: ${ageGenesis.years} years, ${ageGenesis.months} months, ${ageGenesis.days} days, since the [first mined block](https://explorer.melroy.org/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f)\\.\n
+Bitcoin Cash fork: ${ageFork.years} years, ${ageFork.months} months, ${ageFork.days} days, ago since the [first block after the hard fork](https://explorer.melroy.org/block/000000000000000000651ef99cb9fcbe0dadde1d424bd9f15ff20136191a5eec)\\.\n
+First block of subsidy era \\#4: ${ageSubsidyBlock.years} years, ${ageFork.months} months, ${ageFork.days} days, since the [first block of 6\\.25 BCH coinbase payout](https://explorer.melroy.org/block/00000000000000000169a496bfafa84ad8d3ef8039fc9e391a8eada67996b9c8)\\.`
   }
 
   /**
@@ -62,7 +62,7 @@ Protocol version: ${networkResult.protocolversion}
 Peers connected: ${networkResult.connections}`
     } catch (error) {
       console.error(error)
-      text += 'Error: Could not fetch network info!\n'
+      text += 'Error: Could not fetch network info\\!\n'
     }
 
     try {
@@ -81,11 +81,11 @@ Last receive: ${recieveTime}
 ---`
         }
       } else {
-        text += 'Warning: No peers connected...'
+        text += 'Warning: No peers connected\\.\\.\\.'
       }
     } catch (error) {
       console.error(error)
-      text += 'Error: Could not fetch peer info!\n'
+      text += 'Error: Could not fetch peer info\\!\n'
     }
     return text
   }
@@ -123,7 +123,7 @@ Reachable: ${networks[i].reachable}
           return 'Error: ' + error.response.data.error.message
         } else {
           console.error(error)
-          return 'Error: Something went wrong. '
+          return 'Error: Something went wrong\\. '
         }
       } else {
         throw error // Re-throw error
@@ -149,7 +149,7 @@ Reachable: ${networks[i].reachable}
     if (miningResult.data) {
       return ProcessResult.bitcoinCashStats(blockchainResult, quote.data, miningResultLocal, miningResult.data, bestBlockResult)
     } else {
-      return 'Mining data response was empty.'
+      return 'Mining data response was empty\\.'
     }
   }
 
@@ -184,7 +184,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
           return 'Error: ' + error.response.data.error.message
         } else {
           console.error(error)
-          return 'Error: Something went wrong. '
+          return 'Error: Something went wrong\\. '
         }
       } else {
         throw error // Re-throw error
@@ -275,11 +275,11 @@ Next block hash: ${nextBlockText}`
     if (result && 'confirmed' in result) {
       const confirmedBch = Misc.printCurrencyWithoutSymbol(result.confirmed / 100000000.0, 8)
       const unconfirmedBch = Misc.printCurrencyWithoutSymbol(result.unconfirmed / 100000000.0, 8)
-      return `*Balance:* [${confirmedBch} BCH](${Misc.blockchainExplorerUrl()}/address/${address}) (unconfirmed: ${unconfirmedBch} BCH)`
+      return `*Balance:* [${confirmedBch} BCH](${Misc.blockchainExplorerUrl()}/address/${address}) \\(unconfirmed: ${unconfirmedBch} BCH\\)`
     } else if (result && 'message' in result) {
-      return `Error while retrieving the balance: ${result.message}.`
+      return `Error while retrieving the balance: ${result.message}\\.`
     } else {
-      return 'Something went wrong getting the balance. Please, try again.'
+      return 'Something went wrong getting the balance. Please, try again\\.'
     }
   }
 

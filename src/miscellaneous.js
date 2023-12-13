@@ -29,7 +29,7 @@ class Misc {
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
       currencyDisplay: 'narrowSymbol'
-    }).format(value)
+    }).format(value).replace('.', '\\.')
   }
 
   /**
@@ -43,7 +43,7 @@ class Misc {
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
       currencyDisplay: 'code'
-    }).format(value)
+    }).format(value).replace('.', '\\.')
   }
 
   /**
@@ -57,7 +57,7 @@ class Misc {
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
       currencyDisplay: 'code'
-    }).format(value).replace(/[a-z]{3}/i, '').trim()
+    }).format(value).replace(/[a-z]{3}/i, '').replace('.', '\\.').trim()
   }
 
   /**
@@ -73,7 +73,7 @@ class Misc {
       currencyDisplay: 'narrowSymbol',
       notation: 'compact',
       compactDisplay: 'short'
-    }).format(value)
+    }).format(value).replace('.', '\\.')
   }
 
   /**
@@ -89,7 +89,7 @@ class Misc {
       currencyDisplay: 'code',
       notation: 'compact',
       compactDisplay: 'short'
-    }).format(value).replace(/[a-z]{3}/i, '').trim()
+    }).format(value).replace(/[a-z]{3}/i, '').replace('.', '\\.').trim()
   }
 
   /**
