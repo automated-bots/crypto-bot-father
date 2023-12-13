@@ -103,7 +103,7 @@ class Misc {
     return new Intl.NumberFormat('en-IN', {
       minimumFractionDigits: minFractionDigits,
       maximumFractionDigits: maxFractionDigits
-    }).format(value)
+    }).format(value).replace('.', '\\.')
   }
 
   /**

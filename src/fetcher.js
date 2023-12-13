@@ -163,8 +163,9 @@ Reachable: ${networks[i].reachable}
    * Estimate the Bitcoin Cash fee
    */
   async bitcoinEstimateFee () {
-    const estimateFee = (await this.bitcoinCash.estimateFee()).replace('.', '\\.')
-    return `Estimated fee: ${estimateFee} BCH/kB`
+    const estimateFee = await this.bitcoinCash.estimateFee()
+    const fee = estimateFee.toString().replace('.', '\\.')
+    return `Estimated fee: ${fee} BCH/kB`
   }
 
   /**
@@ -241,8 +242,8 @@ Next block hash: ${nextBlockText}`
       let returnData = '*Latest 8 blocks:*\n'
       for (let i = 0; i < 8; i++) {
         const block = blocks.data[i]
-        const sizeKb = block.size / 1000.0
-        const poolName = ('extras' in block && 'pool' in block.extras && 'name' in block.extras.pool) ? block.extras.pool.name : 'Unknown'
+        const sizeKb = (block.size / 1000.0).toString().replace('.', '\\.')
+        const poolName = ('extras' in block && 'pool' in block.extras && 'name' in block.extras.pool) ? (block.extras.pool.name).replace('.', '\\.').replace('-', '\\-').replace('+', '\\+').replace('!', '\\!').replace('_', '\\_').replace('#', '\\#').replace('=', '\\=').replace('~', '\\~') : 'Unknown'
         returnData += `• Height: [${block.height}](${Misc.blockchainExplorerUrl()}/block/${block.id}), Pool: ${poolName}, TXs: ${block.tx_count}, Size: ${sizeKb} kB\n`
       }
       return returnData
