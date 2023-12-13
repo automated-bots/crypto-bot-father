@@ -55,7 +55,7 @@ First block of subsidy era \\#4: ${ageSubsidyBlock.years} years, ${ageFork.month
     let text = ''
     try {
       const networkResult = await this.bitcoinCash.getNetworkInfo()
-      const nodeVersion = networkResult.subversion.toString().replace('.', '\\.')
+      const nodeVersion = networkResult.subversion.toString().replaceAll('.', '\\.').replace('(', '\\(').replace(')', '\\)')
       const protocalVersion = networkResult.protocolversion.toString().replace('.', '\\.')
       text += `
 Bitcoin Cash node version: ${nodeVersion}
@@ -106,7 +106,7 @@ Last receive: ${recieveTime}
       let text = `
 *Bitcoin Network Info*
 Bitcoin cash node version: ${nodeVersion}
-User-agent string: ${subVersion}
+User\\-agent string: ${subVersion}
 Protocol version: ${protocolVersion}
 Connections: ${result.connections}
 P2P active: ${result.networkactive}
