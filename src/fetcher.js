@@ -100,7 +100,7 @@ Last receive: ${recieveTime}
     try {
       const result = await this.bitcoinCash.getNetworkInfo()
       const nodeVersion = result.version.toString().replace('.', '\\.')
-      const subVersion = result.subversion.toString().replace('.', '\\.')
+      const subVersion = result.subversion.toString().replaceAll('.', '\\.').replace('(', '\\(').replace(')', '\\)')
       const protocolVersion = result.protocolversion.toString().replace('.', '\\.')
       const relayFee = result.relayfee.toString().replace('.', '\\.')
       let text = `
