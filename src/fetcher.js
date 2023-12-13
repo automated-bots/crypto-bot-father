@@ -262,7 +262,7 @@ Next block hash: ${nextBlockText}`
       let returnData = '*Latest 8 TXs:*\n'
       for (let i = 0; i < 8; i++) {
         const tx = txs.data[i]
-        const txSmall = tx.txid.substring(0, 3) + '...' + tx.txid.substr(tx.txid.length - 3)
+        const txSmall = tx.txid.substring(0, 3) + '\\.\\.\\.' + tx.txid.substr(tx.txid.length - 3)
         const amount = Misc.printCurrencyWithoutSymbol(tx.value / 100000000.0, 5)
         const fee = Misc.printNumber(tx.fee / tx.size, 0, 2)
         returnData += `• TXID: [${txSmall}](${Misc.blockchainExplorerUrl()}/tx/${tx.txid}), Amount: ${amount} BCH, Fee: ${fee} sat/B\n`
