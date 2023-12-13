@@ -55,9 +55,11 @@ First block of subsidy era \\#4: ${ageSubsidyBlock.years} years, ${ageFork.month
     let text = ''
     try {
       const networkResult = await this.bitcoinCash.getNetworkInfo()
+      const nodeVersion = networkResult.subversion.replace('.', '\\.')
+      const protocalVersion = networkResult.protocolversion.replace('.', '\\.')
       text += `
-Bitcoin Cash node version: ${networkResult.subversion}
-Protocol version: ${networkResult.protocolversion}
+Bitcoin Cash node version: ${nodeVersion}
+Protocol version: ${protocalVersion}
 \n*Peer info*
 Peers connected: ${networkResult.connections}`
     } catch (error) {
@@ -97,14 +99,18 @@ Last receive: ${recieveTime}
   async bitcoinNetworkInfo () {
     try {
       const result = await this.bitcoinCash.getNetworkInfo()
+      const nodeVersion = result.version.replace('.', '\\.')
+      const subVersion = result.subversion.replace('.', '\\.')
+      const protocolVersion = result.protocolversion.replace('.', '\\.')
+      const relayFee = result.relayfee.replace('.', '\\.')
       let text = `
 *Bitcoin Network Info*
-Bitcoin cash node version: ${result.version}
-User-agent string: ${result.subversion}
-Protocol version: ${result.protocolversion}
+Bitcoin cash node version: ${nodeVersion}
+User-agent string: ${subVersion}
+Protocol version: ${protocolVersion}
 Connections: ${result.connections}
 P2P active: ${result.networkactive}
-Minimum relay fee:  ${result.relayfee} BCH/kB
+Minimum relay fee:  ${relayFee} BCH/kB
 Minimum charge: ${result.excessutxocharge} BCH
 Networks:`
       const networks = result.networks
@@ -157,7 +163,7 @@ Reachable: ${networks[i].reachable}
    * Estimate the Bitcoin Cash fee
    */
   async bitcoinEstimateFee () {
-    const estimateFee = await this.bitcoinCash.estimateFee()
+    const estimateFee = await this.bitcoinCash.estimateFee().replace('.', '\\.')
     return `Estimated fee: ${estimateFee} BCH/kB`
   }
 
@@ -201,12 +207,13 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
       const blockInfo = await this.bitcoinCash.getBlock(hash)
       const blockDate = Misc.printDate(new Date(blockInfo.time * 1000))
       const nextBlockText = (blockInfo.nextblockhash) ? `[${blockInfo.nextblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.nextblockhash})` : 'N/A'
+      const blockDifficulty = blockInfo.difficulty.replace('.', '\\.')
       return `**Block details for: [${hash}](${Misc.blockchainExplorerUrl()}/block/${hash})**
 Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${hash})
 Confirmations: ${blockInfo.confirmations}
 Nr of transactions: ${blockInfo.nTx}
 Block time: ${blockDate}
-Difficulty: ${blockInfo.difficulty}
+Difficulty: ${blockDifficulty}
 Preview block hash: [${blockInfo.previousblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.previousblockhash})
 Next block hash: ${nextBlockText}`
     } catch (error) {
