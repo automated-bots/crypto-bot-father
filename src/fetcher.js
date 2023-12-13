@@ -55,8 +55,8 @@ First block of subsidy era \\#4: ${ageSubsidyBlock.years} years, ${ageFork.month
     let text = ''
     try {
       const networkResult = await this.bitcoinCash.getNetworkInfo()
-      const nodeVersion = (networkResult.subversion).replace('.', '\\.')
-      const protocalVersion = (networkResult.protocolversion).replace('.', '\\.')
+      const nodeVersion = networkResult.subversion.toString().replace('.', '\\.')
+      const protocalVersion = networkResult.protocolversion.toString().replace('.', '\\.')
       text += `
 Bitcoin Cash node version: ${nodeVersion}
 Protocol version: ${protocalVersion}
@@ -75,12 +75,12 @@ Peers connected: ${networkResult.connections}`
         for (i = 0; i < 3; i++) {
           const sendTime = Misc.printDate(new Date(peerResult[i].lastsend * 1000))
           const recieveTime = Misc.printDate(new Date(peerResult[i].lastrecv * 1000))
-          const ping = parseFloat(peerResult[i].pingtime * 1000).toFixed(2)
+          const ping = parseFloat(peerResult[i].pingtime * 1000).toFixed(2).toString().replace('.', '\\.')
           text += `
 Ping: ${ping} ms
 Last send: ${sendTime}
 Last receive: ${recieveTime}
----`
+\\-\\-\\-`
         }
       } else {
         text += 'Warning: No peers connected\\.\\.\\.'
@@ -99,10 +99,10 @@ Last receive: ${recieveTime}
   async bitcoinNetworkInfo () {
     try {
       const result = await this.bitcoinCash.getNetworkInfo()
-      const nodeVersion = (result.version).replace('.', '\\.')
-      const subVersion = (result.subversion).replace('.', '\\.')
-      const protocolVersion = (result.protocolversion).replace('.', '\\.')
-      const relayFee = (result.relayfee).replace('.', '\\.')
+      const nodeVersion = result.version.toString().replace('.', '\\.')
+      const subVersion = result.subversion.toString().replace('.', '\\.')
+      const protocolVersion = result.protocolversion.toString().replace('.', '\\.')
+      const relayFee = result.relayfee.toString().replace('.', '\\.')
       let text = `
 *Bitcoin Network Info*
 Bitcoin cash node version: ${nodeVersion}
@@ -119,7 +119,7 @@ Networks:`
 Name: ${networks[i].name}
 Only net: ${networks[i].limited}
 Reachable: ${networks[i].reachable}
------------------------`
+\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-\\-`
       }
       return text
     } catch (error) {
@@ -208,7 +208,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
       const blockInfo = await this.bitcoinCash.getBlock(hash)
       const blockDate = Misc.printDate(new Date(blockInfo.time * 1000))
       const nextBlockText = (blockInfo.nextblockhash) ? `[${blockInfo.nextblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.nextblockhash})` : 'N/A'
-      const blockDifficulty = (blockInfo.difficulty).toString().replace('.', '\\.')
+      const blockDifficulty = blockInfo.difficulty.toString().replace('.', '\\.')
       return `**Block details for: [${hash}](${Misc.blockchainExplorerUrl()}/block/${hash})**
 Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${hash})
 Confirmations: ${blockInfo.confirmations}
