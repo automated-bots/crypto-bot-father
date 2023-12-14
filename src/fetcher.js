@@ -55,8 +55,8 @@ First block of subsidy era \\#4: ${ageSubsidyBlock.years} years, ${ageFork.month
     let text = ''
     try {
       const networkResult = await this.bitcoinCash.getNetworkInfo()
-      const nodeVersion = networkResult.subversion.toString().replaceAll('.', '\\.').replace('(', '\\(').replace(')', '\\)')
-      const protocalVersion = networkResult.protocolversion.toString().replace('.', '\\.')
+      const nodeVersion = networkResult.subversion.toString().replaceAll('.', '\\.').replaceAll('(', '\\(').replaceAll(')', '\\)')
+      const protocalVersion = networkResult.protocolversion.toString().replaceAll('.', '\\.')
       text += `
 Bitcoin Cash node version: ${nodeVersion}
 Protocol version: ${protocalVersion}
@@ -99,9 +99,9 @@ Last receive: ${recieveTime}
   async bitcoinNetworkInfo () {
     try {
       const result = await this.bitcoinCash.getNetworkInfo()
-      const nodeVersion = result.version.toString().replace('.', '\\.')
-      const subVersion = result.subversion.toString().replaceAll('.', '\\.').replace('(', '\\(').replace(')', '\\)')
-      const protocolVersion = result.protocolversion.toString().replace('.', '\\.')
+      const nodeVersion = result.version.toString().replaceAll('.', '\\.')
+      const subVersion = result.subversion.toString().replaceAll('.', '\\.').replaceAll('(', '\\(').replaceAll(')', '\\)')
+      const protocolVersion = result.protocolversion.toString().replaceAll('.', '\\.')
       const relayFee = result.relayfee.toString().replace('.', '\\.')
       let text = `
 *Bitcoin Network Info*
@@ -243,8 +243,12 @@ Next block hash: ${nextBlockText}`
       for (let i = 0; i < 8; i++) {
         const block = blocks.data[i]
         const sizeKb = (block.size / 1000.0).toString().replace('.', '\\.')
-        const poolName = ('extras' in block && 'pool' in block.extras && 'name' in block.extras.pool) ? (block.extras.pool.name).replace('.', '\\.').replace('-', '\\-').replace('+', '\\+').replace('!', '\\!').replace('_', '\\_').replace('#', '\\#').replace('=', '\\=').replace('~', '\\~') : 'Unknown'
-        returnData += `• Height: [${block.height}](${Misc.blockchainExplorerUrl()}/block/${block.id}), Pool: ${poolName}, TXs: ${block.tx_count}, Size: ${sizeKb} kB\n`
+        const poolName = ('extras' in block && 'pool' in block.extras && 'name' in block.extras.pool) ? (block.extras.pool.name) : 'Unknown'
+        const poolNameMarkdownSafe = poolName.replaceAll('.', '\\.').replaceAll('-', '\\-').replaceAll('!', '\\!').replaceAll('+', '\\+').replaceAll('#', '\\#').replaceAll('*', '\\*')
+          .replaceAll('_', '\\_').replaceAll('(', '\\(').replaceAll(')', '\\)').replaceAll('~', '\\~').replaceAll('`', '\\~')
+          .replaceAll('|', '\\|').replaceAll('[', '\\[').replaceAll(']', '\\]').replaceAll('<', '\\<').replaceAll('>', '\\>')
+          .replaceAll('=', '\\=').replaceAll('{', '\\{').replaceAll('}', '\\}').replaceAll('=', '\\=').replaceAll('=', '\\=')
+        returnData += `• Height: [${block.height}](${Misc.blockchainExplorerUrl()}/block/${block.id}), Pool: ${poolNameMarkdownSafe}, TXs: ${block.tx_count}, Size: ${sizeKb} kB\n`
       }
       return returnData
     } else {
