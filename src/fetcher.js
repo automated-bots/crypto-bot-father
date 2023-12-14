@@ -400,7 +400,7 @@ Next block hash: ${nextBlockText}`
         rates = rates.data
       } catch (err) {
         // Continue without exchange rates
-        console.log('(internal) Could not get exchange rates (symbol: ' + symbol + ') during marketStats().')
+        console.error('(internal) Could not get exchange rates (symbol: ' + symbol + ') during marketStats(). With error: ' + err.message)
       }
       if (quote.data && meta.data) {
         // Note: rates could be an object containing the rates or null
