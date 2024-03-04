@@ -98,7 +98,11 @@ app.use('/', routes)
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
-  next(createError(404))
+  if (req.originalUrl.includes('favicon.ico')) {
+    res.sendStatus(404)
+  } else {
+    next(createError(404))
+  }
 })
 
 // Error handler
