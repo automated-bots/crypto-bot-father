@@ -233,11 +233,11 @@ Exchange rate: ${exchangeRate} \\(${percentageChange24h}%\\) BCH/USD`
     const tableData = []
     tableData.push(['Nr', 'Symbl', '$ Price', '%24H', '%7D', '$ Cap', '$Vol24H'])
     for (const coin of listingResults) {
-      const dollarPrice = Misc.printCurrencyWithoutSymbol(coin.price)
-      const percentChange24h = (coin.percentage_changed_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
-      const percentChange7d = (coin.percentage_changed_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
-      const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(coin.market_cap)
-      const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(coin.volume_24h)
+      const dollarPrice = Misc.printCurrencyWithoutSymbol(coin.price).replace('\\.', '.')
+      const percentChange24h = (coin.percentage_changed_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange7d = (coin.percentage_changed_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(coin.market_cap).replace('\\.', '.')
+      const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(coin.volume_24h).replace('\\.', '.')
       tableData.push([coin.rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, marketCap, volume24h])
     }
     text += '```\n' + table(tableData, config) + '\n```'
@@ -264,13 +264,13 @@ Exchange rate: ${exchangeRate} \\(${percentageChange24h}%\\) BCH/USD`
     tableData.push(['Nr', 'Symbol', '$ Price', '%24H', '%7D', '%30D', '90D', '$ Cap', '$Vol24H', '%Domin', 'Cir. Supp', 'Max Supp'])
     for (const coin of listingResults) {
       const dollarPrice = Misc.printCurrencyWithoutSymbol(coin.price)
-      const percentChange24h = (coin.percentage_changed_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
-      const percentChange7d = (coin.percentage_changed_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
-      const percentChange30d = (coin.percentage_changed_30d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
-      const percentChange90d = (coin.percentage_changed_90d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
+      const percentChange24h = (coin.percentage_changed_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange7d = (coin.percentage_changed_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange30d = (coin.percentage_changed_30d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange90d = (coin.percentage_changed_90d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(coin.market_cap)
       const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(coin.volume_24h)
-      const marketCapDominance = (coin.market_cap_dominance).toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).replace('.', '\\.')
+      const marketCapDominance = (coin.market_cap_dominance).toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
       const circulatingSupply = Misc.printCurrencyNotationCompactWithoutSymbol(coin.circulating_supply)
       const maxSupply = (coin.max_supply) ? Misc.printCurrencyNotationCompactWithoutSymbol(coin.max_supply) : 'N/A'
       tableData.push([coin.rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, percentChange30d, percentChange90d, marketCap, volume24h, marketCapDominance, circulatingSupply, maxSupply])
