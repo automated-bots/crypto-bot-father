@@ -15,6 +15,7 @@ class ProcessResult {
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
     const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
+    const datetime = rates.datetime
 
     if (quoteSymbol) {
       quoteSymbol = quoteSymbol.toUpperCase()
@@ -44,7 +45,8 @@ class ProcessResult {
     return `*Current prices of ${baseName} \\(*[${baseCurrency}](${COINGECKO_URL}/${urlBaseName})*\\) in fiat and crypto*
 • ${dollarPrice} USD
 • ${euroPrice} EUR
-${cryptoPrices}`
+${cryptoPrices}
+Rates datetime: ${datetime}`
   }
 
   static detailedPriceOverview (symbol, rates) {
@@ -78,6 +80,7 @@ ${cryptoPrices}`
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
     const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
+    const datetime = rates.datetime
 
     return `*Current prices of ${baseName} \\(*[${baseCurrency}](${COINGECKO_URL}/${urlBaseName})*\\) in fiat*
 • ${dollarPrice} USD
@@ -106,7 +109,9 @@ ${cryptoPrices}`
 *Current price of ${baseName} in stable coins*
 • ${usdcPrice} [USDC](${COINGECKO_URL}/usd-coin)
 • ${usdtPrice} [USDT](${COINGECKO_URL}/tether)
-• ${busdPrice} [BUSD](${COINGECKO_URL}/binance-usd)`
+• ${busdPrice} [BUSD](${COINGECKO_URL}/binance-usd)
+
+Rates datetime: ${datetime}`
   }
 
   static dominance (symbol, quote) {
@@ -150,6 +155,8 @@ Price: 1 ${symbol} \\= ${ethPrice} ETH`
     const changeIcon7d = (Math.sign(quote.percentage_changed_7d) === 1) ? '🔼' : '🔽'
     const changeIcon30d = (Math.sign(quote.percentage_changed_30d) === 1) ? '🔼' : '🔽'
     const changeIcon90d = (Math.sign(quote.percentage_changed_90d) === 1) ? '🔼' : '🔽'
+    const datetime = quote.last_updated
+
     return `*General coin data for ${name} \\(*[${symbol}](${meta.cmc_url})*\\)*
 Rank: \\#${meta.rank}
 Circulating supply: ${circulatingSupply} ${symbol}s
@@ -158,6 +165,7 @@ Max\\. supply: ${maxSupply} ${symbol}s
 Market Cap: $${marketCap}
 Market Dominance: ${marketCapDominance}%
 Visit on: [CoinMarketCap](${meta.cmc_url})
+Quote datetime: ${datetime}
 
 *Price* 💱
 Price: 1 ${symbol} \\= ${dollarPrice} USD
@@ -193,6 +201,8 @@ Last 90D: ${changeIcon90d} ${percentChanged90d}%`
     const blockReward24h = miningResult.block_reward24h.toString().replace('.', '\\.')
     const blockReward3d = miningResult.block_reward3d.toString().replace('.', '\\.')
     const blockReward7d = miningResult.block_reward7d.toString().replace('.', '\\.')
+    const datetime = quote.last_updated
+
     return `*General* 🖥
 Last block: ${medianTime}
 Median time current best block: ${blockchainResult.mediantime}
@@ -200,6 +210,7 @@ Best block height: [${bestBlockResult.height}](${Misc.blockchainExplorerUrl()}/b
 Net Hashrate: ${hashrateth} Phash/s
 Mempool size: ${miningResultLocal.pooledtx}
 Market capital: ${marketCap} USD
+Quote datetime: ${datetime}
 
 *Difficulty* 🤯
 Difficulty: ${difficulty}M
