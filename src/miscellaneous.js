@@ -107,6 +107,14 @@ class Misc {
   }
 
   /**
+   * Make the string Telegram friendly
+   * @param {String} datetime datetime string
+   */
+  static printDatetime (datetime) {
+    return datetime.replaceAll('-', '\\-').replace('.', '\\.')
+  }
+
+  /**
    * Validate if hash is SHA256
    * @param {string} - hash string
    * @return {Boolean} True if SHA256 otherwise false

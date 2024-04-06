@@ -15,7 +15,7 @@ class ProcessResult {
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
     const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
-    const datetime = rates.datetime.replaceAll('-', '\\-')
+    const datetime = Misc.printDatetime(rates.datetime)
 
     if (quoteSymbol) {
       quoteSymbol = quoteSymbol.toUpperCase()
@@ -80,7 +80,7 @@ Rates datetime: ${datetime}`
     const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
     const baseName = (rates.base_name) ? rates.base_name : symbol
     const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
-    const datetime = rates.datetime.replaceAll('-', '\\-')
+    const datetime = Misc.printDatetime(rates.datetime)
 
     return `*Current prices of ${baseName} \\(*[${baseCurrency}](${COINGECKO_URL}/${urlBaseName})*\\) in fiat*
 • ${dollarPrice} USD
@@ -155,8 +155,7 @@ Price: 1 ${symbol} \\= ${ethPrice} ETH`
     const changeIcon7d = (Math.sign(quote.percentage_changed_7d) === 1) ? '🔼' : '🔽'
     const changeIcon30d = (Math.sign(quote.percentage_changed_30d) === 1) ? '🔼' : '🔽'
     const changeIcon90d = (Math.sign(quote.percentage_changed_90d) === 1) ? '🔼' : '🔽'
-    // replace all dashes
-    const datetime = quote.last_updated.replaceAll('-', '\\-')
+    const datetime = Misc.printDatetime(quote.last_updated)
 
     return `*General coin data for ${name} \\(*[${symbol}](${meta.cmc_url})*\\)*
 Rank: \\#${meta.rank}
@@ -202,7 +201,7 @@ Last 90D: ${changeIcon90d} ${percentChanged90d}%`
     const blockReward24h = miningResult.block_reward24h.toString().replace('.', '\\.')
     const blockReward3d = miningResult.block_reward3d.toString().replace('.', '\\.')
     const blockReward7d = miningResult.block_reward7d.toString().replace('.', '\\.')
-    const datetime = quote.last_updated.replaceAll('-', '\\-')
+    const datetime = Misc.printDatetime(quote.last_updated)
 
     return `*General* 🖥
 Last block: ${medianTime}
