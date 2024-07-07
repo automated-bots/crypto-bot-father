@@ -361,117 +361,117 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
     // Other stuff
     this.bot.on('message', (msg) => {
       const catResponses = [
-        'Did you know? Cats can jump up to six times their length in one leap. Meow-gical, right?',
-        'Why was the cat sitting on the computer? Because it wanted to keep an eye on the mouse!',
-        "Here's a fun cat fact: In ancient times cats were worshipped as gods; they have not forgotten this. - Terry Pratchett",
-        'Time spent with cats is never wasted. - Sigmund Freud',
-        "Here's a kitty to make you smile! 🐱"
+        'Did you know? Cats can jump up to six times their length in one leap\\. Meow\\-gical, right?',
+        'Why was the cat sitting on the computer? Because it wanted to keep an eye on the mouse\\!',
+        "Here's a fun cat fact: In ancient times cats were worshipped as gods; they have not forgotten this\\. \\- Terry Pratchett",
+        'Time spent with cats is never wasted\\. \\- Sigmund Freud',
+        "Here's a kitty to make you smile\\! 🐱"
       ]
       const dogResponses = [
-        'Why did the dog sit in the shade? Because he didn\'t want to be a hot dog!',
-        'What do you call a dog magician? A labracadabrador!',
-        "Ever wonder why dogs chase their tails? They're trying to make ends meet!",
-        'Why do dogs run in circles? Because it\'s hard to run in squares!',
-        "What's a dog's favorite instrument? The trombone!"
+        'Why did the dog sit in the shade? Because he didn\'t want to be a hot dog\\!',
+        'What do you call a dog magician? A labracadabrador\\!',
+        "Ever wonder why dogs chase their tails? They're trying to make ends meet\\!",
+        'Why do dogs run in circles? Because it\'s hard to run in squares\\!',
+        "What's a dog's favorite instrument? The trombone\\!"
       ]
       const jokeResponses = [
-        'Why did the Bitcoin Cash cross the road? To reach the moon before Bitcoin!',
-        "What's a Bitcoin Cash hodler's favorite dance move? The BCH shuffle!",
-        "Why did the Bitcoin Cash developer break up with their significant other? They couldn't handle the big blocks!",
-        'How does Bitcoin Cash like its coffee? With a lot of hash!',
-        "What's a Bitcoin Cash enthusiast's favorite hobby? Forking around with big blocks!",
-        'Why did the restaurant stop accepting Bitcoin? The fees were eating into their profits!',
-        "What's a Bitcoin Cash miner's favorite game? Crash Bandicoot!",
-        'What do you call a group of Bitcoin Cash supporters? A chain gang!',
-        'Why did the Bitcoin Cash investor bring a shovel to the crypto conference? To dig for buried blocks!',
-        "What's Bitcoin Cash's favorite mode of transportation? The BCHain!",
-        'How does Bitcoin Cash handle stress? It just goes with the fork!',
-        'Why did the bank robber switch to BCH? He got tired of waiting for his confirmations to come through.',
-        'BCH struts into a cafe, pays for a pastry with a wink. Whispers to Bitcoin across the counter, "Enjoy waiting for your latte while I fight the custodial dragon on the Lightning Network."',
-        'Why was the Bitcoin Cash community excited about the block size increase? More room for BCHain parties!',
-        "What did the Bitcoin Cash say to the skeptic? Fork off, I'm the real deal!",
-        'Why did the Bitcoin Cash miner bring a pickaxe to the blockchain? To mine their own business!',
-        "What's a Bitcoin Cash enthusiast's favorite movie? The Fast and the Furious!",
-        'Why did the man walk past the Bitcoin ATM and use the BCH one instead? He only had a penny to buy a cup of coffee!',
-        'Why did the Bitcoin Cash investor bring a fishing rod to the crypto conference? To catch big blocks of fish and chips!',
-        'What do you call a Bitcoin Cash transaction in the winter? A cold chain!',
-        'Why did the Bitcoin Cash investor get a job at the circus? To juggle all those big blocks!'
+        'Why did the Bitcoin Cash cross the road? To reach the moon before Bitcoin\\!',
+        "What's a Bitcoin Cash hodler's favorite dance move? The BCH shuffle\\!",
+        "Why did the Bitcoin Cash developer break up with their significant other? They couldn't handle the big blocks\\!",
+        'How does Bitcoin Cash like its coffee? With a lot of hash\\!',
+        "What's a Bitcoin Cash enthusiast's favorite hobby? Forking around with big blocks\\!",
+        'Why did the restaurant stop accepting Bitcoin? The fees were eating into their profits\\!',
+        "What's a Bitcoin Cash miner's favorite game? Crash Bandicoot\\!",
+        'What do you call a group of Bitcoin Cash supporters? A chain gang\\!',
+        'Why did the Bitcoin Cash investor bring a shovel to the crypto conference? To dig for buried blocks\\!',
+        "What's Bitcoin Cash's favorite mode of transportation? The BCHain\\!",
+        'How does Bitcoin Cash handle stress? It just goes with the fork\\!',
+        'Why did the bank robber switch to BCH? He got tired of waiting for his confirmations to come through\\.',
+        'BCH struts into a cafe, pays for a pastry with a wink\\. Whispers to Bitcoin across the counter, "Enjoy waiting for your latte while I fight the custodial dragon on the Lightning Network\\."',
+        'Why was the Bitcoin Cash community excited about the block size increase? More room for BCHain parties\\!',
+        "What did the Bitcoin Cash say to the skeptic? Fork off, I'm the real deal\\!",
+        'Why did the Bitcoin Cash miner bring a pickaxe to the blockchain? To mine their own business\\!',
+        "What's a Bitcoin Cash enthusiast's favorite movie? The Fast and the Furious\\!",
+        'Why did the man walk past the Bitcoin ATM and use the BCH one instead? He only had a penny to buy a cup of coffee\\!',
+        'Why did the Bitcoin Cash investor bring a fishing rod to the crypto conference? To catch big blocks of fish and chips\\!',
+        'What do you call a Bitcoin Cash transaction in the winter? A cold chain\\!',
+        'Why did the Bitcoin Cash investor get a job at the circus? To juggle all those big blocks\\!'
       ]
       const mcdonaldsResponses = [
-        "When BCH price drops, time to brush up that McDonald's job application!",
-        "Looks like it's time to consider a side hustle at McDonald's. Wonder if they take applications in cryptocurrency?",
-        "BCH price taking a dive? Don't worry, the drive thru will be there to help!",
-        "When BCH hits a rough patch, remember: even McDonald's started small. And now they're flipping billions of patties! And they can use your help.",
-        "Considering a career change to McDonald's due to BCH price? At least you'll get a guaranteed McMoon every month.",
-        'Changing career to McDonald\'s? Their milkshake machine might actually work more often than your BCH fortune telling skills.',
-        "BCH dip? Time to brush up on those McDonald's skills from last year and get a job at McDonald's!",
-        "Don't let BCH price dips drive you to McDonald's. Hodl strong, because the crypto market is full of surprises!",
-        "When BCH price is down, it's just a reminder that even Bitcoin Cash needs its McBreaks!",
-        "Feeling down about BCH price? McDonald's offers great benefits and will cheer you up with their value meals (if you can afford them).",
-        'When BCH takes a dip, think of it as a chance to perfect your burger-flipping skills. Hodl strong!',
+        "When BCH price drops, time to brush up that McDonald's job application\\!",
+        "Looks like it's time to consider a side hustle at McDonald's\\. Wonder if they take applications in cryptocurrency?",
+        "BCH price taking a dive? Don't worry, the drive thru will be there to help\\!",
+        "When BCH hits a rough patch, remember: even McDonald's started small\\. And now they're flipping billions of patties\\! And they can use your help\\.",
+        "Considering a career change to McDonald's due to BCH price? At least you'll get a guaranteed McMoon every month\\.",
+        'Changing career to McDonald\'s? Their milkshake machine might actually work more often than your BCH fortune telling skills\\.',
+        "BCH dip? Time to brush up on those McDonald's skills from last year and get a job at McDonald's\\!",
+        "Don't let BCH price dips drive you to McDonald's\\. Hodl strong, because the crypto market is full of surprises\\!",
+        "When BCH price is down, it's just a reminder that even Bitcoin Cash needs its McBreaks\\!",
+        "Feeling down about BCH price? McDonald's offers great benefits and will cheer you up with their value meals \\(if you can afford them\\)\\.",
+        'When BCH takes a dip, think of it as a chance to perfect your burger\\-flipping skills\\. Hodl strong\\!',
         "BCH price down? Time to think like McDonald's: \"Would you like some dipping sauce with that dip in the market?\"",
-        'When BCH price drops, remember: it\'s just a temporary dip, not a Happy Meal deal breaker!',
-        "Thinking about McDonald's due to BCH price? You might end up flipping burgers instead of flipping cryptocurrencies!",
-        "Considering a job at McDonald's because of BCH prices? Remember, flipping burgers might be less volatile than flipping coins!",
-        'Thinking about applying to McDonald\'s during a BCH bear market? Just remember, even their "dollar menu" doesn\'t offer this kind of discount!',
-        "If BCH price has you considering McDonald's, just remember: their hiring process is faster than your BCH lambo dreams.",
-        "When BCH prices drop, consider working at McDonald's—because at least there you'll know the value of every patty!",
-        "Feeling the crunch of BCH price dip? Remember, McDonald's started small too, however, they're always hiring Bitcoin Cashers!",
-        'BCH price fluctuating? Stay cool like an ice-cold McFlurry and fill-in that form already...'
+        'When BCH price drops, remember: it\'s just a temporary dip, not a Happy Meal deal breaker\\!',
+        "Thinking about McDonald's due to BCH price? You might end up flipping burgers instead of flipping cryptocurrencies\\!",
+        "Considering a job at McDonald's because of BCH prices? Remember, flipping burgers might be less volatile than flipping coins\\!",
+        'Thinking about applying to McDonald\'s during a BCH bear market? Just remember, even their "dollar menu" doesn\'t offer this kind of discount\\!',
+        "If BCH price has you considering McDonald's, just remember: their hiring process is faster than your BCH lambo dreams\\.",
+        "When BCH prices drop, consider working at McDonald's—because at least there you'll know the value of every patty\\!",
+        "Feeling the crunch of BCH price dip? Remember, McDonald's started small too, however, they're always hiring Bitcoin Cashers\\!",
+        'BCH price fluctuating? Stay cool like an ice\\-cold McFlurry and fill\\-in that form already\\.'
       ]
       const insultResponses = [
-        'Why did the Bitcoin Cash supporter become a chef? They wanted to fork pancakes instead of blockchains!',
-        "What's the difference between Bitcoin and Bitcoin Cash? One is digital gold, the other is fool's gold!",
-        'Why did the Bitcoin Cash developer go broke? They kept trying to scale but forgot to add value!',
-        'Why did the Bitcoin Cash enthusiast go broke? They spent more time debating block sizes than learning about financial sense!',
-        'How many Bitcoin Cash supporters does it take to change a light bulb? None, they prefer to fork in the dark!',
-        'What do you call a group of Bitcoin Cash developers? A hard fork of friends!',
-        "Why don't Bitcoin Cash supporters play hide and seek? They can't hide from the real Bitcoin!",
-        'Why did the Bitcoin Cash investor carry an umbrella? For all the rain from Bitcoin maximalists!',
-        'Why did the Bitcoin Cash miner get a job in customer service? They were used to dealing with forks!'
+        'Why did the Bitcoin Cash supporter become a chef? They wanted to fork pancakes instead of blockchains\\!',
+        "What's the difference between Bitcoin and Bitcoin Cash? One is digital gold, the other is fool's gold\\!",
+        'Why did the Bitcoin Cash developer go broke? They kept trying to scale but forgot to add value\\!',
+        'Why did the Bitcoin Cash enthusiast go broke? They spent more time debating block sizes than learning about financial sense\\!',
+        'How many Bitcoin Cash supporters does it take to change a light bulb? None, they prefer to fork in the dark\\!',
+        'What do you call a group of Bitcoin Cash developers? A hard fork of friends\\!',
+        "Why don't Bitcoin Cash supporters play hide and seek? They can't hide from the real Bitcoin\\!",
+        'Why did the Bitcoin Cash investor carry an umbrella? For all the rain from Bitcoin maximalists\\!',
+        'Why did the Bitcoin Cash miner get a job in customer service? They were used to dealing with forks\\!'
       ]
       const motivationResponses = [
-        "Bitcoin Cash is not just a currency; it's a revolution in digital finance. Keep hodling!",
-        "During downtimes, remember: Bitcoin Cash's history is filled with comebacks and triumphs.",
-        'Every Bitcoin Cash dip is an opportunity to accumulate for the future. Stay patient and wait another 15 years!',
-        'The resilience of Bitcoin Cash is unmatched. Trust in its long-term potential.',
-        '"When in doubt, zoom out!" Bitcoin Cash\'s journey is about steady growth over time.',
-        'Believe in the fundamentals. Bitcoin Cash is paving the way for a decentralized future and an electronic cash system.',
-        'In the world of Bitcoin Cash, volatility is a sign of its evolving strength and adoption (I think?).',
-        "Think of Bitcoin Cash's fluctuations as turbulence before a smooth flight to new heights. Because the block height is constantly increasing, it's a good sign.",
-        'Bitcoin Cash rewards those who stay committed through ups and downs. Despite the block rewards are going down :).',
-        "When Bitcoin Cash drops, it's a chance to buy low and strengthen your position for the future. So you have more BCH in absolute amount at least."
+        "Bitcoin Cash is not just a currency; it's a revolution in digital finance\\. Keep hodling\\!",
+        "During downtimes, remember: Bitcoin Cash's history is filled with comebacks and triumphs\\.",
+        'Every Bitcoin Cash dip is an opportunity to accumulate for the future\\. Stay patient and wait another 15 years\\!',
+        'The resilience of Bitcoin Cash is unmatched\\. Trust in its long\\-term potential\\.',
+        '"When in doubt, zoom out\\!" Bitcoin Cash\'s journey is about steady growth over time\\.',
+        'Believe in the fundamentals\\. Bitcoin Cash is paving the way for a decentralized future and an electronic cash system\\.',
+        'In the world of Bitcoin Cash, volatility is a sign of its evolving strength and adoption \\(I think?\\)\\.',
+        "Think of Bitcoin Cash's fluctuations as turbulence before a smooth flight to new heights\\. Because the block height is constantly increasing, it's a good sign\\.",
+        'Bitcoin Cash rewards those who stay committed through ups and downs\\. Despite the block rewards are going down 😊\\)\\.',
+        "When Bitcoin Cash drops, it's a chance to buy low and strengthen your position for the future\\. So you have more BCH in absolute amount at least\\."
       ]
       const fakeNewsResponses = [
         'BREAKING: Scientists discover a way to mine BitcoinCash using renewable energy, eliminating carbon footprint',
         'Crypto adoption soars as major retailers announce acceptance of Bitcoin Cash for all purchases',
-        'Bitcoin Cash hits new all-time high of $1 million, making early adopters the richest people on Earth',
+        'Bitcoin Cash hits new all\\-time high of $1 million, making early adopters the richest people on Earth',
         'New blockchain technology solves global poverty crisis, providing financial inclusion for billions',
         'CryptoKitties NFT Sells for Record $10 Million, Buyer Plans Virtual Cat Mansion in Decentraland',
-        "Dogecoin becomes official currency of Mars colony, Elon Musk declares 'This is one small step for Doge, one giant leap for Dogekind!'",
+        "Dogecoin becomes official currency of Mars colony, Elon Musk declares 'This is one small step for Doge, one giant leap for Dogekind\\!'",
         'Litecoin founder receives Nobel Prize for contributions to decentralized finance',
         'Stablecoin becomes preferred currency for international trade, reducing transaction costs globally',
-        'Vitalik Buterin announces new Ethereum upgrade, \'Ethereum Infinity\', promising infinite scalability and zero transaction fees.',
+        'Vitalik Buterin announces new Ethereum upgrade, \'Ethereum Infinity\', promising infinite scalability and zero transaction fees\\.',
         'Crypto philanthropist donates billions in Bitcoin Cash to fund clean water projects in developing countries'
       ]
       const shillResponses = [
-        'Bitcoin Cash offers rapid transaction times and low fees, making it perfect for everyday transactions and micro-payments.',
-        'With a larger block size, BCH can handle more transactions per second than BTC, ensuring it can scale effectively as adoption grows. If needed the block size can be further increased.',
-        'BCH has a strong community of developers and enthusiasts dedicated to its growth and improvement, fostering innovation and resilience.',
-        'BCH stays true to the decentralized ethos of cryptocurrencies, empowering individuals worldwide with financial freedom and electronic cash. All within layer 1.',
-        'Many merchants and businesses accept BCH globally, providing practical use cases for its utility as a peer-to-peer electronic cash system.',
-        'Bitcoin Cash prioritizes user experience with intuitive wallets and a focus on usability, making it accessible for newcomers and seasoned users alike.'
+        'Bitcoin Cash offers rapid transaction times and low fees, making it perfect for everyday transactions and micro\\-payments\\.',
+        'With a larger block size, BCH can handle more transactions per second than BTC, ensuring it can scale effectively as adoption grows\\. If needed the block size can be further increased\\.',
+        'BCH has a strong community of developers and enthusiasts dedicated to its growth and improvement, fostering innovation and resilience\\.',
+        'BCH stays true to the decentralized ethos of cryptocurrencies, empowering individuals worldwide with financial freedom and electronic cash\\. All within layer 1\\.',
+        'Many merchants and businesses accept BCH globally, providing practical use cases for its utility as a peer\\-to\\-peer electronic cash system\\.',
+        'Bitcoin Cash prioritizes user experience with intuitive wallets and a focus on usability, making it accessible for newcomers and seasoned users alike\\.'
       ]
       const fudResponses = [
-        'Bitcoin Cash scalability questioned in recent analysis, but ongoing upgrades like Avalanche consensus are addressing these concerns effectively.',
-        'Reports suggest BCH adoption rates may be stagnating, yet recent partnerships and merchant integrations continue to expand its ecosystem.',
-        "Security vulnerabilities allegedly found in Bitcoin Cash, though developers assert robust security measures ensure the network's integrity.",
-        'Rumors of key developers leaving BCH project surfaced, but community sources indicate a diverse and committed development team remains active.',
-        'Critics argue Bitcoin Cash lacks innovation compared to newer cryptocurrencies, while proponents highlight ongoing advancements like CashFusion for privacy.',
-        'Concerns over regulatory challenges for BCH arise amid evolving global regulations, prompting community discussions on compliance strategies.',
-        'Increased transaction fees on the BCH network reported during peak usage times, raising questions about its scalability under heavy demand.',
-        "Internal disputes within the BCH community discussed, with factions debating strategic directions but unified in preserving BCH's decentralized ethos.",
-        'Allegations of market manipulation affecting BCH prices investigated, highlighting volatility and market dynamics rather than deliberate manipulation.'
+        'Bitcoin Cash scalability questioned in recent analysis, but ongoing upgrades like Avalanche consensus are addressing these concerns effectively\\.',
+        'Reports suggest BCH adoption rates may be stagnating, yet recent partnerships and merchant integrations continue to expand its ecosystem\\.',
+        "Security vulnerabilities allegedly found in Bitcoin Cash, though developers assert robust security measures ensure the network's integrity\\.",
+        'Rumors of key developers leaving BCH project surfaced, but community sources indicate a diverse and committed development team remains active\\.',
+        'Critics argue Bitcoin Cash lacks innovation compared to newer cryptocurrencies, while proponents highlight ongoing advancements like CashFusion for privacy\\.',
+        'Concerns over regulatory challenges for BCH arise amid evolving global regulations, prompting community discussions on compliance strategies\\.',
+        'Increased transaction fees on the BCH network reported during peak usage times, raising questions about its scalability under heavy demand\\.',
+        "Internal disputes within the BCH community discussed, with factions debating strategic directions but unified in preserving BCH's decentralized ethos\\.",
+        'Allegations of market manipulation affecting BCH prices investigated, highlighting volatility and market dynamics rather than deliberate manipulation\\.'
       ]
 
       if (msg.text) {
@@ -497,11 +497,11 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
         } else if (msg.text.toString() === '/fud') {
           this.sendMessage(msg.chat.id, fudResponses[Math.floor(Math.random() * fudResponses.length)])
         } else if (msg.text.toString() === '/wallet') {
-          this.sendMessage(msg.chat.id, `Total balance of ${name}: -$180,000.00. Have a nice day.`)
+          this.sendMessage(msg.chat.id, `Total balance of ${name}: \\-$180,000.00. Have a nice day.`)
         } else if (msg.text.toString() === '/moon') {
-          this.sendMessage(msg.chat.id, '🌕 BCH to the moon and beyond! Strap in, hodlers! We\'re orbiting towards financial freedom!')
+          this.sendMessage(msg.chat.id, '🌕 BCH to the moon and beyond\\! Strap in, hodlers\\! We\'re orbiting towards financial freedom\\!')
         } else if (msg.text.toString() === '/easteregg') {
-          this.sendMessage(msg.chat.id, `🐰 ${name} found the hidden Easter egg! As a reward, here's a virtual high-five 🖐️ and a secret crypto tip: hodl your memes as tightly as you hodl your Bitcoin Cash!`)
+          this.sendMessage(msg.chat.id, `🐰 ${name} found the hidden Easter egg\\! As a reward, here's a virtual high\\-five 🖐️ and a secret crypto tip: hodl your memes as tightly as you hodl your Bitcoin Cash\\!`)
         }
       }
     })
