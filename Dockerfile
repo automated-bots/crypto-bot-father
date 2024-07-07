@@ -1,5 +1,5 @@
 FROM node:22-slim
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 ARG DEBIAN_FRONTEND=noninteractive
 
