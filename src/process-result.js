@@ -21,7 +21,7 @@ class ProcessResult {
       quoteSymbol = quoteSymbol.toUpperCase()
       if (Object.keys(ratesList).includes(quoteSymbol)) {
         const quotePrice = Misc.printCurrencyWithoutSymbol(ratesList[quoteSymbol], 8)
-        return `Current price of ${baseName} ([${baseCurrency}](${COINGECKO_URL}/${urlBaseName})) is ${quotePrice} ${quoteSymbol}`
+        return `Current price of ${baseName} \\([${baseCurrency}](${COINGECKO_URL}/${urlBaseName})\\) is ${quotePrice} ${quoteSymbol}`
       }
     }
 
