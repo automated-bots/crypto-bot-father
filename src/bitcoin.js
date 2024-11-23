@@ -1,6 +1,6 @@
-const axios = require('axios')
+import axios from 'axios'
 
-class BitcoinCash {
+export default class BitcoinCash {
   /**
    * Constructor
    * @param {string} bitcoindHost
@@ -139,5 +139,3 @@ class BitcoinCash {
       })
   }
 }
-
-module.exports = BitcoinCash

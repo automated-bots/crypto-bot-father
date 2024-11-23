@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+import { Router } from 'express'
+const router = Router()
 
 // We are receiving updates at the route below
 router.post(`/bot${global.TelegramSecretHash}`, (req, res) => {
@@ -7,4 +7,4 @@ router.post(`/bot${global.TelegramSecretHash}`, (req, res) => {
   res.sendStatus(200)
 })
 
-module.exports = router
+export default router

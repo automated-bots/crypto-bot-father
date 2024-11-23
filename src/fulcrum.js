@@ -1,12 +1,12 @@
-const net = require('net')
+import { Socket } from 'net'
 
-class Fulcrum {
+export default class Fulcrum {
   /**
    * Constructor
    * @param {integer} fulcrumPort Fulcrum port
-   * @param {string} fulcrumHost (Optional) Fulcrum host, default: 127.0.0.1
+   * @param {string} fulcrumHost Fulcrum host
    */
-  constructor (fulcrumPort, fulcrumHost = '127.0.0.1') {
+  constructor (fulcrumPort, fulcrumHost) {
     this.port = fulcrumPort
     this.host = fulcrumHost
     this.received = {}
@@ -16,7 +16,7 @@ class Fulcrum {
   }
 
   connect () {
-    this.fulcrum = new net.Socket()
+    this.fulcrum = new Socket()
     this.fulcrum.setTimeout(10000)
     this.fulcrum.setEncoding('utf8')
     this.fulcrum.setKeepAlive(true, 0)
@@ -96,5 +96,3 @@ class Fulcrum {
     }
   }
 }
-
-module.exports = Fulcrum

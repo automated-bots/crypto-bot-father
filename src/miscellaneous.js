@@ -1,6 +1,6 @@
-const { DateTime } = require('luxon')
+import { DateTime } from 'luxon'
 
-class Misc {
+export default class Misc {
   /**
    * Get blockchain Explorer URL
    * @returns URL
@@ -135,5 +135,3 @@ class Misc {
     return diff.toObject()
   }
 }
-
-module.exports = Misc

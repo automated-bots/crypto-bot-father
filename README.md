@@ -42,27 +42,27 @@ Create Telegram bot via [@bothfather](https://telegram.me/BotFather). Fill-in th
 
 ```sh
 TELEGRAM_TOKEN=xyz
+TELEGRAM_BOT_URL=https://yourdomain.com
 BITCOIN_RPC_HOST=localhost
 BITCOIN_RPC_PORT=8332
 BITCOIN_RPC_USERNAME=bitcoin
 BITCOIN_RPC_PASSWORD=xyz
-TELEGRAM_BOT_URL=https://yourdomain.com
 CHART_IMAGE_API_KEY=aaaabbbbcccc
 ```
 
 Where:
 
 - `TELEGRAM_TOKEN` = Secret Bot API token
+- `TELEGRAM_BOT_URL` = your public domain name you use to communicate against the Telegram web API server.
 - `BITCOIN_RPC_HOST` = Bitcoin core host (default: `localhost`), optionally.
 - `BITCOIN_RPC_PORT` = Bitcoin core RPC port (default: `8332`), optionally.
 - `BITCOIN_RPC_USERNAME` = Bitcoin core daemon RPC username (default: `bitcoin`)
 - `BITCOIN_RPC_PASSWORD` = Bitcoin core daemon RPC password (default empty)
 - `FULCRUM_RPC_HOST` = Fulcrum RPC host (default: `localhost`), optionally.
 - `FULCRUM_RPC_PORT` = Fulcrum RPC port (default: `50001`), optionally.
-- `TELEGRAM_BOT_URL` = your public domain name you use to communicate against the Telegram web API server.
 - `CHART_IMAGE_API_KEY` = API key for retrieving TradingView images from [Chart-img](https://chart-img.com/).
 
-Finally, starting the bot server: `npm start` (or `node src/index.js`)
+Finally, starting the bot server: `npm start` (or `node .`)
 
 **Note 1:** Reverse proxy (eg. Nginx) is required to put between the bot and the world-wide-web. Expose the webserver on port 443 (with SSL). See [nginx_example.conf](nginx_example.conf).
 
@@ -85,15 +85,31 @@ Fix lint issues: `npm run fix`
 - Create or edit the Bitcoin Daemon (BCHN) configuration file: `/etc/bitcoin/bitcoin.conf`, used by the Bitcoin Cash Node Daemon service. Example of the content of this file:
 
 ```sh
-maxconnections=80
-maxuploadtarget=2500
+# Disable listening
+listen=0
+
+# Max connections to other nodes
+maxconnections=6
+# Limit the upload
+maxuploadtarget=20
 
 # Transaction index (full index)
 txindex=1
 
 server=1
 
-rpcthreads=7
+# Bind to all interfaces
+rpcbind=0.0.0.0
+
+# Enable JSON-RPC authentication
+#rpcauth=your_username:hashed_password
+
+rpcthreads=6
+
+# Allow all IPs
+rpcallowip=0.0.0.0/0
+rpcallowip=::/0
+
 ```
 
 - See [bitcoind.service systemd file](bitcoind.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.

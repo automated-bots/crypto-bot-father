@@ -1,6 +1,7 @@
-const Misc = require('./miscellaneous')
+import Misc from './miscellaneous.js'
+import logger from './logger.js'
 
-class Telegram {
+export default class Telegram {
   /**
    * Constructor
    * @param {Object} bot Telegram bot object
@@ -19,8 +20,8 @@ class Telegram {
    */
   sendMessage (chatId, message, options = { parse_mode: 'MarkdownV2', disable_web_page_preview: true }) {
     this.bot.sendMessage(chatId, message, options).catch((error) => {
-      console.log(`WARN: Message attempted to send (to chatID: ${chatId}): ${message}`)
-      console.error('Error: Could not send message due to: ' + error.message)
+      logger.warn(`WARN: Message attempted to send (to chatID: ${chatId}): ${message}`)
+      logger.error('Error: Could not send message due to: ' + error.message)
       global.ErrorState = true
     })
   }
@@ -32,7 +33,7 @@ class Telegram {
    */
   sendImage (chartId, image) {
     this.bot.sendPhoto(chartId, image).catch((error) => {
-      console.error(error)
+      logger.error(error)
       global.ErrorState = true
     })
   }
@@ -81,7 +82,7 @@ More info:
       // Fall-back to Bitcoin Cash (symbol: BCH)
       this.fetcher.priceQuotes('BCH')
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // price command (/price <symbol> [<quote_symbol>]) - provide your own base symbol, and optionally a second parameter as the quote symbol
@@ -93,7 +94,7 @@ More info:
       }
       this.fetcher.priceQuotes(symbol, quoteSymbol)
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // detailedprice command (/detailedprice): default Bitcoin Cash
@@ -101,7 +102,7 @@ More info:
       // Fall-back to Bitcoin Cash (symbol: BCH)
       this.fetcher.detailedPriceQuotes('BCH')
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // detailedprice command (/detailedprice <symbol>) - provide your own base symbol
@@ -109,14 +110,14 @@ More info:
       const symbol = match[1].trim()
       this.fetcher.detailedPriceQuotes(symbol)
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // dominance command (/dominance): default Bitcoin Cash
     this.bot.onText(/^[/|!]dominance\S*$/, (msg) => {
       this.fetcher.dominance('BCH')
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // dominance command (/dominance <symbol>) - provide your own base symbol
@@ -124,7 +125,7 @@ More info:
       const symbol = match[1].trim()
       this.fetcher.dominance(symbol)
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // stats command (/stats): default Bitcoin Cash
@@ -132,7 +133,7 @@ More info:
       // Fall-back to Bitcoin Cash (symbol: BCH)
       this.fetcher.marketStats('BCH')
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // stats command (/stats <symbol>) - provide your own symbol
@@ -140,14 +141,14 @@ More info:
       const symbol = match[1].trim()
       this.fetcher.marketStats(symbol)
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // Market overview command (/overview)
     this.bot.onText(/^[/|!]overview\S*$/, (msg) => {
       this.fetcher.marketOverview()
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // Market overview command (/overview) - in-/decrease limit to coins
@@ -163,7 +164,7 @@ More info:
         } else {
           this.fetcher.marketOverview(limit)
             .then(message => this.sendMessage(msg.chat.id, message))
-            .catch(error => console.error(error))
+            .catch(error => logger.error(error))
         }
       }
     })
@@ -172,7 +173,7 @@ More info:
     this.bot.onText(/^[/|!]detailedoverview\S*$/, (msg) => {
       this.fetcher.detailedMarketOverview()
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // Detailed market overview command (/detailedoverview) - in-/decrease limit to coins
@@ -188,7 +189,7 @@ More info:
         } else {
           this.fetcher.detailedMarketOverview(limit)
             .then(message => this.sendMessage(msg.chat.id, message))
-            .catch(error => console.error(error))
+            .catch(error => logger.error(error))
         }
       }
     })
@@ -198,7 +199,7 @@ More info:
       // Fall-back to Bitcoin Cash (symbol: BCH)
       this.fetcher.chartImage('BCH')
         .then(image => this.sendImage(msg.chat.id, image))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // chart command (/chart <symbol> [<quote_symbol>]) - provide your own base symbol, and optionally a second parameter as the quote symbol
@@ -210,14 +211,14 @@ More info:
       }
       this.fetcher.chartImage(symbol, quoteSymbol)
         .then(image => this.sendImage(msg.chat.id, image))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // Bitcoin cash node status command (/nodestatus)
     this.bot.onText(/^[/|!]nodestatus/, (msg) => {
       this.fetcher.bitcoinStatus()
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // Bitcoin network command (/network)
@@ -225,7 +226,7 @@ More info:
       this.fetcher.bitcoinNetworkInfo()
         .then(message => this.sendMessage(msg.chat.id, message))
         .catch(error => {
-          console.error(error)
+          logger.error(error)
           this.sendMessage(msg.chat.id, 'Error: Could not fetch network info, still verifying blocks\\.\\.\\. Or can\'t connect to the Bitcoin Cash Node \\(BCHN\\) API\\.')
         })
     })
@@ -234,14 +235,14 @@ More info:
     this.bot.onText(/^[/|!]info/, (msg) => {
       this.fetcher.bitcoinInfo()
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // Bitcoin Cash estimated fee command (/fee)
     this.bot.onText(/^[/|!]fee/, (msg) => {
       this.fetcher.bitcoinEstimateFee()
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     this.bot.onText(/^[/|!]balance\S*$/, (msg) => {
@@ -253,7 +254,7 @@ More info:
       const address = match[1].trim()
       this.fetcher.bitcoinAddressBalance(address)
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     this.bot.onText(/^[/|!]transaction\S*$/, (msg) => {
@@ -266,7 +267,7 @@ More info:
       // TODO: Improve details like fee & total transaction amounts
       this.fetcher.bitcoinTransaction(hash)
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // transactions command (/transactions <address>)
@@ -275,7 +276,7 @@ More info:
       // TODO: Fully missing
       this.fetcher.bitcoinTransactions(address)
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     this.bot.onText(/^[/|!]block\S*$/, (msg) => {
@@ -289,7 +290,7 @@ More info:
         // Retrieved block by hash (sha256)
         this.fetcher.bitcoinBlock(hash)
           .then(message => this.sendMessage(msg.chat.id, message))
-          .catch(error => console.error(error))
+          .catch(error => logger.error(error))
       } else {
         // TODO: Retrieve by block hash
         this.sendMessage(msg.chat.id, 'Info: Please provide a block hash, other parameters are not yet supported\\.')
@@ -300,14 +301,14 @@ More info:
     this.bot.onText(/^[/|!]latestblocks/, (msg) => {
       this.fetcher.bitcoinLatestBlocks()
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // latesttransactions command (/latesttransactions or /latesttx), returns latest 8 TXs
     this.bot.onText(/^[/|!](latesttransactions|latesttx)/, (msg) => {
       this.fetcher.bitcoinLatestTransactions()
         .then(message => this.sendMessage(msg.chat.id, message))
-        .catch(error => console.error(error))
+        .catch(error => logger.error(error))
     })
 
     // top10 command (/top10)
@@ -507,5 +508,3 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
     })
   }
 }
-
-module.exports = Telegram
