@@ -1,5 +1,5 @@
-const { table, getBorderCharacters } = require('table')
-const Misc = require('./miscellaneous')
+import { table, getBorderCharacters } from 'table'
+import Misc from './miscellaneous.js'
 
 // Constants
 const COINGECKO_URL = 'https://www.coingecko.com/en/coins'
@@ -8,7 +8,7 @@ const COINGECKO_URL = 'https://www.coingecko.com/en/coins'
  * Static methods to help processing the result data.
  * Especially useful for big message that also requires pre-processing.
  */
-class ProcessResult {
+export default class ProcessResult {
   static priceOverview (symbol, rates, quoteSymbol = null) {
     symbol = symbol.toUpperCase()
     const ratesList = rates.rates
@@ -290,5 +290,3 @@ Exchange rate: ${exchangeRate} \\(${percentageChange24h}%\\) BCH/USD`
     return text
   }
 }
-
-module.exports = ProcessResult

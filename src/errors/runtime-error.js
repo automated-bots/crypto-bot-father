@@ -1,4 +1,4 @@
-class RuntimeError extends Error {
+export class RuntimeError extends Error {
   constructor (message) {
     super(message)
 
@@ -9,5 +9,3 @@ class RuntimeError extends Error {
     Error.captureStackTrace(this, this.constructor)
   }
 }
-
-module.exports = RuntimeError

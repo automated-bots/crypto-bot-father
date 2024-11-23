@@ -1,13 +1,55 @@
-const express = require('express')
-const router = express.Router()
-const aboutRoute = require('./about')
-const telegramRoute = require('./telegram')
+import { Router } from 'express'
+import aboutRoutes from './about.js'
+import telegramRoutes from './telegram.js'
+import logger from '../logger.js'
+const router = Router()
+
+const sendInterceptor = (res, send) => (content) => {
+  if (res.req.originalUrl !== '/favicon.ico') {
+    logger.info({
+      reqId: res.req.id,
+      res: {
+        body: content,
+        statusCode: res.statusCode,
+        ...(res.get('link') && { linkHeader: res.get('link') })
+      },
+      req: {
+        host: res.req.hostname,
+        method: res.req.method
+      }
+    }, 'request completed')
+  }
+  res.send = send
+  res.send(content)
+}
+
+// Request middleware for logger
+router.use((req, res, next) => {
+  // Only ignore favicon.ico requests
+  if (req.originalUrl !== '/favicon.ico') {
+    const path = (req.originalUrl) ? req.originalUrl : req.path
+    logger.info({
+      reqId: req.id,
+      req: {
+        host: req.hostname,
+        method: req.method,
+        path: path,
+        ...(Object.keys(req.body).length !== 0 && { body: req.body }),
+        ip: req.ip
+      }
+    }, 'incoming request')
+  }
+
+  // Override send to capture the response data
+  res.send = sendInterceptor(res, res.send)
+  next()
+})
 
 router.get('/', (req, res) => {
   res.json({ message: 'Welcome to Crypto bot father' })
 })
-  .use('/about', aboutRoute)
-  .use('/telegram', telegramRoute)
+  .use('/about', aboutRoutes)
+  .use('/telegram', telegramRoutes)
 
 router.get('/health', (req, res) => {
   const errorCode = (global.ErrorState) ? 500 : 200
@@ -15,4 +57,4 @@ router.get('/health', (req, res) => {
   res.status(errorCode).json({ result: result })
 })
 
-module.exports = router
+export default router

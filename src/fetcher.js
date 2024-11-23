@@ -1,14 +1,15 @@
-const axios = require('axios')
-const ProcessResult = require('./process-result')
-const RuntimeError = require('./errors/runtime-error')
-const Misc = require('./miscellaneous')
+import axios from 'axios'
+import ProcessResult from './process-result.js'
+import { RuntimeError } from './errors/runtime-error.js'
+import Misc from './miscellaneous.js'
+import logger from './logger.js'
 
 const CHART_IMAGE_API_KEY = process.env.CHART_IMAGE_API_KEY || ''
 
 /**
  * Fetches or calculates the data we need from all kind of sources
  */
-class Fetcher {
+export default class Fetcher {
   constructor (bitcoinCash, fulcrum) {
     this.bitcoinCash = bitcoinCash
     this.fulcrum = fulcrum
@@ -63,7 +64,7 @@ Protocol version: ${protocalVersion}
 \n*Peer info*
 Peers connected: ${networkResult.connections}`
     } catch (error) {
-      console.error(error)
+      logger.error(error)
       text += 'Error: Could not fetch network info\\!\n'
     }
 
@@ -86,7 +87,7 @@ Last receive: ${recieveTime}
         text += 'Warning: No peers connected\\.\\.\\.'
       }
     } catch (error) {
-      console.error(error)
+      logger.error(error)
       text += 'Error: Could not fetch peer info\\!\n'
     }
     return text
@@ -128,7 +129,7 @@ Reachable: ${networks[i].reachable}
         if ('error' in error.response.data) {
           return 'Error: ' + error.response.data.error.message
         } else {
-          console.error(error)
+          logger.error(error)
           return 'Error: Something went wrong\\. '
         }
       } else {
@@ -190,7 +191,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
         if ('error' in error.response.data) {
           return 'Error: ' + error.response.data.error.message
         } else {
-          console.error(error)
+          logger.error(error)
           return 'Error: Something went wrong\\. '
         }
       } else {
@@ -223,7 +224,7 @@ Next block hash: ${nextBlockText}`
         if ('error' in error.response.data) {
           return 'Error: ' + error.response.data.error.message
         } else {
-          console.error(error)
+          logger.error(error)
           return 'Error: Something went wrong. '
         }
       } else {
@@ -400,7 +401,7 @@ Next block hash: ${nextBlockText}`
         rates = rates.data
       } catch (err) {
         // Continue without exchange rates
-        console.error('(internal) Could not get exchange rates (symbol: ' + symbol + ') during marketStats(). With error: ' + err.message)
+        logger.error('(internal) Could not get exchange rates (symbol: ' + symbol + ') during marketStats(). With error: ' + err.message)
       }
       if (quote.data && meta.data) {
         // Note: rates could be an object containing the rates or null
@@ -495,5 +496,3 @@ Next block hash: ${nextBlockText}`
     }
   }
 }
-
-module.exports = Fetcher

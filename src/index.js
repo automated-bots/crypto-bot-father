@@ -1,34 +1,43 @@
-require('dotenv').config()
+import 'dotenv/config'
+
 // NTBA = node-telegram-bot-api fixes
 process.env.NTBA_FIX_319 = 1
 process.env.NTBA_FIX_350 = 1
 // constants
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
-const BITCOIN_RPC_HOST = process.env.BITCOIN_RPC_HOST || 'localhost'
+const BITCOIN_RPC_HOST = process.env.BITCOIN_RPC_HOST || '127.0.0.1'
 const BITCOIN_RPC_PORT = process.env.BITCOIN_RPC_PORT || 8332
 const BITCOIN_RPC_USER = process.env.BITCOIN_RPC_USERNAME || 'bitcoin'
 const BITCOIN_RPC_PASS = process.env.BITCOIN_RPC_PASSWORD || ''
-const FULCRUM_RPC_HOST = process.env.FULCRUM_RPC_HOST || 'localhost'
+const FULCRUM_RPC_HOST = process.env.FULCRUM_RPC_HOST || '127.0.0.1'
 const FULCRUM_RPC_PORT = process.env.FULCRUM_RPC_PORT || 50001
-const botUrl = process.env.TELEGRAM_BOT_URL || 'https://cryptofather.melroy.org'
+const botUrl = process.env.TELEGRAM_BOT_URL
 const port = process.env.PORT || 3007
 
-const createError = require('http-errors')
-const crypto = require('crypto')
-global.TelegramSecretHash = crypto.randomBytes(20).toString('hex')
-const TelegramBot = require('node-telegram-bot-api')
-const express = require('express')
-const bodyParser = require('body-parser')
-const BitcoinCash = require('./bitcoin')
-const Fulcrum = require('./fulcrum')
-const Fetcher = require('./fetcher')
-const Telegram = require('./telegram')
-const routes = require('./routes')
+// Convert all require below to es6 imports
+import { randomBytes } from 'crypto'
+import TelegramBot from 'node-telegram-bot-api'
+import express from 'express'
+import { createError } from 'http-errors-enhanced'
+import bodyParser from 'body-parser'
+import BitcoinCash from './bitcoin.js'
+import Fulcrum from './fulcrum.js'
+import Fetcher from './fetcher.js'
+import Telegram from './telegram.js'
+import routes from './routes/index.js'
+import logger from './logger.js'
+
+global.TelegramSecretHash = randomBytes(20).toString('hex')
 global.ErrorState = false
 
+if (!botUrl) {
+  logger.fatal('No Telegram bot URL provided!')
+  throw new Error('\x1b[31mERROR: Provide your Telegram bot URL, by setting the TELEGRAM_BOT_URL environment variable first! See README.md.\nExit.\x1b[0m')
+}
+
 if (!TELEGRAM_TOKEN) {
-  console.error('\x1b[31mERROR: Provide your Telegram token, by setting the TELEGRAM_TOKEN environment variable first! See README.md.\nExit.\x1b[0m')
-  process.exit(1)
+  logger.fatal('No Telegram token provided!')
+  throw new Error('\x1b[31mERROR: Provide your Telegram token, by setting the TELEGRAM_TOKEN environment variable first! See README.md.\nExit.\x1b[0m')
 }
 
 // Create helper objects
@@ -39,10 +48,10 @@ const fetcher = new Fetcher(bitcoinCash, fulcrum)
 const telegramBot = new TelegramBot(TELEGRAM_TOKEN, {
   filepath: false
 })
-const tel = new Telegram(telegramBot, fetcher)
+const tg = new Telegram(telegramBot, fetcher)
 
 telegramBot.on('error', (error) => {
-  console.error(error)
+  logger.error(error)
   global.ErrorState = true
 })
 
@@ -55,7 +64,7 @@ app.use(bodyParser.json())
 
 // This informs the Telegram servers of the new webhook
 telegramBot.setWebHook(`${botUrl}/telegram/bot${global.TelegramSecretHash}`).catch((error) => {
-  console.error(error)
+  logger.error(error)
   global.ErrorState = true
 })
 
@@ -88,7 +97,7 @@ app.get('/test', async (req, res) => {
     <pre><code>${age}</code></pre>`
     res.send(html)
   } catch (err) {
-    console.log(err)
+    logger.error(err)
     res.send('Internal error')
   }
 })
@@ -101,24 +110,21 @@ app.use((req, res, next) => {
   if (req.originalUrl.includes('favicon.ico')) {
     res.sendStatus(404)
   } else {
-    next(createError(404))
+    next(createError(404, 'Page not found'))
   }
 })
 
 // Error handler
 app.use((error, req, res, next) => {
-  // Only print errors in development
-  if (req.app.get('env') === 'development') {
-    console.error(error)
-  }
+  logger.error(error)
   // Render the error page
   res.status(error.status || 500).json()
 })
 
 // Set Telegram commands
-tel.setCommands()
+tg.setCommands()
 
 // Start server
 app.listen(port, () => {
-  console.log(`Crypto Bot Father server is listening on ${port}`)
+  logger.info(`Crypto Bot Father server is listening on http://localhost:${port}`)
 })
