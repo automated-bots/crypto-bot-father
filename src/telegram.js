@@ -1,5 +1,6 @@
 import Misc from './miscellaneous.js'
 import logger from './logger.js'
+import { globalState } from './globalState.js'
 
 export default class Telegram {
   /**
@@ -22,7 +23,7 @@ export default class Telegram {
     this.bot.sendMessage(chatId, message, options).catch((error) => {
       logger.warn(`WARN: Message attempted to send (to chatID: ${chatId}): ${message}`)
       logger.error('Error: Could not send message due to: ' + error.message)
-      global.ErrorState = true
+      globalState.errorState = true
     })
   }
 
@@ -34,7 +35,7 @@ export default class Telegram {
   sendImage (chartId, image) {
     this.bot.sendPhoto(chartId, image).catch((error) => {
       logger.error(error)
-      global.ErrorState = true
+      globalState.errorState = true
     })
   }
 

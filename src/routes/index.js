@@ -2,6 +2,7 @@ import { Router } from 'express'
 import aboutRoutes from './about.js'
 import telegramRoutes from './telegram.js'
 import logger from '../logger.js'
+import { globalState } from '../globalState.js'
 const router = Router()
 
 const sendInterceptor = (res, send) => (content) => {
@@ -52,8 +53,8 @@ router.get('/', (req, res) => {
   .use('/telegram', telegramRoutes)
 
 router.get('/health', (req, res) => {
-  const errorCode = (global.ErrorState) ? 500 : 200
-  const result = (global.ErrorState) ? 'NOK' : 'OK'
+  const errorCode = (globalState.errorState) ? 500 : 200
+  const result = (globalState.errorState) ? 'NOK' : 'OK'
   res.status(errorCode).json({ result: result })
 })
 

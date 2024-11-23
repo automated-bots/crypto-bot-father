@@ -1,4 +1,5 @@
 import { Socket } from 'net'
+import { globalState } from './globalState.js'
 
 export default class Fulcrum {
   /**
@@ -24,7 +25,7 @@ export default class Fulcrum {
     this.fulcrum.on('error', (error) => {
       console.error(`Fulcrum error:\n ${error}`)
       // Set our health to NOK
-      global.ErrorState = true
+      globalState.errorState = true
     })
     this.fulcrum.on('data', data => {
       try {

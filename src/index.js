@@ -14,10 +14,9 @@ const FULCRUM_RPC_PORT = process.env.FULCRUM_RPC_PORT || 50001
 const botUrl = process.env.TELEGRAM_BOT_URL
 const port = process.env.PORT || 3007
 
-// Convert all require below to es6 imports
-import { randomBytes } from 'crypto'
 import TelegramBot from 'node-telegram-bot-api'
 import express from 'express'
+import { globalState } from './globalState.js'
 import { createError } from 'http-errors-enhanced'
 import bodyParser from 'body-parser'
 import BitcoinCash from './bitcoin.js'
@@ -26,9 +25,6 @@ import Fetcher from './fetcher.js'
 import Telegram from './telegram.js'
 import routes from './routes/index.js'
 import logger from './logger.js'
-
-global.TelegramSecretHash = randomBytes(20).toString('hex')
-global.ErrorState = false
 
 if (!botUrl) {
   logger.fatal('No Telegram bot URL provided!')
@@ -52,7 +48,7 @@ const tg = new Telegram(telegramBot, fetcher)
 
 telegramBot.on('error', (error) => {
   logger.error(error)
-  global.ErrorState = true
+  globalState.errorState = true
 })
 
 // Create the Express app
@@ -63,9 +59,9 @@ app.disable('x-powered-by')
 app.use(bodyParser.json())
 
 // This informs the Telegram servers of the new webhook
-telegramBot.setWebHook(`${botUrl}/telegram/bot${global.TelegramSecretHash}`).catch((error) => {
+telegramBot.setWebHook(`${botUrl}/telegram/bot${globalState.telegramSecretHash}`).catch((error) => {
   logger.error(error)
-  global.ErrorState = true
+  globalState.errorState = true
 })
 
 // Add telegram object to request
