@@ -1,7 +1,8 @@
-const http = require('http')
+import http from 'http'
+import process from 'node:process'
 
 const options = {
-  host: 'localhost',
+  host: '127.0.0.1',
   port: '3007',
   path: '/health',
   timeout: 2000

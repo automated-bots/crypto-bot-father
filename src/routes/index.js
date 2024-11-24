@@ -6,7 +6,7 @@ import { globalState } from '../globalState.js'
 const router = Router()
 
 const sendInterceptor = (res, send) => (content) => {
-  if (res.req.originalUrl !== '/favicon.ico') {
+  if (res.req.originalUrl !== '/favicon.ico' && res.req.originalUrl !== '/health') {
     logger.info({
       reqId: res.req.id,
       res: {
@@ -27,7 +27,7 @@ const sendInterceptor = (res, send) => (content) => {
 // Request middleware for logger
 router.use((req, res, next) => {
   // Only ignore favicon.ico requests
-  if (req.originalUrl !== '/favicon.ico') {
+  if (req.originalUrl !== '/favicon.ico' && res.req.originalUrl !== '/health') {
     const path = (req.originalUrl) ? req.originalUrl : req.path
     logger.info({
       reqId: req.id,
