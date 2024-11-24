@@ -245,10 +245,7 @@ Next block hash: ${nextBlockText}`
         const block = blocks.data[i]
         const sizeKb = (block.size / 1000.0).toString().replace('.', '\\.')
         const poolName = ('extras' in block && 'pool' in block.extras && 'name' in block.extras.pool) ? (block.extras.pool.name) : 'Unknown'
-        const poolNameMarkdownSafe = poolName.replaceAll('.', '\\.').replaceAll('-', '\\-').replaceAll('!', '\\!').replaceAll('+', '\\+').replaceAll('#', '\\#').replaceAll('*', '\\*')
-          .replaceAll('_', '\\_').replaceAll('(', '\\(').replaceAll(')', '\\)').replaceAll('~', '\\~').replaceAll('`', '\\~')
-          .replaceAll('|', '\\|').replaceAll('[', '\\[').replaceAll(']', '\\]').replaceAll('<', '\\<').replaceAll('>', '\\>')
-          .replaceAll('=', '\\=').replaceAll('{', '\\{').replaceAll('}', '\\}').replaceAll('=', '\\=').replaceAll('=', '\\=')
+        const poolNameMarkdownSafe = Misc.makeSafeMarkdownString(poolName)
         returnData += `• Height: [${block.height}](${Misc.blockchainExplorerUrl()}/block/${block.id}), Pool: ${poolNameMarkdownSafe}, TXs: ${block.tx_count}, Size: ${sizeKb} kB\n`
       }
       return returnData

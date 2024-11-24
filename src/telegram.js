@@ -39,7 +39,7 @@ export default class Telegram {
       try {
         const users = chat.active_usernames
         if (users.length > 0) {
-          const randomUser = users[Math.floor(Math.random() * users.length)]
+          const randomUser = Misc.makeSafeMarkdownString(users[Math.floor(Math.random() * users.length)].trim())
           return { randomUser, totalUsers: users.length }
         }
       } catch (error) {
