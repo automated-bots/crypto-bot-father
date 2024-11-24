@@ -28,6 +28,28 @@ export default class Telegram {
   }
 
   /**
+   * Get a random username and total users in the chat
+   * @param {Number} chatId Telegram chat ID
+   * @returns {Object} Random user and total users
+   */
+  async getRandomUserAndTotal (chatId) {
+    // Get list of all users from the telegram bot
+    const chat = await this.bot.getChat(chatId)
+    if ('active_usernames' in chat) {
+      try {
+        const users = chat.active_usernames
+        if (users.length > 0) {
+          const randomUser = users[Math.floor(Math.random() * users.length)]
+          return { randomUser, totalUsers: users.length }
+        }
+      } catch (error) {
+        logger.error(error)
+      }
+    }
+    return { randomUser: null, totalUsers: 0 }
+  }
+
+  /**
    * Send image to Telegram chat
    * @param {Number} chartId Telegram chat ID
    * @param {Stream} image Stream/buffer image
@@ -361,6 +383,15 @@ Using these techniques, Bitcoin provides a fast and extremely reliable payment n
     })
 
     // Other stuff
+    this.bot.onText(/^[/|!]somebody\S*$/, async (msg) => {
+      const { randomUser, totalUsers } = await this.getRandomUserAndTotal(msg.chat.id)
+      if (randomUser) {
+        const message = `🎉 Congrats, ${randomUser}\\! 🎉
+        Out of ${totalUsers} people, you've been randomly chosen as “somebody”\\! Enjoy your moment to shine\\! 🌟`
+        this.sendMessage(msg.chat.id, message)
+      }
+    })
+
     this.bot.on('message', (msg) => {
       const catResponses = [
         'Did you know? Cats can jump up to six times their length in one leap\\. Meow\\-gical, right?',
