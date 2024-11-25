@@ -4,7 +4,9 @@ Botfather for all cryptocurrencies for Telegram - Ask him anything about crypto
 
 ## What?
 
-A Telegram chat bot for crypto. The one that rule them all!
+A Telegram chat bot for cryptocurrencies. The one that rule them all!
+
+Live at: [@CyptoExplorer_bot](https://t.me/CyptoExplorer_bot)
 
 ## Why?
 
@@ -34,11 +36,11 @@ There is a Docker image [available on DockerHub](https://hub.docker.com/reposito
 
 - Docker Engine + Docker Compose
 - [Bitcoin Cash Node](https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node)
-- Telegram bot via [@bothfather](https://telegram.me/BotFather)
+- Telegram bot via [@BotFather](https://telegram.me/BotFather)
 
 ### Running
 
-Create Telegram bot via [@bothfather](https://telegram.me/BotFather). Fill-in the applicable tokens/secrets in `.env` file, by using the template (see [.env.example](.env.example)):
+Create Telegram bot via [@BotFather](https://telegram.me/BotFather). Fill-in the applicable tokens/secrets in `.env` file, by using the template (see [.env.example](.env.example)):
 
 ```sh
 TELEGRAM_TOKEN=xyz
@@ -47,19 +49,21 @@ BITCOIN_RPC_HOST=localhost
 BITCOIN_RPC_PORT=8332
 BITCOIN_RPC_USERNAME=bitcoin
 BITCOIN_RPC_PASSWORD=xyz
+PINO_LOG_LEVEL=warn
 CHART_IMAGE_API_KEY=aaaabbbbcccc
 ```
 
 Where:
 
-- `TELEGRAM_TOKEN` = Secret Bot API token
-- `TELEGRAM_BOT_URL` = your public domain name you use to communicate against the Telegram web API server.
+- `TELEGRAM_TOKEN` = Secret Bot API token (required).
+- `TELEGRAM_BOT_URL` = Your public domain name you use to communicate against the Telegram web API server (required).
 - `BITCOIN_RPC_HOST` = Bitcoin core host (default: `localhost`), optionally.
 - `BITCOIN_RPC_PORT` = Bitcoin core RPC port (default: `8332`), optionally.
 - `BITCOIN_RPC_USERNAME` = Bitcoin core daemon RPC username (default: `bitcoin`)
 - `BITCOIN_RPC_PASSWORD` = Bitcoin core daemon RPC password (default empty)
 - `FULCRUM_RPC_HOST` = Fulcrum RPC host (default: `localhost`), optionally.
 - `FULCRUM_RPC_PORT` = Fulcrum RPC port (default: `50001`), optionally.
+- `PINO_LOG_LEVEL` = [Pino Log level](https://github.com/pinojs/pino/blob/main/docs/api.md#loggerlevel-string-gettersetter) (default: `info`), optionally. Could be useful to reduce the amount of log output in production (eg. `warn` or `error`).
 - `CHART_IMAGE_API_KEY` = API key for retrieving TradingView images from [Chart-img](https://chart-img.com/).
 
 Finally, starting the bot server: `npm start` (or `node .`)
@@ -109,7 +113,6 @@ rpcthreads=6
 # Allow all IPs
 rpcallowip=0.0.0.0/0
 rpcallowip=::/0
-
 ```
 
 - See [bitcoind.service systemd file](bitcoind.service) for Debian based distributions. Place this file into `/etc/systemd/system` folder.
