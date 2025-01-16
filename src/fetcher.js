@@ -127,7 +127,7 @@ Reachable: ${networks[i].reachable}
       // The Bitcoin cash node returns a 500 HTTP error code
       if (error.response && error.response.status === 500) {
         if ('error' in error.response.data) {
-          return 'Error: ' + error.response.data.error.message
+          return 'Error: ' + Misc.makeSafeMarkdownString(error.response.data.error).message
         } else {
           logger.error(error)
           return 'Error: Something went wrong\\. '
@@ -189,7 +189,7 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
       // The Bitcoin cash node returns a 500 HTTP error code
       if (error.response && error.response.status === 500) {
         if ('error' in error.response.data) {
-          return 'Error: ' + error.response.data.error.message
+          return 'Error: ' + Misc.makeSafeMarkdownString(error.response.data.error).message
         } else {
           logger.error(error)
           return 'Error: Something went wrong\\. '
@@ -222,7 +222,7 @@ Next block hash: ${nextBlockText}`
       // The Bitcoin cash node returns a 500 HTTP error code
       if (error.response && error.response.status === 500) {
         if ('error' in error.response.data) {
-          return 'Error: ' + error.response.data.error.message
+          return 'Error: ' + Misc.makeSafeMarkdownString(error.response.data.error).message
         } else {
           logger.error(error)
           return 'Error: Something went wrong. '
@@ -287,7 +287,8 @@ Next block hash: ${nextBlockText}`
       const unconfirmedBch = Misc.printCurrencyWithoutSymbol(result.unconfirmed / 100000000.0, 8)
       return `*Balance:* [${confirmedBch} BCH](${Misc.blockchainExplorerUrl()}/address/${address}) \\(unconfirmed: ${unconfirmedBch} BCH\\)`
     } else if (result && 'message' in result) {
-      return `Error while retrieving the balance: ${result.message}\\.`
+      const errorMessage = Misc.makeSafeMarkdownString(result.message)
+      return `Error while retrieving the balance: ${errorMessage}\\.`
     } else {
       return 'Something went wrong getting the balance. Please, try again\\.'
     }
@@ -320,9 +321,9 @@ Next block hash: ${nextBlockText}`
     } catch (error) {
       // JS-Finance returns a non 2xx error code
       if (error.response && 'detailed_message' in error.response.data) {
-        return 'Error: ' + error.response.data.detailed_message
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.response.data.detailed_message)
       } else if (error instanceof RuntimeError) {
-        return 'Error: ' + error.message
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.message)
       } else {
         throw error // Re-throw error
       }
@@ -345,9 +346,9 @@ Next block hash: ${nextBlockText}`
     } catch (error) {
       // JS-Finance returns a non 2xx error code
       if (error.response && 'detailed_message' in error.response.data) {
-        return 'Error: ' + error.response.data.detailed_message
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.response.data.detailed_message)
       } else if (error instanceof RuntimeError) {
-        return 'Error: ' + error.message
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.message)
       } else {
         throw error // Re-throw error
       }
@@ -370,9 +371,9 @@ Next block hash: ${nextBlockText}`
     } catch (error) {
       // JS-Finance returns a non 2xx error code
       if (error.response && 'detailed_message' in error.response.data) {
-        return 'Error: ' + error.response.data.detailed_message
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.response.data.detailed_message)
       } else if (error instanceof RuntimeError) {
-        return 'Error: ' + error.message
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.message)
       } else {
         throw error // Re-throw error
       }
@@ -409,9 +410,9 @@ Next block hash: ${nextBlockText}`
     } catch (error) {
       // JS-Finance returns a non 2xx error code
       if (error.response && 'detailed_message' in error.response.data) {
-        return 'Error: ' + error.response.data.detailed_message
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.response.data.detailed_message)
       } else if (error instanceof RuntimeError) {
-        return 'Error: ' + error.message
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.message)
       } else {
         throw error // Re-throw error
       }
@@ -482,11 +483,11 @@ Next block hash: ${nextBlockText}`
     } catch (error) {
       // Chart-img.com returns a non 2xx error code
       if (error.response && 'error' in error.response.data) {
-        return 'Error: ' + error.response.data.error
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.response.data.error)
       } else if (error.response && 'message' in error.response.data) {
-        return 'Error: ' + error.response.data.message
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.response.data.message)
       } else if (error instanceof RuntimeError) {
-        return 'Error: ' + error.message
+        return 'Error: ' + Misc.makeSafeMarkdownString(error.message)
       } else {
         throw error // Re-throw error
       }
