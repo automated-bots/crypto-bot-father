@@ -26,7 +26,7 @@ const sendInterceptor = (res, send) => (content) => {
 
 // Request middleware for logger
 router.use((req, res, next) => {
-  // Only ignore favicon.ico requests
+  // Only ignore favicon.ico & health requests
   if (req.originalUrl !== '/favicon.ico' && res.req.originalUrl !== '/health') {
     const path = (req.originalUrl) ? req.originalUrl : req.path
     logger.info({
