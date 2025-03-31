@@ -1,5 +1,17 @@
 import 'dotenv/config'
 
+import TelegramBot from 'node-telegram-bot-api'
+import express from 'express'
+import { globalState } from './globalState.js'
+import { createError } from 'http-errors-enhanced'
+import bodyParser from 'body-parser'
+import BitcoinCash from './bitcoin.js'
+import Fulcrum from './fulcrum.js'
+import Fetcher from './fetcher.js'
+import Telegram from './telegram.js'
+import routes from './routes/index.js'
+import logger from './logger.js'
+
 // NTBA = node-telegram-bot-api fixes
 process.env.NTBA_FIX_319 = 1
 process.env.NTBA_FIX_350 = 1
@@ -13,18 +25,6 @@ const FULCRUM_RPC_HOST = process.env.FULCRUM_RPC_HOST || '127.0.0.1'
 const FULCRUM_RPC_PORT = process.env.FULCRUM_RPC_PORT || 50001
 const botUrl = process.env.TELEGRAM_BOT_URL
 const port = process.env.PORT || 3007
-
-import TelegramBot from 'node-telegram-bot-api'
-import express from 'express'
-import { globalState } from './globalState.js'
-import { createError } from 'http-errors-enhanced'
-import bodyParser from 'body-parser'
-import BitcoinCash from './bitcoin.js'
-import Fulcrum from './fulcrum.js'
-import Fetcher from './fetcher.js'
-import Telegram from './telegram.js'
-import routes from './routes/index.js'
-import logger from './logger.js'
 
 if (!botUrl) {
   logger.fatal('No Telegram bot URL provided!')

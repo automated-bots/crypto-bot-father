@@ -35,7 +35,7 @@ router.use((req, res, next) => {
         host: req.hostname,
         method: req.method,
         path: path,
-        ...(Object.keys(req.body).length !== 0 && { body: req.body }),
+        ...(req.body && Object.keys(req.body).length !== 0 && { body: req.body }),
         ip: req.ip
       }
     }, 'incoming request')
