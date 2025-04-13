@@ -1,5 +1,6 @@
 import { Socket } from 'net'
 import { globalState } from './globalState.js'
+import logger from './logger.js'
 
 export default class Fulcrum {
   /**
@@ -23,7 +24,7 @@ export default class Fulcrum {
     this.fulcrum.setKeepAlive(true, 0)
     this.fulcrum.setNoDelay(true)
     this.fulcrum.on('error', (error) => {
-      console.error(`Fulcrum error:\n ${error}`)
+      logger.error(`Fulcrum error:\n ${error}`)
       // Set our health to NOK
       globalState.errorState = true
     })
@@ -35,11 +36,11 @@ export default class Fulcrum {
         } else if ('error' in json && 'id' in json && 'message' in json.error) {
           this.receivedError[json.id] = json.error
         } else {
-          console.error('Missing JSON data in received object')
-          console.error(`Received data: ${data}`)
+          logger.error('Missing JSON data in received object')
+          logger.error(`Received data: ${data}`)
         }
       } catch (err) {
-        console.error(err)
+        logger.error(err)
       }
     })
     this.fulcrum.on('close', e => {

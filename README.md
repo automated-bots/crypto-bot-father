@@ -34,7 +34,9 @@ There is a Docker image [available on DockerHub](https://hub.docker.com/reposito
 
 ### Requirements
 
-- Docker Engine + Docker Compose
+- [NodeJS LTS](https://nodejs.org/en/download/)
+- [pnpm](https://pnpm.io)
+- Docker Engine + Docker Compose (if you wish to use/test the Docker image)
 - [Bitcoin Cash Node](https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node)
 - Telegram bot via [@BotFather](https://telegram.me/BotFather)
 
@@ -66,7 +68,7 @@ Where:
 - `PINO_LOG_LEVEL` = [Pino Log level](https://github.com/pinojs/pino/blob/main/docs/api.md#loggerlevel-string-gettersetter) (default: `info`), optionally. Could be useful to reduce the amount of log output in production (eg. `warn` or `error`).
 - `CHART_IMAGE_API_KEY` = API key for retrieving TradingView images from [Chart-img](https://chart-img.com/).
 
-Finally, starting the bot server: `npm start` (or `node .`)
+Finally, starting the bot server: `pnpm start`
 
 **Note 1:** Reverse proxy (eg. Nginx) is required to put between the bot and the world-wide-web. Expose the webserver on port 443 (with SSL). See [nginx_example.conf](nginx_example.conf).
 
@@ -80,9 +82,9 @@ rpcpassword=your_password
 
 ### Linting
 
-Run lint: `npm run lint`
+Run lint: `pnpm lint`
 
-Fix lint issues: `npm run fix`
+Fix lint issues: `pnpm fix`
 
 ### Bitcoin Cash Node setup
 

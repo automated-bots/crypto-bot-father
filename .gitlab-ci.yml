@@ -1,22 +1,23 @@
 default:
-  image: node:22-alpine
+  image: registry.melroy.org/melroy/docker-images/pnpm:22
+
+  before_script:
+    - pnpm install --prefer-offline --prefer-frozen-lockfile
+
   cache:
     key:
       files:
-        - package-lock.json
+        - pnpm-lock.yaml
     paths:
-      - .npm/
-
-before_script:
-  - npm ci --cache .npm --prefer-offline --no-fund --no-audit
+      - .pnpm-store
 
 audit:
   stage: test
   script:
-    - npm audit --omit dev
+    - pnpm audit
   allow_failure: true
 
 lint:
   stage: test
   script:
-    - npm run lint
+    - pnpm run lint

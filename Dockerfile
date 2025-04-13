@@ -1,17 +1,15 @@
-FROM node:22-slim
+FROM registry.melroy.org/melroy/docker-images/pnpm:22
 ENV NODE_ENV=production
-
-ARG DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /app
 
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+COPY --chown=node:node package.json package.json
+COPY --chown=node:node pnpm-lock.yaml pnpm-lock.yaml
 
-RUN npm install --omit=dev --no-fund --no-audit && \
-  chown -R node:node node_modules
+RUN pnpm install --prod && \
+chown -R node:node node_modules
 
-COPY . .
+COPY --chown=node:node . .
 
 USER node
 
@@ -20,4 +18,4 @@ EXPOSE 3007
 HEALTHCHECK --interval=20s --timeout=12s --start-period=6s \
   CMD node healthcheck.js
 
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
