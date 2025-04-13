@@ -1,13 +1,21 @@
+# Config file
 .env
 
-node_modules/
-scripts/
-images/
-docs/
+docs
+images
+scripts
+node_modules
+docker-compose.yml
+Dockerfile
+CODEOWNERS
 
-.git/
-.vscode/
-.gitlab-ci.yml
 nginx_example.conf
 bitcoind.service
-docker-compose.yml
+
+# Hidden files
+.git
+.vscode
+.gitignore
+.dockerignore
+.eslintrc.js
+.gitlab-ci.yml
