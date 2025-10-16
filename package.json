@@ -1,6 +1,6 @@
 {
   "name": "crypto-bot-father",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "A crypto bot father for Telegram. The one that rule them all!",
   "main": "src/index.js",
   "packageManager": "pnpm@10.7.1",
@@ -30,19 +30,19 @@
   },
   "license": "AGPL-3.0",
   "dependencies": {
-    "axios": "^1.6.7",
+    "axios": "^1.12.2",
     "body-parser": "^2.2.0",
-    "dotenv": "^16.4.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "http-errors-enhanced": "^3.0.0",
-    "luxon": "^3.4.4",
+    "http-errors-enhanced": "^3.0.2",
+    "luxon": "^3.7.2",
     "node-telegram-bot-api": "^0.66.0",
-    "pino": "^9.5.0",
-    "table": "^6.8.1"
+    "pino": "^10.0.0",
+    "table": "^6.9.0"
   },
   "devDependencies": {
-    "eslint": "^9.15.0",
-    "neostandard": "^0.12.1",
-    "pino-pretty": "^13.0.0"
+    "eslint": "^9.37.0",
+    "neostandard": "^0.12.2",
+    "pino-pretty": "^13.1.2"
   }
 }
