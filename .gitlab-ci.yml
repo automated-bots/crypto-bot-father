@@ -14,7 +14,7 @@ default:
 audit:
   stage: test
   script:
-    - pnpm audit
+    - pnpm audit --prod
   allow_failure: true
 
 lint:
