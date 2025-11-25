@@ -3,7 +3,7 @@ import 'dotenv/config'
 import TelegramBot from 'node-telegram-bot-api'
 import express from 'express'
 import { globalState } from './globalState.js'
-import { createError } from 'http-errors-enhanced'
+import { createError, HttpError } from 'http-errors-enhanced'
 import bodyParser from 'body-parser'
 import BitcoinCash from './bitcoin.js'
 import Fulcrum from './fulcrum.js'
@@ -13,7 +13,6 @@ import routes from './routes/index.js'
 import logger from './logger.js'
 
 // NTBA = node-telegram-bot-api fixes
-process.env.NTBA_FIX_319 = 1
 process.env.NTBA_FIX_350 = 1
 // constants
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
@@ -106,13 +105,18 @@ app.use((req, res, next) => {
   if (req.originalUrl.includes('favicon.ico')) {
     res.sendStatus(404)
   } else {
-    next(createError(404, 'Page not found'))
+    next(createError(404, 'Page not found: ' + req.originalUrl))
   }
 })
 
 // Error handler
 app.use((error, req, res, next) => {
-  logger.error(error)
+  if (error instanceof HttpError && error.status === 404) {
+    // Log a warning only
+    logger.warn(error)
+  } else {
+    logger.error(error)
+  }
   // Render the error page
   res.status(error.status || 500).json()
 })

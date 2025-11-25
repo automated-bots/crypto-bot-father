@@ -9,7 +9,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "NODE_OPTIONS=--no-network-family-autoselection node .",
+    "start": "node --no-network-family-autoselection .",
     "lint": "eslint src",
     "fix": "eslint src --fix"
   },
