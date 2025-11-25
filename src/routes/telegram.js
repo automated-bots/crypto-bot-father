@@ -5,7 +5,7 @@ const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
 
 // We are receiving updates at the route below
 router.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
-  //if (req.body) {
+  // if (req.body) {
   // Trigger processUpdate function always
   req.telegram_bot.processUpdate(req.body)
   res.sendStatus(200)
