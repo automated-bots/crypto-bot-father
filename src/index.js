@@ -4,7 +4,6 @@ import TelegramBot from 'node-telegram-bot-api'
 import express from 'express'
 import { globalState } from './globalState.js'
 import { createError, HttpError } from 'http-errors-enhanced'
-import bodyParser from 'body-parser'
 import BitcoinCash from './bitcoin.js'
 import Fulcrum from './fulcrum.js'
 import Fetcher from './fetcher.js'
@@ -55,7 +54,7 @@ const app = express()
 // Disable powered by by header
 app.disable('x-powered-by')
 // parse the updates to JSON
-app.use(bodyParser.json())
+app.use(express.json())
 
 // This informs the Telegram servers of the new webhook
 telegramBot.setWebHook(`${botUrl}/telegram/bot${TELEGRAM_TOKEN}`).catch((error) => {
