@@ -58,7 +58,7 @@ app.disable('x-powered-by')
 app.use(bodyParser.json())
 
 // This informs the Telegram servers of the new webhook
-telegramBot.setWebHook(`${botUrl}/telegram/bot${globalState.telegramSecretHash}`).catch((error) => {
+telegramBot.setWebHook(`${botUrl}/telegram/bot${TELEGRAM_TOKEN}`).catch((error) => {
   logger.error(error)
   globalState.errorState = true
 })
