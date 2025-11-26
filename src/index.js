@@ -14,6 +14,7 @@ import logger from './logger.js'
 // NTBA = node-telegram-bot-api fixes
 process.env.NTBA_FIX_350 = 1
 // constants
+const BOT_PATH_SECRET = process.env.BOT_PATH_SECRET
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
 const BITCOIN_RPC_HOST = process.env.BITCOIN_RPC_HOST || '127.0.0.1'
 const BITCOIN_RPC_PORT = process.env.BITCOIN_RPC_PORT || 8332
@@ -24,13 +25,18 @@ const FULCRUM_RPC_PORT = process.env.FULCRUM_RPC_PORT || 50001
 const botUrl = process.env.TELEGRAM_BOT_URL
 const port = process.env.PORT || 3007
 
+if (!BOT_PATH_SECRET || BOT_PATH_SECRET === 'change_this_to_a_secure_random_string') {
+  logger.fatal('Insecure or missing BOT_PATH_SECRET environment variable!')
+  throw new Error('\x1b[31mERROR: Set a secure BOT_PATH_SECRET environment variable first! See README.md.\nExit.\x1b[0m')
+}
+
 if (!botUrl) {
   logger.fatal('No Telegram bot URL provided!')
   throw new Error('\x1b[31mERROR: Provide your Telegram bot URL, by setting the TELEGRAM_BOT_URL environment variable first! See README.md.\nExit.\x1b[0m')
 }
 
-if (!TELEGRAM_TOKEN) {
-  logger.fatal('No Telegram token provided!')
+if (!TELEGRAM_TOKEN || TELEGRAM_TOKEN === 'xyz') {
+  logger.fatal('Insecure or missing TELEGRAM_TOKEN environment variable!')
   throw new Error('\x1b[31mERROR: Provide your Telegram token, by setting the TELEGRAM_TOKEN environment variable first! See README.md.\nExit.\x1b[0m')
 }
 
@@ -57,7 +63,7 @@ app.disable('x-powered-by')
 app.use(express.json())
 
 // This informs the Telegram servers of the new webhook
-telegramBot.setWebHook(`${botUrl}/telegram/bot${TELEGRAM_TOKEN}`).catch((error) => {
+telegramBot.setWebHook(`${botUrl}/telegram/bot${BOT_PATH_SECRET}`).catch((error) => {
   logger.error(error)
   globalState.errorState = true
 })

@@ -45,6 +45,7 @@ There is a Docker image [available on DockerHub](https://hub.docker.com/reposito
 Create Telegram bot via [@BotFather](https://telegram.me/BotFather). Fill-in the applicable tokens/secrets in `.env` file, by using the template (see [.env.example](.env.example)):
 
 ```sh
+BOT_SECRET_URL=change_this_to_a_secure_random_string
 TELEGRAM_TOKEN=xyz
 TELEGRAM_BOT_URL=https://yourdomain.com
 BITCOIN_RPC_HOST=localhost
@@ -57,6 +58,7 @@ CHART_IMAGE_API_KEY=aaaabbbbcccc
 
 Where:
 
+- `BOT_SECRET_URL` = A random secret string (hash) which gets added to the webhook bot URL, so the POST webhook path can't easily be found by others. This is **NOT** the same as the bot API token. You can set `BOT_SECRET_URL` to any secret value.
 - `TELEGRAM_TOKEN` = Secret Bot API token (required).
 - `TELEGRAM_BOT_URL` = Your public domain name you use to communicate against the Telegram web API server (required).
 - `BITCOIN_RPC_HOST` = Bitcoin core host (default: `localhost`), optionally.
