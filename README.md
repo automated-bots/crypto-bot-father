@@ -52,7 +52,7 @@ BITCOIN_RPC_HOST=localhost
 BITCOIN_RPC_PORT=8332
 BITCOIN_RPC_USERNAME=bitcoin
 BITCOIN_RPC_PASSWORD=xyz
-PINO_LOG_LEVEL=warn
+LOG_LEVEL=warn
 CHART_IMAGE_API_KEY=aaaabbbbcccc
 ```
 
@@ -67,7 +67,7 @@ Where:
 - `BITCOIN_RPC_PASSWORD` = Bitcoin core daemon RPC password (default empty)
 - `FULCRUM_RPC_HOST` = Fulcrum RPC host (default: `localhost`), optionally.
 - `FULCRUM_RPC_PORT` = Fulcrum RPC port (default: `50001`), optionally.
-- `PINO_LOG_LEVEL` = [Pino Log level](https://github.com/pinojs/pino/blob/main/docs/api.md#loggerlevel-string-gettersetter) (default: `info`), optionally. Could be useful to reduce the amount of log output in production (eg. `warn` or `error`).
+- `LOG_LEVEL` = [Pino Log level](https://github.com/pinojs/pino/blob/main/docs/api.md#loggerlevel-string-gettersetter) (default: `info`), optionally. Could be useful to reduce the amount of log output in production (eg. `warn` or `error`).
 - `CHART_IMAGE_API_KEY` = API key for retrieving TradingView images from [Chart-img](https://chart-img.com/).
 
 Finally, starting the bot server: `pnpm start`
