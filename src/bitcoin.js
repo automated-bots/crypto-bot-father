@@ -8,7 +8,7 @@ export default class BitcoinCash {
    * @param {string} bitcoindRPCUser
    * @param {string} bitcoindRPCPass
    */
-  constructor (bitcoindHost, bitcoindPort, bitcoindRPCUser, bitcoindRPCPass) {
+  constructor(bitcoindHost, bitcoindPort, bitcoindRPCUser, bitcoindRPCPass) {
     // Local Bitcoin Cash node API
     this.bitcoind = axios.create({
       baseURL: 'http://' + bitcoindHost + ':' + bitcoindPort,
@@ -30,12 +30,13 @@ export default class BitcoinCash {
    *
    * @return {Promise} Axios promise
    */
-  getPeerInfo () {
-    return this.bitcoind.post('/', {
-      method: 'getpeerinfo',
-      params: []
-    })
-      .then(response => {
+  getPeerInfo() {
+    return this.bitcoind
+      .post('/', {
+        method: 'getpeerinfo',
+        params: []
+      })
+      .then((response) => {
         return Promise.resolve(response.data.result)
       })
   }
@@ -44,14 +45,15 @@ export default class BitcoinCash {
    * Get blockchain info
    * @return {Promise} Axios promise
    */
-  getBlockChainInfo () {
-    return this.bitcoind.post('/', {
-      jsonrpc: '1.0',
-      id: this.rpcId,
-      method: 'getblockchaininfo',
-      params: []
-    })
-      .then(response => {
+  getBlockChainInfo() {
+    return this.bitcoind
+      .post('/', {
+        jsonrpc: '1.0',
+        id: this.rpcId,
+        method: 'getblockchaininfo',
+        params: []
+      })
+      .then((response) => {
         return Promise.resolve(response.data.result)
       })
   }
@@ -61,14 +63,15 @@ export default class BitcoinCash {
    *
    * @return {Promise} Axios promise (blocks, headers, bestblockhash, difficulty, mediantime, softforks)
    */
-  getNetworkInfo () {
-    return this.bitcoind.post('/', {
-      jsonrpc: '1.0',
-      id: this.rpcId,
-      method: 'getnetworkinfo',
-      params: []
-    })
-      .then(response => {
+  getNetworkInfo() {
+    return this.bitcoind
+      .post('/', {
+        jsonrpc: '1.0',
+        id: this.rpcId,
+        method: 'getnetworkinfo',
+        params: []
+      })
+      .then((response) => {
         return Promise.resolve(response.data.result)
       })
   }
@@ -78,14 +81,15 @@ export default class BitcoinCash {
    *
    * @return {Promise} Axios promise (blocks, difficulty, networkhashps)
    */
-  getMiningInfo () {
-    return this.bitcoind.post('/', {
-      jsonrpc: '1.0',
-      id: this.rpcId,
-      method: 'getmininginfo',
-      params: []
-    })
-      .then(response => {
+  getMiningInfo() {
+    return this.bitcoind
+      .post('/', {
+        jsonrpc: '1.0',
+        id: this.rpcId,
+        method: 'getmininginfo',
+        params: []
+      })
+      .then((response) => {
         return Promise.resolve(response.data.result)
       })
   }
@@ -94,13 +98,14 @@ export default class BitcoinCash {
    * Estimate BCH fee
    * @return {Promise} Axios promise (fee)
    */
-  estimateFee () {
-    return this.bitcoind.post('/', {
-      jsonrpc: '1.0',
-      id: this.rpcId,
-      method: 'estimatefee'
-    })
-      .then(response => {
+  estimateFee() {
+    return this.bitcoind
+      .post('/', {
+        jsonrpc: '1.0',
+        id: this.rpcId,
+        method: 'estimatefee'
+      })
+      .then((response) => {
         return Promise.resolve(response.data.result)
       })
   }
@@ -110,14 +115,15 @@ export default class BitcoinCash {
    * @param {String} hash Transaction hash
    * @erturn {Promise} Axios promise
    */
-  getRawTransaction (hash) {
-    return this.bitcoind.post('/', {
-      jsonrpc: '1.0',
-      id: this.rpcId,
-      method: 'getrawtransaction',
-      params: [hash, true]
-    })
-      .then(response => {
+  getRawTransaction(hash) {
+    return this.bitcoind
+      .post('/', {
+        jsonrpc: '1.0',
+        id: this.rpcId,
+        method: 'getrawtransaction',
+        params: [hash, true]
+      })
+      .then((response) => {
         return Promise.resolve(response.data.result)
       })
   }
@@ -127,14 +133,15 @@ export default class BitcoinCash {
    * @param {String} hash Block header hash
    * @erturn {Promise} Axios promise
    */
-  getBlock (hash) {
-    return this.bitcoind.post('/', {
-      jsonrpc: '1.0',
-      id: this.rpcId,
-      method: 'getblock',
-      params: [hash]
-    })
-      .then(response => {
+  getBlock(hash) {
+    return this.bitcoind
+      .post('/', {
+        jsonrpc: '1.0',
+        id: this.rpcId,
+        method: 'getblock',
+        params: [hash]
+      })
+      .then((response) => {
         return Promise.resolve(response.data.result)
       })
   }

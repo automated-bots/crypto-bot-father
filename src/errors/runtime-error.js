@@ -1,5 +1,5 @@
 export class RuntimeError extends Error {
-  constructor (message) {
+  constructor(message) {
     super(message)
 
     // assign the error class name in your custom error (as a shortcut)

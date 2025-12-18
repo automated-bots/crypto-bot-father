@@ -9,11 +9,11 @@ const COINGECKO_URL = 'https://www.coingecko.com/en/coins'
  * Especially useful for big message that also requires pre-processing.
  */
 export default class ProcessResult {
-  static priceOverview (symbol, rates, quoteSymbol = null) {
+  static priceOverview(symbol, rates, quoteSymbol = null) {
     symbol = symbol.toUpperCase()
     const ratesList = rates.rates
-    const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
-    const baseName = (rates.base_name) ? rates.base_name : symbol
+    const baseCurrency = rates.base_currency ? rates.base_currency : symbol
+    const baseName = rates.base_name ? rates.base_name : symbol
     const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
     const datetime = Misc.printDatetime(rates.datetime)
 
@@ -49,7 +49,7 @@ ${cryptoPrices}
 Rates datetime: ${datetime}`
   }
 
-  static detailedPriceOverview (symbol, rates) {
+  static detailedPriceOverview(symbol, rates) {
     symbol = symbol.toUpperCase()
     const ratesList = rates.rates
     // Fiat
@@ -77,8 +77,8 @@ Rates datetime: ${datetime}`
     const litecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.LTC, 5)
     const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(ratesList.BCH, 8)
     const dogecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.DOGE)
-    const baseCurrency = (rates.base_currency) ? rates.base_currency : symbol
-    const baseName = (rates.base_name) ? rates.base_name : symbol
+    const baseCurrency = rates.base_currency ? rates.base_currency : symbol
+    const baseName = rates.base_name ? rates.base_name : symbol
     const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
     const datetime = Misc.printDatetime(rates.datetime)
 
@@ -114,14 +114,16 @@ Rates datetime: ${datetime}`
 Rates datetime: ${datetime}`
   }
 
-  static dominance (symbol, quote) {
+  static dominance(symbol, quote) {
     symbol = symbol.toUpperCase()
-    const name = (quote.name) ? quote.name : symbol
-    const marketCapDominance = quote.market_cap_dominance.toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).replace('.', '\\.')
+    const name = quote.name ? quote.name : symbol
+    const marketCapDominance = quote.market_cap_dominance
+      .toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+      .replace('.', '\\.')
     return `Current dominance of ${name} \\(${symbol}\\) is ${marketCapDominance}%\\.`
   }
 
-  static marketStats (symbol, quote, meta, rates) {
+  static marketStats(symbol, quote, meta, rates) {
     symbol = symbol.toUpperCase()
     let exchangeString = ''
     // Fill-in the exchange rates when found
@@ -134,27 +136,44 @@ Rates datetime: ${datetime}`
 Price: 1 ${symbol} \\= ${btcPrice} BTC
 Price: 1 ${symbol} \\= ${ethPrice} ETH`
     }
-    const name = (quote.name) ? quote.name : symbol
+    const name = quote.name ? quote.name : symbol
     const dollarPrice = Misc.printCurrencyWithoutSymbol(quote.price)
-    const circulatingSupply = (meta.circulating_supply) ? meta.circulating_supply.toLocaleString('en').replace('.', '\\.') : 'N/A'
-    const totalSupply = (meta.total_supply) ? meta.total_supply.toLocaleString('en').replace('.', '\\.') : 'N/A'
-    const maxSupply = (meta.max_supply) ? meta.max_supply.toLocaleString('en').replace('.', '\\.') : 'N/A'
+    const circulatingSupply = meta.circulating_supply ? meta.circulating_supply.toLocaleString('en').replace('.', '\\.') : 'N/A'
+    const totalSupply = meta.total_supply ? meta.total_supply.toLocaleString('en').replace('.', '\\.') : 'N/A'
+    const maxSupply = meta.max_supply ? meta.max_supply.toLocaleString('en').replace('.', '\\.') : 'N/A'
     const marketCap = quote.market_cap.toLocaleString('en', { maximumFractionDigits: 0 }).replace('.', '\\.')
-    const marketCapDominance = quote.market_cap_dominance.toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).replace('.', '\\.')
+    const marketCapDominance = quote.market_cap_dominance
+      .toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+      .replace('.', '\\.')
     const volume24h = quote.volume_24h.toLocaleString('en', { maximumFractionDigits: 0 }).replace('.', '\\.')
     const volume7d = quote.volume_7d.toLocaleString('en', { maximumFractionDigits: 0 }).replace('.', '\\.')
     const volume30d = quote.volume_30d.toLocaleString('en', { maximumFractionDigits: 0 }).replace('.', '\\.')
-    const percentChanged1h = quote.percentage_changed_1h.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
-    const percentChanged24h = quote.percentage_changed_24h.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
-    const percentChanged7d = quote.percentage_changed_7d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
-    const percentChanged30d = quote.percentage_changed_30d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
-    const percentChanged90d = quote.percentage_changed_90d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.').replace('-', '\\-')
+    const percentChanged1h = quote.percentage_changed_1h
+      .toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      .replace('.', '\\.')
+      .replace('-', '\\-')
+    const percentChanged24h = quote.percentage_changed_24h
+      .toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      .replace('.', '\\.')
+      .replace('-', '\\-')
+    const percentChanged7d = quote.percentage_changed_7d
+      .toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      .replace('.', '\\.')
+      .replace('-', '\\-')
+    const percentChanged30d = quote.percentage_changed_30d
+      .toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      .replace('.', '\\.')
+      .replace('-', '\\-')
+    const percentChanged90d = quote.percentage_changed_90d
+      .toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      .replace('.', '\\.')
+      .replace('-', '\\-')
     const lastUpdatedQuote = Misc.printDate(new Date(quote.last_updated))
-    const changeIcon1h = (Math.sign(quote.percentage_changed_1h) === 1) ? '🔼' : '🔽'
-    const changeIcon24h = (Math.sign(quote.percentage_changed_24h) === 1) ? '🔼' : '🔽'
-    const changeIcon7d = (Math.sign(quote.percentage_changed_7d) === 1) ? '🔼' : '🔽'
-    const changeIcon30d = (Math.sign(quote.percentage_changed_30d) === 1) ? '🔼' : '🔽'
-    const changeIcon90d = (Math.sign(quote.percentage_changed_90d) === 1) ? '🔼' : '🔽'
+    const changeIcon1h = Math.sign(quote.percentage_changed_1h) === 1 ? '🔼' : '🔽'
+    const changeIcon24h = Math.sign(quote.percentage_changed_24h) === 1 ? '🔼' : '🔽'
+    const changeIcon7d = Math.sign(quote.percentage_changed_7d) === 1 ? '🔼' : '🔽'
+    const changeIcon30d = Math.sign(quote.percentage_changed_30d) === 1 ? '🔼' : '🔽'
+    const changeIcon90d = Math.sign(quote.percentage_changed_90d) === 1 ? '🔼' : '🔽'
     const datetime = Misc.printDatetime(quote.last_updated)
 
     return `*General coin data for ${name} \\(*[${symbol}](${meta.cmc_url})*\\)*
@@ -185,18 +204,20 @@ Last 30D: ${changeIcon30d} ${percentChanged30d}%
 Last 90D: ${changeIcon90d} ${percentChanged90d}%`
   }
 
-  static bitcoinCashStats (blockchainResult, quote, miningResultLocal, miningResult, bestBlockResult) {
-    const hashrateth = (miningResultLocal.networkhashps / 1000.0 / 1000.0 / 1000.0 / 1000.0 / 1000.0).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.') // Convert to Tera
+  static bitcoinCashStats(blockchainResult, quote, miningResultLocal, miningResult, bestBlockResult) {
+    const hashrateth = (miningResultLocal.networkhashps / 1000.0 / 1000.0 / 1000.0 / 1000.0 / 1000.0)
+      .toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      .replace('.', '\\.') // Convert to Tera
     const medianTime = Misc.printDate(new Date(blockchainResult.mediantime * 1000))
-    const marketCap = (miningResult.market_cap).toLocaleString('en', { maximumFractionDigits: 0 })
+    const marketCap = miningResult.market_cap.toLocaleString('en', { maximumFractionDigits: 0 })
     const difficulty = (blockchainResult.difficulty / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
     const difficulty24h = (miningResult.difficulty24h / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
     const difficulty3d = (miningResult.difficulty3d / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
     const difficulty7d = (miningResult.difficulty7d / 1000.0 / 1000.0).toLocaleString('en', { maximumFractionDigits: 0 }) // Convert to Millions
     const blockTimeMin = Math.floor(miningResult.block_time_seconds / 60)
     const blockTimeSec = (((miningResult.block_time_seconds / 60) % 2) * 60).toFixed(0).replace('.', '\\.')
-    const exchangeRate = (quote.price).toFixed(2).replace('.', '\\.')
-    const percentageChange24h = (quote.percentage_changed_24h).toFixed(2).replace('.', '\\.').replace('-', '\\-')
+    const exchangeRate = quote.price.toFixed(2).replace('.', '\\.')
+    const percentageChange24h = quote.percentage_changed_24h.toFixed(2).replace('.', '\\.').replace('-', '\\-')
     const blockReward = miningResult.block_reward.toString().replace('.', '\\.')
     const blockReward24h = miningResult.block_reward24h.toString().replace('.', '\\.')
     const blockReward3d = miningResult.block_reward3d.toString().replace('.', '\\.')
@@ -229,7 +250,7 @@ Block reward 7D avg: ${blockReward7d} BCH
 Exchange rate: ${exchangeRate} \\(${percentageChange24h}%\\) BCH/USD`
   }
 
-  static marketOverview (listingResults) {
+  static marketOverview(listingResults) {
     const config = {
       border: getBorderCharacters('ramac'),
       columnDefault: {
@@ -245,8 +266,8 @@ Exchange rate: ${exchangeRate} \\(${percentageChange24h}%\\) BCH/USD`
     tableData.push(['Nr', 'Symbl', '$ Price', '%24H', '%7D', '$ Cap', '$Vol24H'])
     for (const coin of listingResults) {
       const dollarPrice = Misc.printCurrencyWithoutSymbol(coin.price).replace('\\.', '.')
-      const percentChange24h = (coin.percentage_changed_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const percentChange7d = (coin.percentage_changed_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange24h = coin.percentage_changed_24h.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange7d = coin.percentage_changed_7d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(coin.market_cap).replace('\\.', '.')
       const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(coin.volume_24h).replace('\\.', '.')
       tableData.push([coin.rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, marketCap, volume24h])
@@ -255,7 +276,7 @@ Exchange rate: ${exchangeRate} \\(${percentageChange24h}%\\) BCH/USD`
     return text
   }
 
-  static detailedMarketOverview (listingResults) {
+  static detailedMarketOverview(listingResults) {
     const config = {
       border: getBorderCharacters('ramac'),
       columnDefault: {
@@ -275,16 +296,29 @@ Exchange rate: ${exchangeRate} \\(${percentageChange24h}%\\) BCH/USD`
     tableData.push(['Nr', 'Symbol', '$ Price', '%24H', '%7D', '%30D', '90D', '$ Cap', '$Vol24H', '%Domin', 'Cir. Supp', 'Max Supp'])
     for (const coin of listingResults) {
       const dollarPrice = Misc.printCurrencyWithoutSymbol(coin.price).replace('\\.', '.')
-      const percentChange24h = (coin.percentage_changed_24h).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const percentChange7d = (coin.percentage_changed_7d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const percentChange30d = (coin.percentage_changed_30d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      const percentChange90d = (coin.percentage_changed_90d).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange24h = coin.percentage_changed_24h.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange7d = coin.percentage_changed_7d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange30d = coin.percentage_changed_30d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      const percentChange90d = coin.percentage_changed_90d.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       const marketCap = Misc.printCurrencyNotationCompactWithoutSymbol(coin.market_cap).replace('\\.', '.')
       const volume24h = Misc.printCurrencyNotationCompactWithoutSymbol(coin.volume_24h).replace('\\.', '.')
-      const marketCapDominance = (coin.market_cap_dominance).toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
+      const marketCapDominance = coin.market_cap_dominance.toLocaleString('en', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
       const circulatingSupply = Misc.printCurrencyNotationCompactWithoutSymbol(coin.circulating_supply).replace('\\.', '.')
-      const maxSupply = (coin.max_supply) ? Misc.printCurrencyNotationCompactWithoutSymbol(coin.max_supply).replace('\\.', '.') : 'N/A'
-      tableData.push([coin.rank, coin.symbol, dollarPrice, percentChange24h, percentChange7d, percentChange30d, percentChange90d, marketCap, volume24h, marketCapDominance, circulatingSupply, maxSupply])
+      const maxSupply = coin.max_supply ? Misc.printCurrencyNotationCompactWithoutSymbol(coin.max_supply).replace('\\.', '.') : 'N/A'
+      tableData.push([
+        coin.rank,
+        coin.symbol,
+        dollarPrice,
+        percentChange24h,
+        percentChange7d,
+        percentChange30d,
+        percentChange90d,
+        marketCap,
+        volume24h,
+        marketCapDominance,
+        circulatingSupply,
+        maxSupply
+      ])
     }
     text += '```\n' + table(tableData, config) + '\n```'
     return text

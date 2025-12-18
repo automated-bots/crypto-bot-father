@@ -32,12 +32,16 @@ if (!BOT_PATH_SECRET || BOT_PATH_SECRET === 'change_this_to_a_secure_random_stri
 
 if (!botUrl) {
   logger.fatal('No Telegram bot URL provided!')
-  throw new Error('\x1b[31mERROR: Provide your Telegram bot URL, by setting the TELEGRAM_BOT_URL environment variable first! See README.md.\nExit.\x1b[0m')
+  throw new Error(
+    '\x1b[31mERROR: Provide your Telegram bot URL, by setting the TELEGRAM_BOT_URL environment variable first! See README.md.\nExit.\x1b[0m'
+  )
 }
 
 if (!TELEGRAM_TOKEN || TELEGRAM_TOKEN === 'xyz') {
   logger.fatal('Insecure or missing TELEGRAM_TOKEN environment variable!')
-  throw new Error('\x1b[31mERROR: Provide your Telegram token, by setting the TELEGRAM_TOKEN environment variable first! See README.md.\nExit.\x1b[0m')
+  throw new Error(
+    '\x1b[31mERROR: Provide your Telegram token, by setting the TELEGRAM_TOKEN environment variable first! See README.md.\nExit.\x1b[0m'
+  )
 }
 
 // Create helper objects

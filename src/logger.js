@@ -19,10 +19,8 @@ const envToLogger = {
         return { level: label }
       }
     },
-    timestamp: pino.stdTimeFunctions.isoTime,
+    timestamp: pino.stdTimeFunctions.isoTime
   }
 }
 
-export default pino(
-  envToLogger[NODE_ENV]
-)
+export default pino(envToLogger[NODE_ENV])

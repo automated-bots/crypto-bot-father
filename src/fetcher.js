@@ -10,7 +10,7 @@ const CHART_IMAGE_API_KEY = process.env.CHART_IMAGE_API_KEY || ''
  * Fetches or calculates the data we need from all kind of sources
  */
 export default class Fetcher {
-  constructor (bitcoinCash, fulcrum) {
+  constructor(bitcoinCash, fulcrum) {
     this.bitcoinCash = bitcoinCash
     this.fulcrum = fulcrum
     this.jsFinance = axios.create({
@@ -39,7 +39,7 @@ export default class Fetcher {
    *  - https://explorer.bitcoinunlimited.info/block/000000000000000000b3cfd73dbd87c5e6cae26d89a5956ee78193733f61340e
    * @returns message string
    */
-  bitcoinAge () {
+  bitcoinAge() {
     const ageGenesis = Misc.timeDifference('2009-01-03T18:15:05.000Z') // Since creation of the genesis block
     const ageFork = Misc.timeDifference('2017-08-01T18:12:41.000Z') // Since creation of the Bitcoin cash fork
     const ageSubsidyBlock = Misc.timeDifference('2024-04-03T22:45:15.000Z') // Since first block of subsidy era #5 (4.125 BCH)
@@ -52,7 +52,7 @@ First block of subsidy era \\#5: ${ageSubsidyBlock.years} years, ${ageSubsidyBlo
    * Retrieve Bitcoin status
    * @returns message
    */
-  async bitcoinStatus () {
+  async bitcoinStatus() {
     let text = ''
     try {
       const networkResult = await this.bitcoinCash.getNetworkInfo()
@@ -76,7 +76,10 @@ Peers connected: ${networkResult.connections}`
         for (i = 0; i < 3; i++) {
           const sendTime = Misc.printDate(new Date(peerResult[i].lastsend * 1000))
           const recieveTime = Misc.printDate(new Date(peerResult[i].lastrecv * 1000))
-          const ping = parseFloat(peerResult[i].pingtime * 1000).toFixed(2).toString().replace('.', '\\.')
+          const ping = parseFloat(peerResult[i].pingtime * 1000)
+            .toFixed(2)
+            .toString()
+            .replace('.', '\\.')
           text += `
 Ping: ${ping} ms
 Last send: ${sendTime}
@@ -97,7 +100,7 @@ Last receive: ${recieveTime}
    * Retrieve Bitcoin network details
    * @return message
    */
-  async bitcoinNetworkInfo () {
+  async bitcoinNetworkInfo() {
     try {
       const result = await this.bitcoinCash.getNetworkInfo()
       const nodeVersion = result.version.toString().replaceAll('.', '\\.')
@@ -142,14 +145,13 @@ Reachable: ${networks[i].reachable}
    * Retrieve Bitcoin Cash information
    * @returns message
    */
-  async bitcoinInfo () {
+  async bitcoinInfo() {
     const blockchainResult = await this.bitcoinCash.getBlockChainInfo()
-    const quote = await this.jsFinance.get('/cryptos/quote/BCH',
-      {
-        params: {
-          quote_currency: 'USD'
-        }
-      })
+    const quote = await this.jsFinance.get('/cryptos/quote/BCH', {
+      params: {
+        quote_currency: 'USD'
+      }
+    })
     const miningResultLocal = await this.bitcoinCash.getMiningInfo()
     const miningResult = await this.jsFinance.get('/cryptos/mining/BCH')
     const bestBlockResult = await this.bitcoinCash.getBlock(blockchainResult.bestblockhash)
@@ -163,7 +165,7 @@ Reachable: ${networks[i].reachable}
   /**
    * Estimate the Bitcoin Cash fee
    */
-  async bitcoinEstimateFee () {
+  async bitcoinEstimateFee() {
     const estimateFee = await this.bitcoinCash.estimateFee()
     const fee = estimateFee.toString().replace('.', '\\.')
     return `Estimated fee: ${fee} BCH/kB`
@@ -174,7 +176,7 @@ Reachable: ${networks[i].reachable}
    * @param {String} hash Bitcoin transaction hash
    * @returns message
    */
-  async bitcoinTransaction (hash) {
+  async bitcoinTransaction(hash) {
     try {
       // TODO: Retrieve inputs and outputs to determine fee & amounts
       const rawTransaction = await this.bitcoinCash.getRawTransaction(hash)
@@ -204,11 +206,13 @@ In Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${r
    * Retrieve Bitcoin block details
    * @param {String} hash Bitcoin block hash
    */
-  async bitcoinBlock (hash) {
+  async bitcoinBlock(hash) {
     try {
       const blockInfo = await this.bitcoinCash.getBlock(hash)
       const blockDate = Misc.printDate(new Date(blockInfo.time * 1000))
-      const nextBlockText = (blockInfo.nextblockhash) ? `[${blockInfo.nextblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.nextblockhash})` : 'N/A'
+      const nextBlockText = blockInfo.nextblockhash
+        ? `[${blockInfo.nextblockhash}](${Misc.blockchainExplorerUrl()}/block/${blockInfo.nextblockhash})`
+        : 'N/A'
       const blockDifficulty = blockInfo.difficulty.toString().replace('.', '\\.')
       return `**Block details for: [${hash}](${Misc.blockchainExplorerUrl()}/block/${hash})**
 Block Height: [${blockInfo.height}](${Misc.blockchainExplorerUrl()}/block/${hash})
@@ -237,15 +241,15 @@ Next block hash: ${nextBlockText}`
    * Retrieve latest Bitcoin Cash blocks
    * @return message
    */
-  async bitcoinLatestBlocks () {
+  async bitcoinLatestBlocks() {
     const blocks = await this.explorer.get('/blocks')
     if (blocks.data && Array.isArray(blocks.data) && blocks.data.length >= 8) {
       let returnData = '*Latest 8 blocks:*\n'
       for (let i = 0; i < 8; i++) {
         const block = blocks.data[i]
         const sizeKb = (block.size / 1000.0).toString().replace('.', '\\.')
-        const poolName = ('extras' in block && 'pool' in block.extras && 'name' in block.extras.pool) ? (block.extras.pool.name) : 'Unknown'
-        const poolNameMarkdownSafe = (poolName) ? Misc.makeSafeMarkdownString(poolName.trim()) : 'Unknown'
+        const poolName = 'extras' in block && 'pool' in block.extras && 'name' in block.extras.pool ? block.extras.pool.name : 'Unknown'
+        const poolNameMarkdownSafe = poolName ? Misc.makeSafeMarkdownString(poolName.trim()) : 'Unknown'
         returnData += `• Height: [${block.height}](${Misc.blockchainExplorerUrl()}/block/${block.id}), Pool: ${poolNameMarkdownSafe}, TXs: ${block.tx_count}, Size: ${sizeKb} kB\n`
       }
       return returnData
@@ -258,7 +262,7 @@ Next block hash: ${nextBlockText}`
    * Retrieve latest Bitcoin Cash trnasactions
    * @return message
    */
-  async bitcoinLatestTransactions () {
+  async bitcoinLatestTransactions() {
     const txs = await this.explorer.get('/mempool/recent')
     if (txs.data && Array.isArray(txs.data) && txs.data.length >= 8) {
       let returnData = '*Latest 8 TXs:*\n'
@@ -280,7 +284,7 @@ Next block hash: ${nextBlockText}`
    * @param {String} address Bitcoin Cash address
    * @return message
    */
-  async bitcoinAddressBalance (address) {
+  async bitcoinAddressBalance(address) {
     const result = await this.fulcrum.getBalance(address)
     if (result && 'confirmed' in result) {
       const confirmedBch = Misc.printCurrencyWithoutSymbol(result.confirmed / 100000000.0, 8)
@@ -299,18 +303,18 @@ Next block hash: ${nextBlockText}`
    * @param {String} hash Bitcoin address
    * @return message
    */
-  async bitcoinTransactions (address) {
+  async bitcoinTransactions(address) {
     // TODO ..
     return 'not yet implemented'
   }
 
   /**
-    * Retrieve latest quote information and exchange rates (fiat + crypto).
-    * @param {String} symbol Crypto symbol
-    * @param {String} quoteSymbol (Optionally) Quote symbol (eg. USD, EUR, BTC, ADA)
-    * @return message
-    */
-  async priceQuotes (symbol, quoteSymbol = null) {
+   * Retrieve latest quote information and exchange rates (fiat + crypto).
+   * @param {String} symbol Crypto symbol
+   * @param {String} quoteSymbol (Optionally) Quote symbol (eg. USD, EUR, BTC, ADA)
+   * @return message
+   */
+  async priceQuotes(symbol, quoteSymbol = null) {
     try {
       const rates = await this.jsFinance.get('/rates/' + symbol)
       if (rates.data) {
@@ -331,11 +335,11 @@ Next block hash: ${nextBlockText}`
   }
 
   /**
-    * Retrieve latest detailed quote information and exchange rates (fiat + crypto).
-    * @param {String} symbol Crypto symbol
-    * @return message
-    */
-  async detailedPriceQuotes (symbol) {
+   * Retrieve latest detailed quote information and exchange rates (fiat + crypto).
+   * @param {String} symbol Crypto symbol
+   * @return message
+   */
+  async detailedPriceQuotes(symbol) {
     try {
       const rates = await this.jsFinance.get('/rates/' + symbol)
       if (rates.data) {
@@ -356,11 +360,11 @@ Next block hash: ${nextBlockText}`
   }
 
   /**
-    * Retrieve dominance (%) data for crypto symbol.
-    * @param {String} symbol Crypto symbol
-    * @return message
-    */
-  async dominance (symbol) {
+   * Retrieve dominance (%) data for crypto symbol.
+   * @param {String} symbol Crypto symbol
+   * @return message
+   */
+  async dominance(symbol) {
     try {
       const quote = await this.jsFinance.get('/cryptos/quote/' + symbol)
       if (quote.data) {
@@ -381,11 +385,11 @@ Next block hash: ${nextBlockText}`
   }
 
   /**
-    * Retrieve latest market statistics
-    * @param {String} symbol Crypto symbol
-    * @return message
-  */
-  async marketStats (symbol) {
+   * Retrieve latest market statistics
+   * @param {String} symbol Crypto symbol
+   * @return message
+   */
+  async marketStats(symbol) {
     try {
       const quote = await this.jsFinance.get('/cryptos/quote/' + symbol, {
         params: {
@@ -423,8 +427,38 @@ Next block hash: ${nextBlockText}`
    * Giving you a generic market overview of the top 20 coins. We will remove tokens/stable coins from the list.
    * @return message
    */
-  async marketOverview (limit = 20) {
-    const removeCurrencySymbols = ['USDT', 'USDC', 'BUSD', 'DAI', 'SHIB', 'UNI', 'WBTC', 'LEO', 'FTT', 'LINK', 'CRO', 'APE', 'MANA', 'SAND', 'AXS', 'QNT', 'AAVE', 'TUSD', 'MKR', 'OKB', 'KCS', 'USDP', 'RUNE', 'BTT', 'CHZ', 'GRT', 'LDO', 'USDD', 'CRV']
+  async marketOverview(limit = 20) {
+    const removeCurrencySymbols = [
+      'USDT',
+      'USDC',
+      'BUSD',
+      'DAI',
+      'SHIB',
+      'UNI',
+      'WBTC',
+      'LEO',
+      'FTT',
+      'LINK',
+      'CRO',
+      'APE',
+      'MANA',
+      'SAND',
+      'AXS',
+      'QNT',
+      'AAVE',
+      'TUSD',
+      'MKR',
+      'OKB',
+      'KCS',
+      'USDP',
+      'RUNE',
+      'BTT',
+      'CHZ',
+      'GRT',
+      'LDO',
+      'USDD',
+      'CRV'
+    ]
     // Retrieve the limit size + the array size of the currency we filter out (eg. to be able to still have 20 items to return)
     const response = await this.jsFinance.get('/cryptos', {
       params: {
@@ -435,10 +469,12 @@ Next block hash: ${nextBlockText}`
     const listingResults = response.data
     // Filter-out the crypto currencies we don't want to list (like tokens and stable coins)
     const listingResultsFiltered = listingResults.filter((value) => {
-      return !(removeCurrencySymbols).includes(value.symbol)
+      return !removeCurrencySymbols.includes(value.symbol)
     })
     // Limit the array
-    if (listingResultsFiltered.length > limit) { listingResultsFiltered.splice(limit) }
+    if (listingResultsFiltered.length > limit) {
+      listingResultsFiltered.splice(limit)
+    }
     return ProcessResult.marketOverview(listingResultsFiltered)
   }
 
@@ -446,7 +482,7 @@ Next block hash: ${nextBlockText}`
    * Giving you a detailed market overview of the top 25 tokens & coins
    * @return message
    */
-  async detailedMarketOverview (limit = 25) {
+  async detailedMarketOverview(limit = 25) {
     const response = await this.jsFinance.get('/cryptos', {
       params: {
         quote_currency: 'USD',
@@ -458,12 +494,12 @@ Next block hash: ${nextBlockText}`
   }
 
   /**
-    * Retrieve TradingView chart
-    * @param {String} symbol Crypto symbol
-    * @param {String} quoteSymbol (Optionally) Quote symbol (eg. USD)
-    * @return {Stream} Image stream data
-    */
-  async chartImage (symbol, quoteSymbol = 'USD') {
+   * Retrieve TradingView chart
+   * @param {String} symbol Crypto symbol
+   * @param {String} quoteSymbol (Optionally) Quote symbol (eg. USD)
+   * @return {Stream} Image stream data
+   */
+  async chartImage(symbol, quoteSymbol = 'USD') {
     try {
       const image = await this.chart.get('/tradingview/advanced-chart', {
         params: {

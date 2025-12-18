@@ -8,7 +8,7 @@ export default class Fulcrum {
    * @param {integer} fulcrumPort Fulcrum port
    * @param {string} fulcrumHost Fulcrum host
    */
-  constructor (fulcrumPort, fulcrumHost) {
+  constructor(fulcrumPort, fulcrumHost) {
     this.port = fulcrumPort
     this.host = fulcrumHost
     this.received = {}
@@ -17,7 +17,7 @@ export default class Fulcrum {
     this.connect()
   }
 
-  connect () {
+  connect() {
     this.fulcrum = new Socket()
     this.fulcrum.setTimeout(10000)
     this.fulcrum.setEncoding('utf8')
@@ -28,7 +28,7 @@ export default class Fulcrum {
       // Set our health to NOK
       globalState.errorState = true
     })
-    this.fulcrum.on('data', data => {
+    this.fulcrum.on('data', (data) => {
       try {
         const json = JSON.parse(data)
         if ('id' in json && 'result' in json) {
@@ -43,7 +43,7 @@ export default class Fulcrum {
         logger.error(err)
       }
     })
-    this.fulcrum.on('close', e => {
+    this.fulcrum.on('close', (e) => {
       this.connected = false
     })
     this.fulcrum.connect(this.port, this.host, () => {
@@ -51,7 +51,7 @@ export default class Fulcrum {
     })
   }
 
-  close () {
+  close() {
     if (this.connected) {
       this.fulcrum.end()
       this.fulcrum.destroy()
@@ -67,7 +67,7 @@ export default class Fulcrum {
    * @param {String} address Bitcoin Cash address
    * @erturn {Promise} Axios promise
    */
-  async getBalance (address) {
+  async getBalance(address) {
     if (!this.connected) {
       this.connect() // Try 1x a reconnect for now
     }
@@ -81,7 +81,7 @@ export default class Fulcrum {
     // Now try to retrieve the data
     let retries = 0
     while (!('getbalance' in this.received)) {
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise((resolve) => setTimeout(resolve, 10))
       retries++
       if (retries === 1000) break
     }

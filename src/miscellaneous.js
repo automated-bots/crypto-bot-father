@@ -5,7 +5,7 @@ export default class Misc {
    * Get blockchain Explorer URL
    * @returns URL
    */
-  static blockchainExplorerUrl () {
+  static blockchainExplorerUrl() {
     return 'https://explorer.melroy.org'
   }
 
@@ -14,7 +14,7 @@ export default class Misc {
    * @param {Date} - date
    * @return {string} formatted date string
    */
-  static printDate (date) {
+  static printDate(date) {
     return new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeStyle: 'medium' }).format(date)
   }
 
@@ -22,49 +22,57 @@ export default class Misc {
    * With currency symbol (eg. $243,429.67), default USD
    * @return {string} formatted currency string
    */
-  static formatCurrencySymbol (value, currency = 'USD', fractionDigits = 2) {
+  static formatCurrencySymbol(value, currency = 'USD', fractionDigits = 2) {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
       currency: currency,
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
       currencyDisplay: 'narrowSymbol'
-    }).format(value).replace('.', '\\.')
+    })
+      .format(value)
+      .replace('.', '\\.')
   }
 
   /**
    * Using ISO currency  (eg. USD 2,352,712.23), default USD
    * @return {string} formatted currency string
    */
-  static printCurrencyCode (value, currency = 'USD', fractionDigits = 2) {
+  static printCurrencyCode(value, currency = 'USD', fractionDigits = 2) {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
       currency: currency,
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
       currencyDisplay: 'code'
-    }).format(value).replace('.', '\\.')
+    })
+      .format(value)
+      .replace('.', '\\.')
   }
 
   /**
    * Without any symbol (eg. 23,046.91)
    * @return {string} formatted currency string
    */
-  static printCurrencyWithoutSymbol (value, fractionDigits = 2) {
+  static printCurrencyWithoutSymbol(value, fractionDigits = 2) {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
       currencyDisplay: 'code'
-    }).format(value).replace(/[a-z]{3}/i, '').replace('.', '\\.').trim()
+    })
+      .format(value)
+      .replace(/[a-z]{3}/i, '')
+      .replace('.', '\\.')
+      .trim()
   }
 
   /**
    * Notation compact, display short symbol (eg. $2.5T), default USD
    * @return {string} formatted currency string
    */
-  static printCurrencyNotationCompactSymbol (value, currency = 'USD', fractionDigits = 2) {
+  static printCurrencyNotationCompactSymbol(value, currency = 'USD', fractionDigits = 2) {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
       currency: currency,
@@ -73,14 +81,16 @@ export default class Misc {
       currencyDisplay: 'narrowSymbol',
       notation: 'compact',
       compactDisplay: 'short'
-    }).format(value).replace('.', '\\.')
+    })
+      .format(value)
+      .replace('.', '\\.')
   }
 
   /**
    * Notation compact, display short, without any symbol (eg. 2.5T)
    * @return {string} formatted currency string
    */
-  static printCurrencyNotationCompactWithoutSymbol (value, fractionDigits = 2) {
+  static printCurrencyNotationCompactWithoutSymbol(value, fractionDigits = 2) {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
       currency: 'USD',
@@ -89,7 +99,11 @@ export default class Misc {
       currencyDisplay: 'code',
       notation: 'compact',
       compactDisplay: 'short'
-    }).format(value).replace(/[a-z]{3}/i, '').replace('.', '\\.').trim()
+    })
+      .format(value)
+      .replace(/[a-z]{3}/i, '')
+      .replace('.', '\\.')
+      .trim()
   }
 
   /**
@@ -99,18 +113,20 @@ export default class Misc {
    * @param {Number} maxFractionDigits maximum fraction digits (default: 2)
    * @returns string formatted number
    */
-  static printNumber (value, minFractionDigits = 0, maxFractionDigits = 2) {
+  static printNumber(value, minFractionDigits = 0, maxFractionDigits = 2) {
     return new Intl.NumberFormat('en-IN', {
       minimumFractionDigits: minFractionDigits,
       maximumFractionDigits: maxFractionDigits
-    }).format(value).replace('.', '\\.')
+    })
+      .format(value)
+      .replace('.', '\\.')
   }
 
   /**
    * Make the string Telegram friendly
    * @param {String} datetime datetime string
    */
-  static printDatetime (datetime) {
+  static printDatetime(datetime) {
     return datetime.replaceAll('-', '\\-').replace('.', '\\.')
   }
 
@@ -119,7 +135,7 @@ export default class Misc {
    * @param {string} - hash string
    * @return {Boolean} True if SHA256 otherwise false
    */
-  static isSha256 (hash) {
+  static isSha256(hash) {
     return hash.match(/^([a-f0-9]{64})$/) != null
   }
 
@@ -128,7 +144,7 @@ export default class Misc {
    * @param {String} ISODateTime ISO date time string (ISO 8601)
    * @ret {Object} Duration object (includes years, months, weeks, days, hours, minutes, seconds and milliseconds)
    */
-  static timeDifference (ISODateTime) {
+  static timeDifference(ISODateTime) {
     const start = DateTime.fromISO(ISODateTime)
     const end = DateTime.now()
     const diff = end.diff(start, ['years', 'months', 'days', 'hours', 'minutes', 'seconds', 'milliseconds'])
@@ -140,10 +156,28 @@ export default class Misc {
    * @param {String} str string input
    * @returns String output, safe for markdown in Telegram
    */
-  static makeSafeMarkdownString (str) {
-    return str.replaceAll('.', '\\.').replaceAll('-', '\\-').replaceAll('!', '\\!').replaceAll('+', '\\+').replaceAll('#', '\\#').replaceAll('*', '\\*')
-      .replaceAll('_', '\\_').replaceAll('(', '\\(').replaceAll(')', '\\)').replaceAll('~', '\\~').replaceAll('`', '\\`')
-      .replaceAll('|', '\\|').replaceAll('[', '\\[').replaceAll(']', '\\]').replaceAll('<', '\\<').replaceAll('>', '\\>')
-      .replaceAll('=', '\\=').replaceAll('{', '\\{').replaceAll('}', '\\}').replaceAll('=', '\\=').replaceAll('=', '\\=')
+  static makeSafeMarkdownString(str) {
+    return str
+      .replaceAll('.', '\\.')
+      .replaceAll('-', '\\-')
+      .replaceAll('!', '\\!')
+      .replaceAll('+', '\\+')
+      .replaceAll('#', '\\#')
+      .replaceAll('*', '\\*')
+      .replaceAll('_', '\\_')
+      .replaceAll('(', '\\(')
+      .replaceAll(')', '\\)')
+      .replaceAll('~', '\\~')
+      .replaceAll('`', '\\`')
+      .replaceAll('|', '\\|')
+      .replaceAll('[', '\\[')
+      .replaceAll(']', '\\]')
+      .replaceAll('<', '\\<')
+      .replaceAll('>', '\\>')
+      .replaceAll('=', '\\=')
+      .replaceAll('{', '\\{')
+      .replaceAll('}', '\\}')
+      .replaceAll('=', '\\=')
+      .replaceAll('=', '\\=')
   }
 }

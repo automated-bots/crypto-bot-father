@@ -1,11 +1,12 @@
-import neostandard, { plugins } from 'neostandard'
+import neostandard from 'neostandard'
+import eslintConfigPrettier from 'eslint-config-prettier/flat'
 
 export default [
   ...neostandard(),
-  plugins.n.configs['flat/recommended'],
   {
     rules: {
       'object-shorthand': 'off'
     }
-  }
+  },
+  eslintConfigPrettier
 ]
