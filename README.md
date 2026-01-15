@@ -20,7 +20,7 @@ This bot is written in JavaScript using [Node.js](https://nodejs.org/en/download
 
 The bot is using [JS Finance](finance.melroy.org/docs) to retrieve general cryptocurrency data like the latest prices. On-chain data is retrieved from the [Bitcoin Cash Node](https://bitcoincashnode.org) (BCHN) in order to retrieve information from the Bitcoin Cash network.
 
-Crypto Bot Father will also leverage the [BCH Explorer REST API](https://explorer.melroy.org) as well as [Fulcrum](https://github.com/cculianu/Fulcrum) to retrieve additional data, which is otherwise too complicated to retrieve from BCHN directly.
+Crypto Bot Father will also leverage the [BCH Explorer REST API](https://bchexplorer.cash) as well as [Fulcrum](https://github.com/cculianu/Fulcrum) to retrieve additional data, which is otherwise too complicated to retrieve from BCHN directly.
 
 ## Who?
 

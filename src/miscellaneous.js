@@ -6,7 +6,7 @@ export default class Misc {
    * @returns URL
    */
   static blockchainExplorerUrl() {
-    return 'https://explorer.melroy.org'
+    return 'https://bchexplorer.cash'
   }
 
   /**
