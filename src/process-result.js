@@ -32,19 +32,27 @@ export default class ProcessResult {
     const bitcoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.BTC, 8)
     const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(ratesList.BCH, 8)
 
+    // Calculate reverse ratios
+    const btcReverseRatio = ratesList.BTC && ratesList.BTC !== 0 ? Misc.printCurrencyWithoutSymbol(1 / ratesList.BTC, 8) : 'N/A'
+    const bchReverseRatio = ratesList.BCH && ratesList.BCH !== 0 ? Misc.printCurrencyWithoutSymbol(1 / ratesList.BCH, 8) : 'N/A'
+
     let cryptoPrices = ''
     if (symbol === 'BCH') {
-      cryptoPrices = `• ${bitcoinPrice} [BTC](${COINGECKO_URL}/bitcoin)`
+      cryptoPrices = `• ${bitcoinPrice} BCH/BTC
+• ${btcReverseRatio} BTC/BCH`
     } else if (symbol === 'BTC') {
-      cryptoPrices = `• ${bitcoinCashPrice} [BCH](${COINGECKO_URL}/bitcoin-cash)`
+      cryptoPrices = `• ${bitcoinCashPrice} BTC/BCH
+• ${bchReverseRatio} BCH/BTC`
     } else {
-      cryptoPrices = `• ${bitcoinPrice} [BTC](${COINGECKO_URL}/bitcoin)
-• ${bitcoinCashPrice} [BCH](${COINGECKO_URL}/bitcoin-cash)`
+      cryptoPrices = `• ${bitcoinPrice} ${baseCurrency}/BTC
+• ${btcReverseRatio} BTC/${baseCurrency}
+• ${bitcoinCashPrice} ${baseCurrency}/BCH
+• ${bchReverseRatio} BCH/${baseCurrency}`
     }
 
     return `*Current prices of ${baseName} \\(*[${baseCurrency}](${COINGECKO_URL}/${urlBaseName})*\\) in fiat and crypto*
-• ${dollarPrice} USD
-• ${euroPrice} EUR
+• ${dollarPrice} USD/${baseCurrency}
+• ${euroPrice} EUR/${baseCurrency}
 ${cryptoPrices}
 Rates datetime: ${datetime}`
   }
@@ -77,10 +85,25 @@ Rates datetime: ${datetime}`
     const litecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.LTC, 5)
     const bitcoinCashPrice = Misc.printCurrencyWithoutSymbol(ratesList.BCH, 8)
     const dogecoinPrice = Misc.printCurrencyWithoutSymbol(ratesList.DOGE)
+
+    const btcReverseRatio = ratesList.BTC && ratesList.BTC !== 0 ? Misc.printCurrencyWithoutSymbol(1 / ratesList.BTC, 8) : 'N/A'
+    const bchReverseRatio = ratesList.BCH && ratesList.BCH !== 0 ? Misc.printCurrencyWithoutSymbol(1 / ratesList.BCH, 8) : 'N/A'
+
     const baseCurrency = rates.base_currency ? rates.base_currency : symbol
     const baseName = rates.base_name ? rates.base_name : symbol
     const urlBaseName = baseName.trim().toLowerCase().replaceAll(' ', '-')
     const datetime = Misc.printDatetime(rates.datetime)
+
+    // Dynamically build crypto reverse ratio section
+    let cryptoReverseRatio = ''
+    if (symbol === 'BCH') {
+      cryptoReverseRatio = `• ${btcReverseRatio} BTC/${baseCurrency}`
+    } else if (symbol === 'BTC') {
+      cryptoReverseRatio = `• ${bchReverseRatio} BCH/${baseCurrency}`
+    } else {
+      cryptoReverseRatio = `• ${bchReverseRatio} BCH/${baseCurrency}
+• ${bchReverseRatio} BCH/${baseCurrency}`
+    }
 
     return `*Current prices of ${baseName} \\(*[${baseCurrency}](${COINGECKO_URL}/${urlBaseName})*\\) in fiat*
 • ${dollarPrice} USD
@@ -105,6 +128,9 @@ Rates datetime: ${datetime}`
 • ${chainlinkPrice} [LINK](${COINGECKO_URL}/chainlink)
 • ${litecoinPrice} [LTC](${COINGECKO_URL}/litecoin)
 • ${dogecoinPrice} [DOGE](${COINGECKO_URL}/dogecoin)
+
+*Current reverse ratio\\(s\\)*
+${cryptoReverseRatio}
 
 *Current price of ${baseName} in stable coins*
 • ${usdcPrice} [USDC](${COINGECKO_URL}/usd-coin)
