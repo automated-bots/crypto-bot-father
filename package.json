@@ -3,7 +3,7 @@
   "version": "1.9.0",
   "description": "A crypto bot father for Telegram. The one that rule them all!",
   "main": "src/index.js",
-  "packageManager": "pnpm@10.26.0",
+  "packageManager": "pnpm@10.33.0",
   "type": "module",
   "directories": {
     "doc": "docs"
@@ -32,17 +32,17 @@
   },
   "license": "AGPL-3.0",
   "dependencies": {
-    "axios": "^1.13.4",
-    "dotenv": "^17.2.4",
+    "axios": "^1.14.0",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "http-errors-enhanced": "^4.0.2",
     "luxon": "^3.7.2",
     "node-telegram-bot-api": "^0.67.0",
-    "pino": "^10.3.0",
+    "pino": "^10.3.1",
     "table": "^6.9.0"
   },
   "devDependencies": {
-    "eslint": "^9.39.2",
+    "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "neostandard": "^0.12.2",
     "pino-pretty": "^13.1.3",
