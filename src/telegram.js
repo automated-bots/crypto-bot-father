@@ -11,6 +11,7 @@ export default class Telegram {
   constructor(bot, fetcher) {
     this.bot = bot
     this.fetcher = fetcher
+    this.activeStreams = new Set()
   }
 
   /**
@@ -107,6 +108,29 @@ More info:
         .priceQuotes('BCH')
         .then((message) => this.sendMessage(msg.chat.id, message))
         .catch((error) => logger.error(error))
+    })
+
+    // streamprice command (/streamprice): streams live BCH/USD price from Coinbase via sendMessageDraft
+    this.bot.onText(/^[/|!]streamprice\S*$/, (msg) => {
+      const chatId = msg.chat.id
+      const draftId = msg.message_id
+      if (this.activeStreams.has(chatId)) {
+        this.bot
+          .sendMessageDraft(chatId, draftId, 'BCH price stream is already active.')
+          .catch((error) => logger.error('sendMessageDraft error: ' + error.message))
+        return
+      }
+      this.activeStreams.add(chatId)
+      this.bot
+        .sendMessageDraft(chatId, draftId, 'BCH price streaming incoming...')
+        .catch((error) => logger.error('sendMessageDraft error: ' + error.message))
+      this.fetcher
+        .streamBchPrice((latestPrice) => {
+          const text = `BCH Price: $${latestPrice.price}`
+          this.bot.sendMessageDraft(chatId, draftId, text).catch((error) => logger.error('sendMessageDraft error: ' + error.message))
+        })
+        .catch((error) => logger.error('streamBchPrice error: ' + error.message))
+        .finally(() => this.activeStreams.delete(chatId))
     })
 
     // price command (/price <symbol> [<quote_symbol>]) - provide your own base symbol, and optionally a second parameter as the quote symbol

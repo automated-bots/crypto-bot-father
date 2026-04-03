@@ -29,6 +29,18 @@ export default class Fetcher {
       responseType: 'stream',
       timeout: 10000
     })
+    this.coinbase = axios.create({
+      baseURL: 'https://www.coinbase.com',
+      headers: {
+        Accept: 'multipart/mixed;subscriptionSpec="1.0", application/json',
+        'Content-Type': 'application/json',
+        Origin: 'https://www.coinbase.com',
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:149.0) Gecko/20100101 Firefox/149.0',
+        Host: 'www.coinbase.com'
+      },
+      responseType: 'stream',
+      timeout: 0
+    })
   }
 
   /**
@@ -306,6 +318,70 @@ Next block hash: ${nextBlockText}`
   async bitcoinTransactions(address) {
     // TODO ..
     return 'not yet implemented'
+  }
+
+  /**
+   * Stream BCH/USD price updates from Coinbase GraphQL subscription endpoint.
+   * The response is a multipart/mixed stream; each chunk may contain one or more
+   * JSON payloads separated by boundary lines.
+   * Calls onPrice(data) for every parsed latestPrice object received.
+   * Resolves when the stream ends or maxDurationMs is reached, rejects on error.
+   * @param {Function} onPrice Callback invoked with each latestPrice payload
+   * @param {Number} [maxDurationMs=60000] Maximum time in ms to keep the stream open
+   * @returns {Promise<void>}
+   */
+  async streamBchPrice(onPrice, maxDurationMs = 60000) {
+    const query = {
+      query:
+        'subscription AssetPriceSubscriptionSubscription($input:LatestAssetPriceUpdatedInput!,$shouldUseUASFields:Boolean!){latestAssetPriceUpdated(input:$input){latestPrice{price,timestamp,percentChanges@skip(if:$shouldUseUASFields){hour,day,week,month,year,all},percentChangesV2@include(if:$shouldUseUASFields){hour,day,week,month,year,all},id}}}',
+      operationName: 'AssetPriceSubscriptionSubscription',
+      variables: {
+        input: {
+          assetUuid: '45f99e13-b522-57d7-8058-c57bf92fe7a3', // BCH
+          quoteCurrency: 'USD'
+        },
+        shouldUseUASFields: false
+      }
+    }
+
+    const response = await this.coinbase.post('/graphql/query?operationName=AssetPriceSubscriptionSubscription', query)
+
+    return new Promise((resolve, reject) => {
+      let buffer = ''
+
+      const timer = setTimeout(() => {
+        response.data.destroy()
+        resolve()
+      }, maxDurationMs)
+
+      response.data.on('data', (chunk) => {
+        buffer += chunk.toString()
+        const parts = buffer.split('\r\n')
+        buffer = parts.pop()
+        for (const part of parts) {
+          const trimmed = part.trim()
+          if (!trimmed || trimmed.startsWith('--') || trimmed.startsWith('Content-Type')) continue
+          try {
+            const parsed = JSON.parse(trimmed)
+            const latestPrice = parsed?.payload?.data?.latestAssetPriceUpdated?.latestPrice
+            if (latestPrice) {
+              onPrice(latestPrice)
+            }
+          } catch (_) {
+            // Not a JSON line, skip
+          }
+        }
+      })
+
+      response.data.on('end', () => {
+        clearTimeout(timer)
+        resolve()
+      })
+      response.data.on('error', (err) => {
+        clearTimeout(timer)
+        reject(err)
+      })
+    })
   }
 
   /**

@@ -24,8 +24,8 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2
       node-telegram-bot-api:
-        specifier: ^0.67.0
-        version: 0.67.0(request@2.88.2)
+        specifier: github:yagop/node-telegram-bot-api#24fb242bcfe41de929452ad8f2e9535a6b811466
+        version: https://codeload.github.com/yagop/node-telegram-bot-api/tar.gz/24fb242bcfe41de929452ad8f2e9535a6b811466(request@2.88.2)
       pino:
         specifier: ^10.3.1
         version: 10.3.1
@@ -1109,8 +1109,9 @@ packages:
     resolution: {integrity: sha512-pyFS63ptit/P5WqUkt+UUfe+4oevH+bFeIiPPdfb0pFeYEu/1ELnJu5l+5EcTKYL5M7zaAa7S8ddywgXypqKCw==}
     engines: {node: '>= 0.4'}
 
-  node-telegram-bot-api@0.67.0:
-    resolution: {integrity: sha512-gO7o/dPcdFSUuFuPiAYBxV7bcN+vQL3pfaHN8P4z8fPtFstN05xVmhMFOth57DANGDKBpzW3rMRo7debOlUI1w==}
+  node-telegram-bot-api@https://codeload.github.com/yagop/node-telegram-bot-api/tar.gz/24fb242bcfe41de929452ad8f2e9535a6b811466:
+    resolution: {tarball: https://codeload.github.com/yagop/node-telegram-bot-api/tar.gz/24fb242bcfe41de929452ad8f2e9535a6b811466}
+    version: 0.68.0
     engines: {node: '>=0.12'}
 
   oauth-sign@0.9.0:
@@ -2940,7 +2941,7 @@ snapshots:
       object.entries: 1.1.9
       semver: 6.3.1
 
-  node-telegram-bot-api@0.67.0(request@2.88.2):
+  node-telegram-bot-api@https://codeload.github.com/yagop/node-telegram-bot-api/tar.gz/24fb242bcfe41de929452ad8f2e9535a6b811466(request@2.88.2):
     dependencies:
       '@cypress/request': 3.0.10
       '@cypress/request-promise': 5.0.0(@cypress/request@3.0.10)(request@2.88.2)
