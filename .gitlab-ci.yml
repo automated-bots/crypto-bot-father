@@ -21,6 +21,6 @@ audit:
 format_lint:
   stage: test
   script:
-    - pnpm run format  
+    - pnpm run format
     - pnpm run lint
   interruptible: true
