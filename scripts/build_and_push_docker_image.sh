@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
 docker build -t danger89/crypto-bot-father -t registry.melroy.org/melroy/crypto-bot-father/crypto-bot-father:latest .
 
 # Publish to both GitLab Registry and Docker Hub
