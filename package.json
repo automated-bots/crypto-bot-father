@@ -13,7 +13,8 @@
     "lint": "eslint src",
     "fix": "eslint src --fix",
     "format": "prettier --check \"**/*.{js,ts}\"",
-    "format:fix": "prettier --write \"**/*.{js,ts}\""
+    "format:fix": "prettier --write \"**/*.{js,ts}\"",
+    "test": "node --test"
   },
   "repository": {
     "type": "git",
@@ -33,19 +34,22 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "axios": "^1.20.0",
-    "dotenv": "^17.4.2",
+    "dotenv": "^18.0.8",
     "express": "^5.3.0",
-    "http-errors-enhanced": "^4.0.2",
+    "http-errors-enhanced": "^5.0.1",
     "luxon": "^3.7.2",
-    "node-telegram-bot-api": "github:yagop/node-telegram-bot-api#24fb242bcfe41de929452ad8f2e9535a6b811466",
+    "node-telegram-bot-api": "^2.1.0",
     "pino": "^10.4.0",
     "table": "^6.9.0"
   },
   "devDependencies": {
-    "eslint": "^9.39.5",
+    "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
-    "neostandard": "^0.13.0",
+    "neostandard": "^0.14.1",
     "pino-pretty": "^13.2.0",
     "prettier": "^3.9.10"
+  },
+  "engines": {
+    "node": "^22.21.0 || >=24"
   }
 }

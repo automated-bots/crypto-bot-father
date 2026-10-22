@@ -34,7 +34,7 @@ There is a Docker image [available on DockerHub](https://hub.docker.com/reposito
 
 ### Requirements
 
-- [NodeJS LTS](https://nodejs.org/en/download/)
+- [NodeJS](https://nodejs.org/en/download/) 22.21+ or 24+ (Docker uses Node 24)
 - [pnpm](https://pnpm.io)
 - Docker Engine + Docker Compose (if you wish to use/test the Docker image)
 - [Bitcoin Cash Node](https://gitlab.com/bitcoin-cash-node/bitcoin-cash-node)
@@ -81,6 +81,10 @@ Finally, starting the bot server: `pnpm start`
 rpcuser=your_username
 rpcpassword=your_password
 ```
+
+### Tests
+
+Run local integration tests: `pnpm test`. Tests use mocked external services and do not require production credentials.
 
 ### Linting
 

@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import TelegramBot from 'node-telegram-bot-api'
+import { Bot } from 'node-telegram-bot-api'
 import express from 'express'
 import { globalState } from './globalState.js'
 import { createError, HttpError } from 'http-errors-enhanced'
@@ -11,8 +11,6 @@ import Telegram from './telegram.js'
 import routes from './routes/index.js'
 import logger from './logger.js'
 
-// NTBA = node-telegram-bot-api fixes
-process.env.NTBA_FIX_350 = 1
 // constants
 const BOT_PATH_SECRET = process.env.BOT_PATH_SECRET
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN
@@ -49,12 +47,10 @@ const bitcoinCash = new BitcoinCash(BITCOIN_RPC_HOST, BITCOIN_RPC_PORT, BITCOIN_
 const fulcrum = new Fulcrum(FULCRUM_RPC_PORT, FULCRUM_RPC_HOST)
 const fetcher = new Fetcher(bitcoinCash, fulcrum)
 
-const telegramBot = new TelegramBot(TELEGRAM_TOKEN, {
-  filepath: false
-})
+const telegramBot = new Bot(TELEGRAM_TOKEN)
 const tg = new Telegram(telegramBot, fetcher)
 
-telegramBot.on('error', (error) => {
+telegramBot.catch((error) => {
   logger.error(error)
   globalState.errorState = true
 })
@@ -67,7 +63,7 @@ app.disable('x-powered-by')
 app.use(express.json())
 
 // This informs the Telegram servers of the new webhook
-telegramBot.setWebHook(`${botUrl}/telegram/bot${BOT_PATH_SECRET}`).catch((error) => {
+telegramBot.api.setWebhook({ url: `${botUrl}/telegram/bot${BOT_PATH_SECRET}` }).catch((error) => {
   logger.error(error)
   globalState.errorState = true
 })
